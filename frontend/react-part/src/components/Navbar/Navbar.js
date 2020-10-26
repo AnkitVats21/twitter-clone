@@ -13,7 +13,7 @@ class NavigationBar extends Component{
 
 <Navbar bg="light" expand="lg" sticky="top" className={classes.navshadow}>
             <span className={classes.brand} to="/">
-              Foodex
+              Twitter
 
             </span>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

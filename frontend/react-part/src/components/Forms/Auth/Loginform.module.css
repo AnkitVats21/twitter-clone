@@ -1,0 +1,35 @@
+.leftbox{
+    width: 50vw;
+    height: 88vh;
+    background-size: cover;
+    background-image: linear-gradient(to bottom, rgba(252, 154, 7, 0.77), rgba(255, 94, 0, 0.23)),
+    url("../../../assets/images/texting-1490691_1920.jpg")
+}
+
+.rightbox{
+    width: 50vw;
+    height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.field{
+    width: 100%;
+    height:35px;
+    padding: 5px 10px;
+    margin: 0;
+    box-sizing: border-box;  
+    border: 1.3px solid black ; 
+    font-family: Lato;
+    outline: none;
+    border-radius: 5px;
+} 
+
+.headline{
+    color: #f95700ff;
+}
+
+.wrapbox{
+    display: flex;
+}

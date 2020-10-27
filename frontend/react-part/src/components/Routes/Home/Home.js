@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import classes from './Home.module.css';
-import NavigationBar from '../../Navbar/Navbar'
-
+// import NavigationBar from '../../Navbar/Navbar'
+import Sidebar from '../../Sidebar/Sidebar'
+import Feed from '../../Feed/Feed'
+import Widgets from '../../../components/Widgets/Widgets'
 
 class Home extends Component {
 
   
     render() {
       return(
-      <>
-        <NavigationBar />     
-
-      </>
+      <div className={classes.flexbox}>
+        {/* <NavigationBar />      */}
+        <Sidebar />
+        <Feed />
+        <Widgets />
+      </div>
       )
     }
   }

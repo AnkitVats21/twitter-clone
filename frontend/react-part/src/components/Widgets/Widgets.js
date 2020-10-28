@@ -20,11 +20,11 @@ function Widgets() {
 
         <TwitterTweetEmbed tweetId={"858551177860055040"} />
 
-        <TwitterTimelineEmbed
+        {/* <TwitterTimelineEmbed
           sourceType="profile"
           screenName="cleverqazi"
           options={{ height: 400 }}
-        />
+        /> */}
 
         <TwitterShareButton
           url={"https://facebook.com/cleverprogrammer"}

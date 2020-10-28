@@ -7,26 +7,22 @@ import SearchIcon from "@material-ui/icons/Search";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
-import ListAltIcon from "@material-ui/icons/ListAlt";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Button } from "@material-ui/core";
 
 function Sidebar() {
   return (
     <div className="sidebar">
       {/* <TwitterIcon className="sidebar__twitterIcon" /> */}
+      <SidebarOption active Icon={HomeIcon} redirect='/log-in' text="Home" />
+      <SidebarOption Icon={SearchIcon} redirect='/explore' text="Explore" />
+      <SidebarOption Icon={NotificationsNoneIcon} redirect='/notifications' text="Notifications" />
+      <SidebarOption Icon={MailOutlineIcon} redirect='/messages' text="Messages" />
+      <SidebarOption Icon={BookmarkBorderIcon} redirect='/bookmarks' text="Bookmarks" />
+      <SidebarOption Icon={PermIdentityIcon} redirect='/profile' text="Profile" />
+      <SidebarOption Icon={ExitToAppIcon} text="Logout" />
 
-      <SidebarOption active Icon={{HomeIcon}} text="Home" />
-      <SidebarOption Icon={SearchIcon} text="Explore" />
-      <SidebarOption Icon={NotificationsNoneIcon} text="Notifications" />
-      <SidebarOption Icon={MailOutlineIcon} text="Messages" />
-      <SidebarOption Icon={BookmarkBorderIcon} text="Bookmarks" />
-      <SidebarOption Icon={ListAltIcon} text="Lists" />
-      <SidebarOption Icon={PermIdentityIcon} text="Profile" />
-      <SidebarOption Icon={MoreHorizIcon} text="More" />
-
-      {/* Button -> Tweet */}
       <Button variant="outlined" className="sidebar__tweet" fullWidth>
         Tweet
       </Button>

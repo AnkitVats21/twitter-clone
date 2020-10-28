@@ -2,26 +2,30 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+}
 
- 
-
+.sidebar_links,
+.sidebar_links:hover{
+  color: black;
+  text-decoration: none;
 }
 
 .sidebarOption:hover {
-  /* background-color: #e8f5fe; */
+  background-color: #e8f5fe;
   border-radius: 30px;
   color: var(--twitter-color);
   transition: color 100ms ease-out;
 }
 
 .sidebarOption > .MuiSvgIcon-root {
-  padding: 20px;
+  margin: 14px;
 }
 
 .sidebarOption > h2 {
   font-weight: 800;
   font-size: 20px;
   margin-right: 20px;
+  margin-bottom: 0;
 }
 
 .sidebarOption--active {

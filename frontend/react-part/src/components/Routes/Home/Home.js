@@ -12,7 +12,7 @@ class Home extends Component {
       return(
       <div className={classes.flexbox}>
         {/* <NavigationBar />      */}
-        <Sidebar />
+        <Sidebar propactive="home" />
         <Feed />
         <Widgets />
       </div>

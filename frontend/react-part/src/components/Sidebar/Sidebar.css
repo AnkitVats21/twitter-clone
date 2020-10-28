@@ -36,3 +36,10 @@
   border: none !important;
   outline: none !important;
 }
+
+/* @media(max-width: 500px){
+  .sidebar__tweet {
+  display: none !important;
+  }
+  
+  } */

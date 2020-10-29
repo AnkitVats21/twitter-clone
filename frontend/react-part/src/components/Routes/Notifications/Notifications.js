@@ -4,18 +4,20 @@ import classes from '../Home/Home.module.css';
 import Sidebar from '../../Sidebar/Sidebar'
 import Feed from '../../Feed/Feed'
 import Trending from '../../Trending/Trending'
+import NotificationList from '../../NotificationList/NotificationList'
 import Widgets from '../../../components/Widgets/Widgets'
 
-class Explore extends Component {
+class Notifications extends Component {
 
   
     render() {
       return(
       <div className={classes.flexbox}>
         {/* <NavigationBar />      */}
-        <Sidebar propactive="explore" />
+        <Sidebar propactive="notifications" />
         {/* <Feed /> */}
-        <Trending />
+        {/* <Trending /> */}
+        <NotificationList />
         <Widgets />
       </div>
       )
@@ -23,6 +25,6 @@ class Explore extends Component {
   }
   
   
-  export default Explore;
+  export default Notifications;
   
   

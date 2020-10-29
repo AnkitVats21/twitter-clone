@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import classes from '../Home/Home.module.css';
 // import NavigationBar from '../../Navbar/Navbar'
 import Sidebar from '../../Sidebar/Sidebar'
-import Feed from '../../Feed/Feed'
+import Saved from '../../Saved/Saved'
 import Trending from '../../Trending/Trending'
 import Widgets from '../../../components/Widgets/Widgets'
 
-class Explore extends Component {
+class Bookmarks extends Component {
 
   
     render() {
       return(
       <div className={classes.flexbox}>
         {/* <NavigationBar />      */}
-        <Sidebar propactive="explore" />
-        {/* <Feed /> */}
-        <Trending />
+        <Sidebar propactive="bookmarks" />
+        <Saved />
+        {/* <Trending /> */}
         <Widgets />
       </div>
       )
@@ -23,6 +23,6 @@ class Explore extends Component {
   }
   
   
-  export default Explore;
+  export default Bookmarks;
   
   

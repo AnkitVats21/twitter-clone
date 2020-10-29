@@ -77,7 +77,7 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
-
+    
     @property
     def is_staff(self):
         return self.staff
@@ -105,9 +105,27 @@ class UserProfile(models.Model):
         return self.name
 
 class OTP(models.Model):
-    otp     = models.CharField(max_length = 6)
-    email   = models.EmailField(max_length= 255)
-    time    = models.IntegerField()
-    reset   = models.BooleanField(default=False)
+    otp      = models.CharField(max_length = 6)
+    email    = models.EmailField(max_length= 255)
+    time     = models.IntegerField()
+    reset    = models.BooleanField(default=False)
     def __str__(self):
         return self.email
+
+class Connections(models.Model):
+    user     = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
+    follower = models.ManyToManyField(User, related_name='follower', blank=True, null=True)
+    following= models.ManyToManyField(User, related_name='following', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+    def username(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = "Connection"
+        verbose_name_plural = "Connections"
+
+# class Notification(models.Model):
+#     user    = models.ForeignKey(User, on_delete=models.CASCADE)
+#     text    = models.TextField(max_length=500, blank=True, null=True)

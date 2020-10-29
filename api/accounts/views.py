@@ -1,13 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import User, OTP
-from .serializers import UserSerializer, OTPSerializer
+from .models import User, OTP, Connections
+from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer
 from rest_framework import viewsets, status, generics, mixins, permissions
 from random import randint
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 import time
+import json
 import re 
   
 regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
@@ -184,12 +185,15 @@ class ForgotPasswordView(APIView):
                 obj.delete()
                 pass
             else:
-                return Response({"details":"you have not verified your otp for password reset"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"details":"you have not verified your otp for password reset"},
+                 status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"details":"we have not got any password reset request"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"details":"we have not got any password reset request"},
+             status=status.HTTP_400_BAD_REQUEST)
         user.set_password(password)
         user.save()
-        return Response({"details":"password reset successfully"}, status=status.HTTP_200_OK)
+        return Response({"details":"password reset successfully"},
+         status=status.HTTP_200_OK)
 
 class ChangePassword(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -201,3 +205,49 @@ class ChangePassword(APIView):
         user.set_password(newpass)
         user.save()
         return Response({"details":"password changed successfully"})
+
+class EditUserProfileView(APIView):
+    serializer_class = UserSerializer
+    #permission_classes = (permissions.IsAuthenticated,)
+    def patch(self,request):
+        user = User.objects.filter(email=request.user)[0]
+        serializer = UserSerializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+from collections import OrderedDict
+
+class ConnectionsView(APIView):
+    permissions_classes = (permissions.IsAuthenticated,)
+    def get(self, request):
+        queryset    = Connections.objects.filter(user=request.user)
+        serializer  = ConnectionsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        userid      = request.data.get('username')
+        try:
+            user2   = User.objects.filter(id=userid)[0]
+        except:
+            user2   = User.objects.filter(username=userid)[0]
+        action      = request.data.get('action')
+        queryset    = Connections.objects.filter(user=request.user)[0]
+        queryset2   = Connections.objects.filter(user=user2)[0]
+        if str(queryset)==str(user2.username):
+            return Response({"details":"you cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
+        if action=='follow':
+            queryset.following.add(user2)
+            queryset2.follower.add(request.user)
+            queryset.save()
+            serializer  = ConnectionsSerializer(queryset)
+            return Response(serializer.data)
+        if action=='unfollow':
+            queryset.following.remove(user2)
+            queryset2.follower.remove(request.user)
+            queryset.save()
+            serializer  = ConnectionsSerializer(queryset)
+            return Response(serializer.data)
+
+
+    

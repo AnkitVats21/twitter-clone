@@ -14,4 +14,7 @@ urlpatterns = [
     path('api/token-refresh/', jwt_views.TokenRefreshView.as_view()),
     path('api/resetpass/', views.ForgotPasswordView.as_view()),
     path('api/changepass/', views.ChangePassword.as_view()),
+    path('api/updateprofile/', views.EditUserProfileView.as_view()),
+    path('api/connections/', views.ConnectionsView.as_view(), name='connections-detail'),
+    path('api/checkusername/', views.CheckUserName.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

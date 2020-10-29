@@ -25,7 +25,7 @@ SECRET_KEY = 'u5))3ekuze2)m(dqg2%$vi9*z1ggma-fyu1zjt%8!b9u#0_!^='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['31fa1d7072fe.ngrok.io','*',]
 
 
 # Application definition
@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/updateprofile/', views.EditUserProfileView.as_view()),
     path('api/connections/', views.ConnectionsView.as_view(), name='connections-detail'),
     path('api/checkusername/', views.CheckUserName.as_view()),
+    path('api/notifications/', views.NotificationView.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

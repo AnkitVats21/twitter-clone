@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserProfile, OTP, Connections
+from .models import User, UserProfile, OTP, Connections, Notification
 from rest_framework.response import Response
 
 class UserProfileSerializer(serializers.ModelSerializer):    
@@ -70,3 +70,8 @@ class ConnectionsSerializer(serializers.ModelSerializer):
         lst['total followers']=len(id)
         lst['total following']=len(id2)
         return lst
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields= '__all__'

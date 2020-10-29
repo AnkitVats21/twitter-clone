@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import User, OTP, Connections
-from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer
+from .models import User, OTP, Connections, Notification
+from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer, NotificationSerializer
 from rest_framework import viewsets, status, generics, mixins, permissions
 from random import randint
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -237,9 +237,19 @@ class ConnectionsView(APIView):
         if str(queryset)==str(user2.username):
             return Response({"details":"you cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         if action=='follow':
+            text = ("{} followed you.").format(request.user.profile.name)
+            try:
+                Connections.objects.filter(user=request.user,following=user2)
+                return Response({'details':'you already followed him'})
+            except:
+                pass
             queryset.following.add(user2)
             queryset2.follower.add(request.user)
             queryset.save()
+            try:
+                Notification.objects.filter(user=user2, text=user2)
+            except:
+                Notification.objects.create(user=user2, text=text, category="Followers")
             serializer  = ConnectionsSerializer(queryset)
             return Response(serializer.data)
         if action=='unfollow':
@@ -249,5 +259,21 @@ class ConnectionsView(APIView):
             serializer  = ConnectionsSerializer(queryset)
             return Response(serializer.data)
 
-
+class NotificationView(APIView):
+    serializer_class = NotificationSerializer
+    permission_classes= (permissions.IsAuthenticated,)
+    def get(self, request):
+        queryset   = Notification.objects.filter(user=request.user)
+        serializer = NotificationSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
     
+    def delete(self, request):
+        action=request.data.get('action')
+        if action=='clearall':
+            queryset   = Notification.objects.filter(user=request.user)
+            queryset.delete()
+            return Response({'details':'all clear'})
+        return Response({'info':'use the action below to clear all notifications',
+        'action':'clearall'})
+
+# class NotificationActionsView(APIView):

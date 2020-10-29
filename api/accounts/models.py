@@ -114,8 +114,8 @@ class OTP(models.Model):
 
 class Connections(models.Model):
     user     = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
-    follower = models.ManyToManyField(User, related_name='follower', blank=True, null=True)
-    following= models.ManyToManyField(User, related_name='following', blank=True, null=True)
+    follower = models.ManyToManyField(User, related_name='follower')
+    following= models.ManyToManyField(User, related_name='following')
 
     def __str__(self):
         return self.user.username
@@ -126,6 +126,18 @@ class Connections(models.Model):
         verbose_name = "Connection"
         verbose_name_plural = "Connections"
 
-# class Notification(models.Model):
-#     user    = models.ForeignKey(User, on_delete=models.CASCADE)
-#     text    = models.TextField(max_length=500, blank=True, null=True)
+Notification_Category=( ('Mention','Mention'),
+    ('Replies', 'Replies'), ("Retweets", 'Retweets'),
+    ('Likes', 'Likes'), ('Followers', 'Followers'),
+    ('Direct Messages', 'Direct Messages'),
+)
+
+
+class Notification(models.Model):
+    user    = models.ForeignKey(User, on_delete=models.CASCADE)
+    text    = models.TextField(max_length=500, blank=True, null=True)
+    timestamp= models.DateTimeField(auto_now_add=True)
+    category= models.CharField(choices=Notification_Category, max_length=30)
+    seen    = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.user.username)+" --> "+self.category

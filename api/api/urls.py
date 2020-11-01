@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('accounts.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^', include('tweet.urls')),
+    url(r'^', include('accounts.urls')),
 ]

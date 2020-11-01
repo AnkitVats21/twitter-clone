@@ -3,7 +3,8 @@ from accounts import views
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
-
+from tweet import views as tweet
+app_name='accounts'
 urlpatterns = [
     path('api/signup/', views.CreateUserAccount.as_view()),
     path('api/users/', views.UserAccountsList.as_view()),
@@ -18,4 +19,5 @@ urlpatterns = [
     path('api/connections/', views.ConnectionsView.as_view(), name='connections-detail'),
     path('api/checkusername/', views.CheckUserName.as_view()),
     path('api/notifications/', views.NotificationView.as_view()),
+    #path('api/hashtags/', tweet.HashtagView.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

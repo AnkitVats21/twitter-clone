@@ -52,7 +52,9 @@ class ConnectionsSerializer(serializers.ModelSerializer):
         fields  = ('username','follower','following')
 
     def to_representation(self, instance):
-        """Convert `follower` to username."""
+        """
+        Convert `follower` to username.
+        """
         ret     = super().to_representation(instance)
         id      = ret['follower']
         id2     = ret['following']

@@ -5,7 +5,7 @@ import NavigationBar from '../../../Navbar/Navbar';
 export default function Loggingin() {
   return(
     <>
-    <NavigationBar />
+    {/* <NavigationBar /> */}
     <Login />
     </>
   )

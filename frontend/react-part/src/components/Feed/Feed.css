@@ -1,8 +1,9 @@
 .feed {
-    flex: 0.5;
-    border-right: 1px solid #ccc !important;
-    border-left: 1px solid #ccc !important;
+    flex: 0.3;
+    /* border-right: 1px solid #ccc !important;
+    border-left: 1px solid #ccc !important; */
     /* min-width: fit-content; */
+    background-color: red;
     overflow-y: scroll;
     flex-wrap: wrap;
   }
@@ -23,7 +24,7 @@
     top: 0;
     background-color: white;
     z-index: 100;
-    border: 1px solid var(--twitter-background);
+    /* border: 1px solid var(--twitter-background); */
     padding: 15px 20px;
   }
   

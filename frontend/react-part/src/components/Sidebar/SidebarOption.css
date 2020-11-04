@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  width: 200px !important;
 }
 
 .sidebar_links,
@@ -11,7 +12,7 @@
 }
 
 .sidebarOption:hover {
-  background-color: #e8f5fe;
+  background-color: #F6F8FF;
   border-radius: 30px;
   color: var(--twitter-color);
   transition: color 100ms ease-out;
@@ -22,7 +23,7 @@
 }
 
 .sidebarOption > h2 {
-  font-weight: 800;
+  font-weight: semibold;
   font-size: 20px;
   margin-right: 20px;
   margin-bottom: 0;

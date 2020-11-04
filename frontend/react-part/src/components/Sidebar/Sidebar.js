@@ -26,7 +26,7 @@ function Sidebar({propactive}) {
       <SidebarOption Icon={ExitToAppIcon} text="Logout" />
 
       <Button variant="outlined" className="sidebar__tweet" fullWidth>
-        Tweet
+        Post
       </Button>
     </div>
   );

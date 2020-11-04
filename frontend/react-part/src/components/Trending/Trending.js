@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import TweetBox from "./TweetBox";
 import Post from "../Feed/Post";
 import "./Trending.css";
-// import db from "./firebase";
-// import FlipMove from "react-flip-move";
+
 
 function Trending() {
-//   const [posts, setPosts] = useState([]);
-
-//   useEffect(() => {
-//     db.collection("posts").onSnapshot((snapshot) =>
-//       setPosts(snapshot.docs.map((doc) => doc.data()))
-//     );
-//   }, []);
 
   return (
     <div className="feed">

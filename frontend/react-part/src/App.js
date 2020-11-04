@@ -6,6 +6,7 @@ import Bookmarks from './components/Routes/Bookmarks/Bookmarks';
 import Notifications from './components/Routes/Notifications/Notifications';
 import LogIn from './components/Routes/Authentication/Login/Login';
 import SignUp from './components/Routes/Authentication/Signup/Signup'
+import OTP from './components/Routes/Authentication/OTP/OTP'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ function App() {
     <Route path='/notifications' component={Notifications} />
     <Route path='/log-in' component={LogIn} />
     <Route path='/sign-up' component={SignUp} />
+    <Route path='/otp' component={OTP} />
 
     </Switch>
     </Router>

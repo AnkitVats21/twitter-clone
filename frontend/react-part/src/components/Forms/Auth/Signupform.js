@@ -151,10 +151,10 @@ class Login extends Component{
         this.setState({ isLoading: true });
     
         const data={
-          name: this.state.name,
+          profile: {name: this.state.name},
           email: this.state.email,
           password: this.state.password,
-          age: this.state.age,
+          username: this.state.username,
           confirm_password: this.state.confirm_password
         }
              
@@ -166,13 +166,14 @@ class Login extends Component{
     .then((resp)=>{
       console.log(resp)
     
-      // if (resp.data.message === "otp_sent") {
-      //   this.createSuccess("OTP sent to the mail")
-      //   localStorage.setItem('email', this.state.email)
-      //   localStorage.setItem('password', this.state.password)
-      //   this.setState({isLoading: false});
-      //   this.setState({ redirect: "/otp" });
-      // }
+      if(resp.status===201){
+        console.log('otp sent')
+        //   this.createSuccess("OTP sent to the mail")
+        this.setState({ redirect: "/otp" });
+        localStorage.setItem('email', this.state.email)
+        localStorage.setItem('password', this.state.password)
+      }
+
     
     })
     .catch(err => {
@@ -188,6 +189,10 @@ class Login extends Component{
     
 
     render(){
+
+      if(this.state.redirect){
+        return <Redirect to= {this.state.redirect} />
+      }
 
       return(
       

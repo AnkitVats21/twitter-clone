@@ -1,19 +1,19 @@
 import axios from "axios";
 
-const BASE_URL = "https://094e16fb78ae.ngrok.io/";
+const BASE_URL = "https://fdfecace8dd5.ngrok.io/";
 
 class ServerService {
 
     login(data){
-       return axios.post(BASE_URL + 'api/token/', data)
+       return axios.post(BASE_URL + 'api/login/', data)
     }
 
     signup(data){
-      return axios.post(BASE_URL + 'auth/register/', data) 
+      return axios.post(BASE_URL + 'api/signup/', data) 
    }
 
     otp(data){
-      return axios.post(BASE_URL + 'auth/register/otp/', data)
+      return axios.post(BASE_URL + 'api/verifyotp/', data)
    }
 
     forgototp(data){
@@ -45,7 +45,15 @@ class ServerService {
    }
 
     homecards(){
-      return axios.get(BASE_URL)
+      return axios.get(BASE_URL+ 'api/feeds/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
     }
 
     profilepicture(formdata){

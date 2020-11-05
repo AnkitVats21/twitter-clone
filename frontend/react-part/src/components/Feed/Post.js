@@ -11,26 +11,30 @@ const Post = forwardRef(
     ({ displayName, username, verified, text, image, avatar }, ref) => {
       return (
         <div className="post" ref={ref}>
+          <div className="posthead">
           <div className="post__avatar">
             <Avatar src={avatar} />
           </div>
-          <div className="post__body">
+          {/* <div className="post__body"> */}
             <div className="post__header">
               <div className="post__headerText">
                 <h3>
                   {displayName}{" "}
                   <span className="post__headerSpecial">
-                    {verified && <VerifiedUserIcon className="post__badge" />} @
-                    {username}
+      {verified && <VerifiedUserIcon className="post__badge" />} <div>@
+                    {username}</div>
                   </span>
                 </h3>
               </div>
-              <div className="post__headerDescription">
-                <p>{text}</p>
-              </div>
+              {/* */}
             </div>
-            {image? <img className="imgwrap" src={image} alt="" />: null}
-
+            </div>
+            <div className="post__headerDescription">
+                <p>{text}</p>
+              </div> 
+              <div  className="imgwrap">
+            {image? <img className="foodimg" src={image} alt="" />: null}
+            </div>
             <div className="post__footer">
               <ChatBubbleOutlineIcon fontSize="small" />
               <RepeatIcon fontSize="small" />
@@ -38,7 +42,7 @@ const Post = forwardRef(
               <PublishIcon fontSize="small" />
             </div>
           </div>
-        </div>
+        // </div>
       );
     }
   );

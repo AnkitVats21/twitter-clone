@@ -7,3 +7,14 @@
     font-weight: 600;
     
 }
+
+.feed {
+    flex: 0.5;
+    /* border-right: 1px solid #ccc !important;
+    border-left: 1px solid #ccc !important; */
+    /* min-width: fit-content; */
+    /* background-color: red; */
+    padding-left: 2%;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+  }

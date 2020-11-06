@@ -98,6 +98,7 @@ class UserProfile(models.Model):
     dob      = models.DateField(blank=True, null=True)
     bio      = models.TextField(max_length=160, blank=True, null=True)
     picture  = models.ImageField(upload_to = 'profile/', blank = True, null = True, max_length = 1000)
+    cover_pic= models.ImageField(upload_to= 'profile/cover/', blank=True, null=True, max_length=2000)
     location = models.CharField(max_length=30, blank=True, null=True)
     website  = models.URLField(max_length=100, blank=True, null=True)
 
@@ -114,8 +115,8 @@ class OTP(models.Model):
 
 class Connections(models.Model):
     user     = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
-    follower = models.ManyToManyField(User, related_name='follower')
-    following= models.ManyToManyField(User, related_name='following')
+    follower = models.ManyToManyField(User, related_name='follower', blank=True)
+    following= models.ManyToManyField(User, related_name='following', blank=True)
 
     def __str__(self):
         return self.user.username

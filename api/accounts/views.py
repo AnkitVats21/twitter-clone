@@ -10,7 +10,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 import time
 import json
 import re 
-  
+from django.core.mail import send_mail
+
 regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 
 def check(email):  
@@ -18,6 +19,14 @@ def check(email):
         return True   
     else:  
         return False
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 class CheckUserName(APIView):
     def post(self, request):
@@ -59,14 +68,14 @@ class CreateUserAccount(APIView):
                 OTP.objects.create(otp = otp, email = user_email, time= t)
                 # context      = {'otp':otp}
                 # html_message = render_to_string('otp_template.html', context)
-                # head         = 'OTP Verification'
-                # body = ("Your One Time Password is {} for registration on Scrummy.").format(otp)
+                head         = 'OTP Verification'
+                body = ("Your One Time Password is {} for talkpiper account verification.").format(otp)
                 print(otp)
-                #send_mail(head, str(body), 'scrummy4u@gmail.com', [user_email], html_message = html_message)
+                send_mail(head, body, 'scrummy4u@gmail.com', [user_email])
                 serializer = UserSerializer(data = req_data, context={'request': request})
                 if serializer.is_valid():
                     serializer.save()
-                    return Response(serializer.data, status = status.HTTP_201_CREATED)
+                    return Response({'details':'otp sent successfully for email verification.'}, status = status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
                 data    = {"details":"OTP sent successfully"}
@@ -85,7 +94,11 @@ class ResendOTP(APIView):
     #serializer_class = OTPSerializer
     def post(self,request):
         email    = request.data.get('email')
-        user      = User.objects.filter(email=email)
+        
+        try:
+            user      = User.objects.filter(email=email)
+        except:
+            user      = User.objects.filter(username=email)
         if user.exists():
             pass
         else:
@@ -110,6 +123,7 @@ class VerifyOTP(APIView):
         email   = request.data.get('email')
         otp     = request.data.get('otp')
         reset  = request.data.get('reset')
+        print(email,otp)
         try:
             obj     = OTP.objects.filter(email__iexact=email)[0]
             user    = User.objects.filter(email__iexact=email)[0]
@@ -120,44 +134,46 @@ class VerifyOTP(APIView):
         if(t1-t2)<300:
             if otp == obj.otp:
                 user.active = True
+                user.save()
+                data = get_tokens_for_user(user)
+                data["details"] = "OTP verified successfully"
                 if reset:
                     obj.reset = True
                     obj.save()
-                    return Response({"details":"OTP verified successfully"},status=status.HTTP_200_OK)
+                    return Response(data, status=status.HTTP_200_OK)
                 obj.delete()
-                return Response({"details":"OTP verified successfully"},status=status.HTTP_200_OK)
+                return Response(data ,status=status.HTTP_200_OK)
             return Response({"details":"wrong otp"}, status=status.HTTP_400_BAD_REQUEST)
         obj.delete()
         return Response({"details":"otp expired"})
 
 
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
-
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
 
 class UserLoginView(TokenObtainPairView):
     def get(self, request):
         data     = {
-            "username":"enter username or email",
+            "email":"enter username or email",
             "password":"enter password"
         }
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        username = request.data.get("username")
+        username = request.data.get("email")
         password = request.data.get("password")
-
+        print(username)
         user = User.objects.filter(username__iexact=username)
         if user.exists():
             pass
         else:
             user = User.objects.filter(email__iexact=username)
+            print(user)
         if user.exists():
-            pass
+            if user[0].active :
+                pass
+            else:
+                if user[0].check_password(password)==False:
+                    return Response({"details":"wrong password"}, status=status.HTTP_400_BAD_REQUEST)
+                return ResendOTP.post(self,request)
         else:
             return Response({"details":"no user found"}, status=status.HTTP_400_BAD_REQUEST)
         user = user[0]
@@ -219,7 +235,7 @@ class EditUserProfileView(APIView):
 from collections import OrderedDict
 
 class ConnectionsView(APIView):
-    permissions_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     def get(self, request):
         queryset    = Connections.objects.filter(user=request.user)
         serializer  = ConnectionsSerializer(queryset, many=True)
@@ -276,4 +292,4 @@ class NotificationView(APIView):
         return Response({'info':'use the action below to clear all notifications',
         'action':'clearall'})
 
-# class NotificationActionsView(APIView):
+

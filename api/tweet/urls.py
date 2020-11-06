@@ -3,6 +3,8 @@ from tweet import views
 
 app_name = 'tweet'
 urlpatterns = [
-    path('api/tweets/', views.TweetView.as_view()),
+    path('api/feeds/', views.FeedsView.as_view()),
     path('api/hashtags/', views.HashtagView.as_view()),
+    path('api/likes/<pk>/', views.LikeView.as_view()),
+    path('api/bookmarks/<pk>/', views.BookmarkView.as_view()),
 ]

@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-# from django.urls import reverse
+from django.urls import reverse
 # Create your models here.
 
 class Hashtag(models.Model):
@@ -32,13 +32,22 @@ class Tweet(models.Model):
     timestamp   = models.DateTimeField(auto_now=True)
     privacy     = models.CharField(choices=comment_privacy, max_length=50, default='Everyone')
     location    = models.CharField(max_length=140, blank=True, null=True)
+    retweets    = models.IntegerField(default=0)
+    comments    = models.IntegerField(default=0)
 
+    # def __str__(self):
+    #     return str(self.user.username)+"-->"+str(self.text[:6])+"..."
+    class Meta:
+        ordering = ('-timestamp',)
+    
+    def name(self):
+        return self.user.profile.name
 
-    def __str__(self):
-        return str(self.user.username)+"-->"+str(self.text[:6])+"..."
+    def username(self):
+        return self.user.username
 
-    # def get_absolute_url(self):
-    #     return reverse("Tweet_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("Tweet", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         h=[t for t in self.text.split() if t.startswith('#')]
@@ -54,10 +63,18 @@ class Tweet(models.Model):
                 Hashtag.objects.create(hashtags=h)
         super(Tweet, self).save(*args, **kwargs) 
 
+    # def update(self, *args, **kwargs):
+    #     super(Tweet, self).save(*args, **kwargs) 
+
 class Likes(models.Model):
-    tweet   = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    user    = models.ManyToManyField(User)
-    count   = models.IntegerField()      
+    tweet   = models.ManyToManyField(Tweet)
+    user    = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userlike')
+
+    class Meta:
+        verbose_name = ("Like")
+        verbose_name_plural = ("Likes")
+    def __str__(self):
+        return str(self.user.username)
 
 class Mention(models.Model):
     user    = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -131,3 +148,10 @@ class CommentReply(models.Model):
         if(l == 1):
             return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))
         return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))+","+str((self.replying_to.all()[1].username))+"...."
+
+class Bookmark(models.Model):
+    user        = models.ForeignKey(User,  on_delete=models.CASCADE, related_name='user_bookmarks')
+    tweet       = models.ManyToManyField(Tweet, blank=True)
+
+    def __str__(self):
+        return str(self.user)+"-->"+str(self.tweet)

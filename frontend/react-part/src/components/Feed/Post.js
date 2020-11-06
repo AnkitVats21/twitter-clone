@@ -2,10 +2,14 @@ import React, { forwardRef } from "react";
 import "./Post.css";
 import { Avatar } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import RepeatIcon from "@material-ui/icons/Repeat";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import PublishIcon from "@material-ui/icons/Publish";
+// import ChatBubbleOutlineIcon from "../../assets/icons/Vector.svg";
+import { ReactComponent as ChatBubbleOutlineIcon } from "../../assets/icons/Comment.svg";
+import { ReactComponent as RepeatIcon } from "../../assets/icons/Retweet.svg";
+import { ReactComponent as FavoriteBorderIcon } from "../../assets/icons/Heart.svg";
+import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
+// import RepeatIcon from "@material-ui/icons/Repeat";
+// import FavoriteBorderIcon from "@material-ui/icons/Heart.svg";
+// import  from "@material-ui/icons/Publish";
 
 const Post = forwardRef(
     ({ displayName, username, verified, text, image, avatar }, ref) => {
@@ -36,13 +40,16 @@ const Post = forwardRef(
             {image? <img className="foodimg" src={image} alt="" />: null}
             </div>
             <div className="post__footer">
-              <ChatBubbleOutlineIcon fontSize="small" />
-              <RepeatIcon fontSize="small" />
-              <FavoriteBorderIcon fontSize="small" />
-              <PublishIcon fontSize="small" />
+              <div><ChatBubbleOutlineIcon /><span className="peoplecount">12</span></div>
+              <div><FavoriteBorderIcon /><span className="peoplecount">12</span></div>
+              <div><RepeatIcon /><span className="peoplecount">12</span></div>
+              <div><PublishIcon /><span className="peoplecount">12</span></div>
+              {/* <FavoriteBorderIcon /><span>12</span>
+              <RepeatIcon /><span>12</span>
+              <PublishIcon /><span>12</span> */}
             </div>
           </div>
-        // </div>
+        //  </div>
       );
     }
   );

@@ -8,13 +8,16 @@
     
 }
 
-.feed {
-    flex: 0.5;
-    /* border-right: 1px solid #ccc !important;
-    border-left: 1px solid #ccc !important; */
-    /* min-width: fit-content; */
-    /* background-color: red; */
-    padding-left: 2%;
-    overflow-y: scroll;
-    flex-wrap: wrap;
+.feed::-webkit-scrollbar {
+    display: none;
+  }
+
+  .feed {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .card{
+    margin-left: 20px;
+    margin-right: 20px;
   }

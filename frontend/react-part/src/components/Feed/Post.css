@@ -49,6 +49,10 @@ border-radius: 20px;
 width: 100%;
 }
 
+.peoplecount{
+  margin-left: 8px;
+}
+
   .post__footer {
     display: flex;
     justify-content: space-around;
@@ -61,6 +65,7 @@ width: 100%;
     font-size: 15px;
     padding-left: 20px;
     padding-right: 20px;
+    /* font-family: 'Open Sans' !important; */
   }
   
   .post__headerText > h3 {

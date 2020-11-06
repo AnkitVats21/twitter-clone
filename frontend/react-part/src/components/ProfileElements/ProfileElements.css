@@ -1,0 +1,99 @@
+.imgbox{
+    display: flex;
+    flex-wrap: wrap;
+    height: 200px !important;
+    overflow: hidden;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.profilewrap{
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+
+.profiledetails {
+padding-left: 32px;
+padding-right: 32px;
+background-color: #F6F8FF;
+border-left: 2px solid rgba(101, 126, 255,0.2);
+border-bottom: 2px solid rgba(101, 126, 255,0.2);
+border-right: 2px solid rgba(101, 126, 255,0.2);
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px;
+  }
+
+  .coverimg{
+      width: 100%;
+      height: 200px;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      /* margin-left: 20px; */
+      /* margin-right: 20px; */
+      display: flex;
+    align-items: flex-end;
+  }
+
+  .profileimg{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 5px solid white;
+      box-sizing: border-box;
+      margin-left: 32px;
+      margin-bottom: 24px;
+  }
+
+  .personname{
+      margin: 0;
+      padding-top:8px;
+      font-size: 22px;
+      font-family: 'Gilroy';
+      color: #262626;
+      font-weight: 600;
+  }
+
+  .personusername{
+      margin: 0;
+      margin-top: 2px;
+      font-size: 18px;
+      color: rgba(38, 38, 38, 0.5);
+      font-weight: 500;
+  }
+
+  .biotext{
+      margin-top: 24px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      color:#444B54;
+      font-weight: 500;
+  }
+
+  .nums{
+    text-align: center;
+
+}
+
+.options{
+    /* height: 10vh; */
+    /* background: chocolate; */
+    display: flex;
+    /* align-items: baseline; */
+    justify-content: space-around;
+}
+
+.profilenums:hover{
+    text-decoration: none;
+    font-family: Roboto;
+    color: #657EFF;
+
+}
+.profilenums{
+    text-decoration: none;
+    font-family: Roboto;
+    color: #444B54;
+    text-align: center;
+    margin-top: 24px;
+
+}

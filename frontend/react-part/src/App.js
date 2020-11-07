@@ -1,6 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Home from './components/Routes/Home/Home';
+import Messages from './components/Routes/Messages/Messages';
 import Explore from './components/Routes/Explore/Explore';
 import Bookmarks from './components/Routes/Bookmarks/Bookmarks';
 import Notifications from './components/Routes/Notifications/Notifications';
@@ -16,6 +17,7 @@ function App() {
     <Router>
     <Switch>
     <Route path='/' exact component={Home} />
+    <Route path='/messages' exact component={Messages} />
     <Route path='/explore' component={Explore} />
     <Route path='/bookmarks' component={Bookmarks} />
     <Route path='/profile' component={Profile} />

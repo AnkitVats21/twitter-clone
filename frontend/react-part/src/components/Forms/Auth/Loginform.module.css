@@ -2,8 +2,8 @@
     width: 50vw;
     height: 100vh;
     background-size: cover;
-    background-image: linear-gradient(to bottom, rgba(252, 154, 7, 0.77), rgba(255, 94, 0, 0.23)),
-    url("../../../assets/images/texting-1490691_1920.jpg")
+    background-image: url("../../../assets/images/Group\ 230.svg");
+    background-color: #F6F8FF;
 }
 
 .rightbox{
@@ -12,27 +12,35 @@
     /* background-color: green; */
     display: flex;
     align-items: center;
-    justify-content: center;
+
+
+    /* justify-content: center; */
+    padding-left: 120px;
+
+
+    background-color: #F6F8FF;
+
 }
 
 .field{
-    width: 100%;
-    height:42px;
+    width: 90%;
+    height:40px;
     padding: 5px 10px;
     box-sizing: border-box;  
-    border: 1.3px solid black ; 
+    border: 1.3px solid rgba(101, 126, 255,0.2) ; 
     font-family: Lato;
     outline: none;
     border-radius: 5px;
+    box-shadow: 2px 0px 14px 0px rgba(61, 100, 241,0.1);
 } 
 
 
 .headline{
-    color: #f95700ff;
+    color: var(--twitter-color);
     /* background-color: aqua; */
-    margin-bottom: 0;
+    margin-bottom: 16px;
     width: 30vw;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .wrapbox{
@@ -42,10 +50,10 @@
 }
 
 .sub{
-    width: 100%;
+    width: 90%;
     /* height: 35px; */
 
-    background-color: #f95700ff;
+    background-color: #657EFF;
     font-size: 15px;
     border: none;
     color: #ffe3e3;
@@ -58,7 +66,7 @@
 }
 
 .labelfield{
-    /* background-color: green; */
+    color: #5F5F5F;
     margin-bottom: 0;
     margin-left: 1%;
 }
@@ -68,6 +76,7 @@
     font-weight: 500;
     margin-bottom: 0 !important;
     /* margin: auto; */
+    font-size: 16px;
     padding-left: 1%;
     width: 70%;
     text-align: left;
@@ -75,6 +84,7 @@
 
 .invisible{
     opacity: 0;
+    font-size: 16px;
     color: #f95700ff;
     margin-bottom: 0 !important;
     padding-left: 1%;
@@ -95,3 +105,18 @@
     text-decoration: none;
     color: black;
 }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: black;
+    opacity: 0.5; 
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: black;
+    opacity: 0.5; 
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: black;
+    opacity: 0.5; 
+  }

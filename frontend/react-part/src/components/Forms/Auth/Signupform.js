@@ -202,7 +202,7 @@ class Login extends Component{
 
     <div className={classes.rightbox}>
     <form onSubmit = {this.handlesubmit} >
-    <h1 className={classes.headline}>SIGN-UP</h1>
+    <h1 className={classes.headline}>Join Talkpiper!</h1>
     <label className={classes.labelfield}> Name </label>< br/>
     <input  type="text" name="name" className={classes.field} required placeholder={this.state.name}  
     onChange={this.handlechangeall} onBlur={this.validname} onFocus={this.nameclean}/> <br/>

@@ -7,14 +7,22 @@ import {
 } from "react-twitter-embed";
 import SearchIcon from "@material-ui/icons/Search";
 
-function Widgets() {
+function Widgets({search}) {
   return (
     <div className="widgets">
-      <div className="widgets__input">
+
+        <h2 className="hidetext">Search</h2>
+
+        {search==="hide"? null: <div className="widgets__input">
         <SearchIcon className="widgets__searchIcon" />
         <input className="widgets__searchbar" placeholder="Search Twitter" type="text" />
-      </div>
+      </div> }
 
+      {/* <div className="widgets__input">
+        <SearchIcon className="widgets__searchIcon" />
+        <input className="widgets__searchbar" placeholder="Search Twitter" type="text" />
+      </div> */}
+      
       <div className="widgets__widgetContainer">
         <h2>What's happening</h2>
 

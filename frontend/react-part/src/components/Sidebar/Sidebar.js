@@ -1,6 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
-// import TwitterIcon from "@material-ui/icons/Twitter";
+import TwitterIcon from "@material-ui/icons/Twitter";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
@@ -14,7 +14,7 @@ import { Button } from "@material-ui/core";
 function Sidebar({propactive}) {
   return (
     <div className="sidebar">
-      {/* <TwitterIcon className="sidebar__twitterIcon" /> */}
+      <TwitterIcon className="sidebar__twitterIcon" />
       {propactive==="home"? <SidebarOption active Icon={HomeIcon} redirect='/' text="Home" />:<SidebarOption Icon={HomeIcon} redirect='/' text="Home" /> }
       {propactive==="explore"? <SidebarOption active Icon={SearchIcon} redirect='/explore' text="Explore" />:<SidebarOption Icon={SearchIcon} redirect='/explore' text="Explore" /> }
       {propactive==="notifications"? <SidebarOption active Icon={NotificationsNoneIcon} redirect='/notifications' text="Notifications" />:<SidebarOption Icon={NotificationsNoneIcon} redirect='/notifications' text="Notifications" /> }

@@ -5,6 +5,7 @@ import Messages from './components/Routes/Messages/Messages';
 import Explore from './components/Routes/Explore/Explore';
 import Bookmarks from './components/Routes/Bookmarks/Bookmarks';
 import Notifications from './components/Routes/Notifications/Notifications';
+import Search from './components/Routes/Search/Search';
 import Profile from './components/Routes/Profile/Profile';
 import LogIn from './components/Routes/Authentication/Login/Login';
 import SignUp from './components/Routes/Authentication/Signup/Signup'
@@ -17,7 +18,8 @@ function App() {
     <Router>
     <Switch>
     <Route path='/' exact component={Home} />
-    <Route path='/messages' exact component={Messages} />
+    <Route path='/messages' component={Messages} />
+    <Route path='/search' component={Search} />
     <Route path='/explore' component={Explore} />
     <Route path='/bookmarks' component={Bookmarks} />
     <Route path='/profile' component={Profile} />

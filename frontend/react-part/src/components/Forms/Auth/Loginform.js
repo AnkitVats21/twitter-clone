@@ -78,7 +78,7 @@ class Login extends Component{
 
         <div className={classes.rightbox}>
         <form onSubmit = {this.handlesubmit} >
-        <h1 className={classes.headline}>SIGN-IN</h1>
+        <h1 className={classes.headline}>Welcome Back!</h1>
         <label className={classes.labelfield}> Email </label><br />
            <input name="email" className={classes.field} required placeholder= {this.state.email} 
           onChange={this.handlechangeall} /> <br/>

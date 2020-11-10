@@ -5,6 +5,8 @@ import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
+// import {ReactComponent as NotificationsNoneIcon} from "../../assets/icons/Bell.svg";
+
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";

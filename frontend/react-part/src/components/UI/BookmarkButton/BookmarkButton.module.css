@@ -1,0 +1,27 @@
+.bookmarkbtn {
+/* background-color: brown; */
+/* height: 30px; */
+  padding: 0;
+
+  text-decoration: none;
+
+}
+
+.peoplecount{
+  margin-left: 4px;
+  font-family: 'Gilroy';
+}
+
+.icon{
+  margin-top: -1.2px;
+  height: 20px;
+  width: 20px;
+  color: #657786;
+}
+
+.filled{
+  margin-top: -1.2px;
+  height: 20px;
+  width: 2px;
+  color: #657786;
+}

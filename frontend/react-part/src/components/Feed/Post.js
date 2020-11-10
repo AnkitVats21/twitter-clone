@@ -6,6 +6,8 @@ import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { ReactComponent as ChatBubbleOutlineIcon } from "../../assets/icons/Comment.svg";
 import { ReactComponent as RepeatIcon } from "../../assets/icons/Retweet.svg";
 import { ReactComponent as FavoriteBorderIcon } from "../../assets/icons/Heart.svg";
+import LikeButton from "../UI/LikeButton/LikeButton"
+import BookmarkButton from "../UI/BookmarkButton/BookmarkButton"
 import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 // import RepeatIcon from "@material-ui/icons/Repeat";
 // import FavoriteBorderIcon from "@material-ui/icons/Heart.svg";
@@ -41,12 +43,11 @@ const Post = forwardRef(
             </div>
             <div className="post__footer">
               <div><ChatBubbleOutlineIcon /><span className="peoplecount">12</span></div>
-              <div><FavoriteBorderIcon /><span className="peoplecount">12</span></div>
+              {/* <div><FavoriteBorderIcon /><span className="peoplecount">12</span></div> */}
+              <LikeButton />
               <div><RepeatIcon /><span className="peoplecount">12</span></div>
-              <div><PublishIcon /><span className="peoplecount">12</span></div>
-              {/* <FavoriteBorderIcon /><span>12</span>
-              <RepeatIcon /><span>12</span>
-              <PublishIcon /><span>12</span> */}
+              {/* <div><PublishIcon /><span className="peoplecount">12</span></div> */}
+              <BookmarkButton />
             </div>
           </div>
         //  </div>

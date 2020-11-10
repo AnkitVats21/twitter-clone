@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import classes from '../Home/Home.module.css';
-// import NavigationBar from '../../Navbar/Navbar'
 import Sidebar from '../../Sidebar/Sidebar'
-import Feed from '../../Feed/Feed'
+import Commentbox from '../../Commentbox/Commentbox'
 import Trending from '../../Trending/Trending'
-import NotificationList from '../../NotificationList/NotificationList'
-import ProfileElements from '../../ProfileElements/ProfileElements'
 import Widgets from '../../../components/Widgets/Widgets'
 
-class Profile extends Component {
+class Comments extends Component {
 
   
     render() {
       return(
       <div className={classes.flexbox}>
-        <Sidebar propactive="profile" />
-        <ProfileElements />
+        <Sidebar propactive="home" />
+        <Commentbox />
         <Widgets />
       </div>
       )
@@ -23,6 +20,6 @@ class Profile extends Component {
   }
   
   
-  export default Profile;
+  export default Comments;
   
   

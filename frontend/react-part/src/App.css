@@ -10,44 +10,9 @@ body {
   --twitter-background: #F6F8FF;
 }
 
-.fa-heart{
-  color: red;
-}
-
-.fa-bullhorn{
-  margin-right: 10px;
-}
-
-
-
-.fa-upload{
-/* color: blue; */
-margin-right: 10px;
-}
-
-
-.fa-bell, .fa-hashtag, .fa-envelope, .fa-edit, .fa-user{
+.staricon{
   margin-right: 10px ;
 }
-
-.fa-sticky-note{
-  margin-left: 13px;
-}
-
-.sortingbtn, .sortingbtn:focus{
-  margin-top: 20px !important;
-  background-color: #ff1742 !important;
-  border:none !important;
-  outline:none !important;
-  box-shadow: none !important;
-}
-
-.sortingbtn:hover, .sortingbtn:active{
-  margin-top: 20px !important;
-  background-color: #c9042b  !important;
-}
-
-
 
 body{
   background-color: #f1f1f1;

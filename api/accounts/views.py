@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User, OTP, Connections, Notification
-from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer, NotificationSerializer
+from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer, NotificationSerializer, FollowerSerializer
 from rest_framework import viewsets, status, generics, mixins, permissions
 from random import randint
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -83,11 +83,11 @@ class CreateUserAccount(APIView):
         else:
             return Response({"error":"Please enter valid email"}, status = status.HTTP_400_BAD_REQUEST)
 
-class UserAccountsList(APIView):
-
+class ProfileView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
     def get(self, request):
-        users       = User.objects.all()
-        serializer  = UserSerializer(users, many = True, context={'request': request})
+        query       = User.objects.filter(id=request.user.id)[0]
+        serializer  = UserSerializer(query, context={'request': request})
         return Response(serializer.data)
 
 class ResendOTP(APIView):
@@ -122,7 +122,7 @@ class VerifyOTP(APIView):
     def post(self, request):
         email   = request.data.get('email')
         otp     = request.data.get('otp')
-        reset  = request.data.get('reset')
+        reset   = request.data.get('reset')
         print(email,otp)
         try:
             obj     = OTP.objects.filter(email__iexact=email)[0]
@@ -159,8 +159,11 @@ class UserLoginView(TokenObtainPairView):
 
     def post(self, request):
         username = request.data.get("email")
+        try:
+            username = request.data['username']
+        except:
+            pass
         password = request.data.get("password")
-        print(username)
         user = User.objects.filter(username__iexact=username)
         if user.exists():
             pass
@@ -234,52 +237,55 @@ class EditUserProfileView(APIView):
 
 from collections import OrderedDict
 
-class ConnectionsView(APIView):
+class FollowerView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    def get(self, request):
-        queryset    = Connections.objects.filter(user=request.user)
-        serializer  = ConnectionsSerializer(queryset, many=True)
+    def get(self, request, connection):
+        user_id     = request.user.id
+        queryset    = Connections.objects.filter(user=request.user)[0]
+        if connection=='follower':
+            query   = queryset.follower.all()
+        else:
+            query   = queryset.following.all()
+        serializer  = FollowerSerializer(query, many=True, context={'request': request, 'user_id': user_id})
         return Response(serializer.data)
 
-    def post(self, request):
-        userid      = request.data.get('username')
+
+class ConnectionsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, pk):
+
+        user    = request.user
         try:
-            user2   = User.objects.filter(id=userid)[0]
+            user2       = User.objects.filter(username=pk)[0]
         except:
-            user2   = User.objects.filter(username=userid)[0]
-        action      = request.data.get('action')
-        queryset    = Connections.objects.filter(user=request.user)[0]
+            return Response({'details':'please enter valid pk'})
+        # action      = request.data.get('action')
+        queryset    = Connections.objects.filter(user=user)[0]
         queryset2   = Connections.objects.filter(user=user2)[0]
-        if str(queryset)==str(user2.username):
+        if pk==str(user.username):
             return Response({"details":"you cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
-        if action=='follow':
-            text = ("{} followed you.").format(request.user.profile.name)
-            try:
-                Connections.objects.filter(user=request.user,following=user2)
-                return Response({'details':'you already followed him'})
-            except:
-                pass
-            queryset.following.add(user2)
-            queryset2.follower.add(request.user)
-            queryset.save()
-            try:
-                Notification.objects.filter(user=user2, text=user2)
-            except:
-                Notification.objects.create(user=user2, text=text, category="Followers")
-            serializer  = ConnectionsSerializer(queryset)
-            return Response(serializer.data)
-        if action=='unfollow':
+        if user2 in queryset.following.all():
             queryset.following.remove(user2)
-            queryset2.follower.remove(request.user)
+            queryset2.follower.remove(user)
             queryset.save()
-            serializer  = ConnectionsSerializer(queryset)
-            return Response(serializer.data)
+            queryset2.save()
+            return Response({'details':'You unfollowed {}'.format(user2.profile.name)})
+        else:
+            queryset.following.add(user2)
+            queryset2.follower.add(user)
+            queryset.save()
+            queryset2.save()
+            text_data = '@{} started following you.'.format(user.username)
+            obj = Notification.objects.filter(user=user2).filter(text=text_data)
+            if len(obj)==0:
+                Notification.objects.create(user=user2, text=text_data, category="Followers")
+            return Response({'details':'You followed {}'.format(user2.profile.name)})
 
 class NotificationView(APIView):
     serializer_class = NotificationSerializer
     permission_classes= (permissions.IsAuthenticated,)
     def get(self, request):
-        queryset   = Notification.objects.filter(user=request.user)
+        queryset   = Notification.objects.filter(user=request.user).filter(seen=False)
         serializer = NotificationSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     
@@ -289,7 +295,15 @@ class NotificationView(APIView):
             queryset   = Notification.objects.filter(user=request.user)
             queryset.delete()
             return Response({'details':'all clear'})
-        return Response({'info':'use the action below to clear all notifications',
+        return Response({'info':'use the actsion below to clear all notifications',
         'action':'clearall'})
 
-
+class NotificationSeenView(APIView):
+    def get(self, request, pk):
+        try:
+            obj      = Notification.objects.filter(id=pk)[0]
+        except:
+            return Response({'details':'notification not found'})
+        obj.seen = True
+        obj.save()
+        return Response({"notification marked as read."})

@@ -40,4 +40,6 @@ class OTPAdmin(admin.ModelAdmin):
     list_display = ('email','otp')
 
 admin.site.register(Connections)
-admin.site.register(Notification)
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('username', 'category')

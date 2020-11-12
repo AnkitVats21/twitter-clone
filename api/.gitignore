@@ -1,0 +1,6 @@
+migrations/
+__pycache__/
+*.pyc
+*.jpg
+*.jpeg
+*.gif

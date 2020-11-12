@@ -111,7 +111,7 @@ class Retweet(models.Model):
                 hashtag.save()
             except:
                 Hashtag.objects.create(hashtags=h)
-        super(Tweet, self).save(*args, **kwargs)
+        super(Retweet, self).save(*args, **kwargs)
 
 class Comment(models.Model):
     tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE)

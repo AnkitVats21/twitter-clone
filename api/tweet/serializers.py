@@ -7,13 +7,13 @@ class TweetSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField('get_status')
     likes = serializers.SerializerMethodField('total_likes')
     profile_pic = serializers.SerializerMethodField('profile')
-
+    bookmarked  = serializers.SerializerMethodField('Bookmark')
     class Meta:
         model   = Tweet
         fields  = ('id','name','username','profile_pic',
         'text','photos','gif','videos','topic',
         'timestamp','privacy','location',
-        'liked', 'likes',
+        'liked', 'likes', 'bookmarked',
         )
     
     def get_status(self, obj):
@@ -35,7 +35,11 @@ class TweetSerializer(serializers.ModelSerializer):
         p    = UserProfile.objects.filter(user=user)[0]
         serializer = UserProfileSerializer(p, context={'request': self.context.get('request')})
         return serializer.data.get('picture')
-
+    
+    def Bookmark(self, instance):
+        user    = self.context.get('request').user
+        bookmarks = Bookmark.objects.filter(user=user)[0]
+        return instance in bookmarks.tweet.all()
 
 
 class HashtagSerializer(serializers.ModelSerializer):

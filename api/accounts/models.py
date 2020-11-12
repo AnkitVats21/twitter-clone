@@ -89,6 +89,12 @@ class User(AbstractBaseUser):
     @property
     def is_active(self):
         return self.active
+    
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+        obj = Connections.objects.filter(user=self)
+        if len(obj)==0:
+            Connections.objects.create(user=self)
 
     
 class UserProfile(models.Model):
@@ -137,8 +143,12 @@ Notification_Category=( ('Mention','Mention'),
 class Notification(models.Model):
     user    = models.ForeignKey(User, on_delete=models.CASCADE)
     text    = models.TextField(max_length=500, blank=True, null=True)
+    extra_txt= models.TextField(blank=True, null=True)
     timestamp= models.DateTimeField(auto_now_add=True)
     category= models.CharField(choices=Notification_Category, max_length=30)
     seen    = models.BooleanField(default=False)
     def __str__(self):
         return str(self.user.username)+" --> "+self.category
+
+    def username(self):
+        return str(self.user.username)

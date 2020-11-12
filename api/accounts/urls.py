@@ -7,7 +7,7 @@ from tweet import views as tweet
 app_name='accounts'
 urlpatterns = [
     path('api/signup/', views.CreateUserAccount.as_view()),
-    path('api/users/', views.UserAccountsList.as_view()),
+    path('api/profile/', views.ProfileView.as_view()),
     path('api/resendotp/', views.ResendOTP.as_view()),
     path('api/sendotp/', views.ResendOTP.as_view(), name='forgot-password-send-otp'),
     path('api/verifyotp/', views.VerifyOTP.as_view()),
@@ -16,8 +16,10 @@ urlpatterns = [
     path('api/resetpass/', views.ForgotPasswordView.as_view()),
     path('api/changepass/', views.ChangePassword.as_view()),
     path('api/updateprofile/', views.EditUserProfileView.as_view()),
-    path('api/connections/', views.ConnectionsView.as_view(), name='connections-detail'),
+    path('api/connections/<pk>/', views.ConnectionsView.as_view(), name='post-to-follow/unfollow'),
+    path('api/user/<connection>/', views.FollowerView.as_view()),
     path('api/checkusername/', views.CheckUserName.as_view()),
     path('api/notifications/', views.NotificationView.as_view()),
+    path('api/notifications/mark_as_read/<pk>/', views.NotificationSeenView.as_view()),
     #path('api/hashtags/', tweet.HashtagView.as_view()),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

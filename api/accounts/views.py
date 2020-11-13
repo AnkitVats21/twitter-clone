@@ -89,6 +89,11 @@ class ProfileView(APIView):
         query       = User.objects.filter(id=request.user.id)[0]
         serializer  = UserSerializer(query, context={'request': request})
         return Response(serializer.data)
+    def patch(self, request):
+        serializer  = UserSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ResendOTP(APIView):
     #serializer_class = OTPSerializer
@@ -275,7 +280,18 @@ class ConnectionsView(APIView):
             queryset2.follower.add(user)
             queryset.save()
             queryset2.save()
-            text_data = '@{} started following you.'.format(user.username)
+            try:
+                profile_pic=request.user.profile.picture.url
+                profile_pic="http://{}{}".format(request.headers['host'],profile_pic)
+            except:
+                profile_pic=None
+            text_data = {
+                "username":user.username,
+                "profile_pic":profile_pic,
+                "notification data":"<b>{}</b> started following you.".format(user.profile.name)
+                }
+            text_data = json.dumps(text_data)
+            print(text_data)
             obj = Notification.objects.filter(user=user2).filter(text=text_data)
             if len(obj)==0:
                 Notification.objects.create(user=user2, text=text_data, category="Followers")

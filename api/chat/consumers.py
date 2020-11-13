@@ -64,7 +64,6 @@ class ChatConsumer(WebsocketConsumer):
             self.close(code=401)
         self.user_id    = response_data.get('user_id')
         self.scope['user']=User.objects.get(id=self.user_id)
-        print(self.scope['user'])
         self.room_group_name = 'chat_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,

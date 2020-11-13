@@ -137,12 +137,14 @@ Notification_Category=( ('Mention','Mention'),
     ('Replies', 'Replies'), ("Retweets", 'Retweets'),
     ('Likes', 'Likes'), ('Followers', 'Followers'),
     ('Direct Messages', 'Direct Messages'),
+    ('Tweet', 'Tweet'),
 )
 
 
 class Notification(models.Model):
     user    = models.ForeignKey(User, on_delete=models.CASCADE)
     text    = models.TextField(max_length=500, blank=True, null=True)
+    tweet_id= models.IntegerField(blank=True, null=True)
     extra_txt= models.TextField(blank=True, null=True)
     timestamp= models.DateTimeField(auto_now_add=True)
     category= models.CharField(choices=Notification_Category, max_length=30)

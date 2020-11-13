@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
-from .serializers import HashtagSerializer, TweetSerializer, BookmarkSerializer
-from .models import Hashtag, Tweet, Likes, Bookmark
+from .serializers import HashtagSerializer, TweetSerializer, TweetPostSerializer, RetweetSerializer
+from .models import Hashtag, Tweet, Likes, Bookmark, Mention, Retweet
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from accounts.models import Connections, User, Notification
 from django.shortcuts import get_object_or_404
+import json
 
 class HashtagView(APIView):
     def get(self, request):
@@ -17,12 +18,63 @@ class FeedsView(APIView):
     def get(self, request):
         Following   = Connections.objects.filter(user=request.user)[0]
         queryset    = []
+        rquery      = []
         for i in Following.following.all():
             tweet     = Tweet.objects.filter(user=i)
+            retweet   = Retweet.objects.filter(user=i)
+            rquery   += retweet
             queryset += tweet
-
         serializer  = TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
+        print(serializer.data)
         return Response(serializer.data)
+    def post(self, request):
+        followers = Connections.objects.filter(user=request.user.id)[0].follower.all()
+        try:
+            profile_pic=request.user.profile.picture.url
+            profile_pic="http://{}{}".format(request.headers['host'],profile_pic)
+        except:
+            profile_pic=None
+        data = request.data.copy()
+        data['user']=str(request.user.id)
+        keys = list(data.keys())
+        serializer = TweetPostSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            try:
+                tweet = Tweet.objects.get(id=serializer.data['id'])
+                m=[t for t in request.data['text'].split() if t.startswith('@')]
+                m=list(dict.fromkeys(m))
+                for i in m:
+                    user = User.objects.filter(username=str(i[1:]))
+                    if len(user)!=0:
+                        obj = Mention.objects.create(user=user[0], tweet=tweet)
+                        text_data   = {
+                            "name": request.user.profile.name,
+                            "username": request.user.username,
+                            "profile_pic": profile_pic,
+                            "tweet_id": serializer.data.get('id'),
+                            "ntification_data":"{} mentioned you in tweet.".format(request.user.profile.name),
+                            "tweet_data": serializer.data.get('text')
+                        }
+                        text_data = json.dumps(text_data)
+                        Notification.objects.create(user=user[0], text=text_data, category='Mention')
+
+            except:
+                pass
+            if 'text' in keys:
+                text_data   = {
+                    "name": request.user.profile.name,
+                    "username": request.user.username,
+                    "profile_pic": profile_pic,
+                    "tweet_id": serializer.data.get('id'),
+                    "ntification_data":"Recent tweet from <b>{}</b>.".format(request.user.profile.name),
+                    "tweet_data": serializer.data.get('text')
+                }
+                text_data = json.dumps(text_data)
+                for i in followers:
+                    Notification.objects.create(user=i, text=text_data, category='Tweet')
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 class LikeView(APIView):
@@ -34,56 +86,70 @@ class LikeView(APIView):
         except:
             return Response({"details":"tweet with this id doesn't exist"})
         tweet_user= User.objects.filter(username=str(tweet.username()))[0]
-        username = request.user.username
+        userid = request.user.id
         name     = request.user.profile.name
         tweetID  = tweet.id
         tweetUser= tweet_user
-        obj     = Likes.objects.get_or_create(user=request.user)
+        obj     = Likes.objects.get_or_create(user=request.user, tweet=tweet)
         like    = obj[0]
         if obj[1]:
-            like.tweet.add(tweet)
-            like.save()
-            self.send_notification(name, username, tweetID, tweetUser)
+            self.send_notification(name, userid, tweet, tweetUser, 'like')
             return Response({'details':'you liked this post.'})
         else:
-            if tweet in like.tweet.all():
-                like.tweet.remove(tweet)
-                self.send_notification(name, username, tweetID, tweetUser, 'unlike')
-                return Response({'details':'you unliked this post.'}, status=status.HTTP_200_OK)
-            else:
-                like.tweet.add(tweet)
-                self.send_notification(name, username, tweetID, tweetUser)
-                return Response({'details':'you liked this post.'}, status=status.HTTP_200_OK)
+            like.delete()
+            self.send_notification(name, userid, tweet, tweetUser, 'unlike')
+            return Response({'details':'you unliked this post.'}, status=status.HTTP_200_OK)
 
-    def send_notification(self, name, username, tweetID, tweetUser, *args):
-        obj = Notification.objects.filter(user=tweetUser).filter(category='Likes').filter(extra_txt__istartswith='id:{}'.format(tweetID))
+    def send_notification(self, name, userid, tweet, tweetUser, *args):
+        fetch_data = """{}"tweet_id":{},""".format('{',tweet.id)
+        obj = Notification.objects.filter(user=tweetUser).filter(category='Likes').filter(tweet_id=tweet.id)
         if len(obj) != 0:
             obj=obj[0]
-            text_data = obj.text
-            users = [t for t in text_data.split() if t.startswith('@')]
-            try:
-                if args[0]=='unlike':
-                    user = '@'+username
-                    final = text_data.replace(user,'')
-                    final = final.replace('  ',' ')
-                    obj.text = final
-                    obj.save()
+            text_data = json.loads(obj.text)
+            extra_txt = json.loads(obj.extra_txt)
+            if args[0]=='unlike':
+                like = Likes.objects.order_by('-timestamp').filter(tweet=tweet.id)
+                if len(like)>1:
+                    text_data['data']='{} and {} other liked your tweet.'.format(like[0].user.profile.name,len(like)-2)
+                elif len(like)==0:
+                    obj.delete()
                     return
-            except:
-                pass
-            if '@'+username not in users:
-                obj.text ='@{} {} '.format(username, text_data)
-                obj.seen = False
+                else:
+                    text_data['data']='{} liked your tweet.'.format(like[0].user.profile.name)
+                text_data = json.dumps(text_data)
+                obj.text = text_data
+                obj.save()
+                return
+            else:
+                like = Likes.objects.order_by('-timestamp').filter(tweet=tweet.id)
+                if len(like)>1:
+                    text_data['data']='{} and {} other liked your tweet.'.format(like[0].user.profile.name,len(like)-2)
+                else:
+                    text_data['data']='{} liked your tweet.'.format(like[0].user.profile.name)
+                if userid not in extra_txt['user_ids']:
+                    extra_txt['user_ids'].append(userid)
+                    obj.seen=False
+                text_data = json.dumps(text_data)
+                obj.extra_txt=json.dumps(extra_txt)
+                obj.text = text_data
                 obj.save()
         else:
-            text_data = '@{} '.format(username)
-            obj = Notification.objects.create(user=tweetUser, category='Likes', text=text_data, extra_txt='id:{}'.format(tweetID))
+            extra_txt = {
+                "user_ids":[userid]
+            }
+            text_data = {
+                "data": "{} liked your tweet".format(name),
+                "tweet_data": tweet.text
+            }
+            extra_txt = json.dumps(extra_txt)
+            text_data = json.dumps(text_data)
+            obj = Notification.objects.create(user=tweetUser, category='Likes', text=text_data, extra_txt=extra_txt, tweet_id=tweet.id)
 
 class BookmarkView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, pk):
-        queryset = Bookmark.objects.filter(user=request.user)
-        serializer=BookmarkSerializer(queryset, many=True, context={'request':request})
+        queryset = Bookmark.objects.filter(user=request.user)[0].tweet.all()
+        serializer=TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
         return Response(serializer.data)
 
     def post(self, request, pk):
@@ -101,3 +167,21 @@ class BookmarkView(APIView):
                 bookmark.tweet.add(tweet)
                 return Response({'details':'you added this tweet to bookmarks.'}, status=status.HTTP_200_OK)
 
+class RetweetView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def post(self, request):
+        serializer = RetweetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()   
+            try:
+                tweet = Tweet.objects.get(id=request.data['tweet'])
+                m=[t for t in request.data.text.split() if t.startswith('@')]
+                m=list(dict.fromkeys(m))
+                for i in m:
+                    user = User.objects.filter(username=str(i))[0]
+                    if len(User)!=0:
+                        obj = Mention.objects.create(user=user, tweet=tweet)
+            except:
+                pass
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

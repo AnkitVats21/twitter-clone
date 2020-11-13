@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, UserProfile, OTP, Connections, Notification
 from rest_framework.response import Response
+import json
 
 class UserProfileSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -91,44 +92,24 @@ class FollowerSerializer(serializers.ModelSerializer):
     
     def user_data(self, instance):
         serializer = UserSerializer(instance, context={'request':self.context.get('request')})
-        return serializer.data['profile']
+        temp = serializer.data
+        data = {'username' : temp['username'],
+                'name': temp['profile']['name'],
+                'bio' : temp['profile']['bio'],
+                'picture': temp['profile']['picture']
+        }
+        return data
 
 class NotificationSerializer(serializers.ModelSerializer):
     url     = serializers.SerializerMethodField('notification_url')
     extra   = serializers.SerializerMethodField('extra_data')
     class Meta:
         model = Notification
-        fields= ('id', 'text', 'timestamp', 'category', 'seen', 'url', 'extra')
+        fields= ('id', 'timestamp', 'category', 'seen', 'url', 'extra')
 
     def notification_url(self, instance):
         host = 'http://'+self.context.get('request').headers['host']
         return host+'/api/notifications/mark_as_read/'+str(instance.id)+"/"
     def extra_data(self, instance):
-        host = 'http://'+self.context.get('request').headers['host']
-        image= ''
-        data = ''
-        if instance.category == 'Likes':
-            text_data = instance.text
-            users   = [t for t in text_data.split() if t.startswith('@')]
-            uname   = users[0][1:]
-            userimg = User.objects.filter(username=uname)[0]
-            image   = host +'/'+ str(userimg.profile.picture)
-            total   = len(users)
-            if total==0:
-                return None
-            if total >3:
-                for i in range(3):
-                    username  = users[int(i)][1:]
-                    user = User.objects.filter(username=username)[0]
-                    end  = ', ' if i<2 else ' '
-                    data += user.profile.name + end
-                others = total - 3
-                data   += 'and {} {} liked your tweet'.format(others, 'others' if others>1 else 'other')
-            else:
-                for i in users:
-                    user = User.objects.filter(username=i[1:])[0]
-                    end = ' ' if i==users[len(users)-1] else ', '
-                    data+= user.profile.name+ end
-                data    += 'liked your tweet.'
-            return {'text_data':data, 'image':image}
-        return None
+        data = json.loads(instance.text)
+        return data

@@ -51,9 +51,7 @@ class Tweet(models.Model):
 
     def save(self, *args, **kwargs):
         h=[t for t in self.text.split() if t.startswith('#')]
-        m=[t for t in self.text.split() if t.startswith('@')]
         h=list(dict.fromkeys(h))
-        m=list(dict.fromkeys(m))
         for h in h:
             try:
                 hashtag = Hashtag.objects.filter(hashtags=h)[0]
@@ -63,12 +61,11 @@ class Tweet(models.Model):
                 Hashtag.objects.create(hashtags=h)
         super(Tweet, self).save(*args, **kwargs) 
 
-    # def update(self, *args, **kwargs):
-    #     super(Tweet, self).save(*args, **kwargs) 
 
 class Likes(models.Model):
-    tweet   = models.ManyToManyField(Tweet)
+    tweet   = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='tweetlike', blank=True, null=True)
     user    = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userlike')
+    timestamp= models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = ("Like")
@@ -100,17 +97,18 @@ class Retweet(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        d=[t for t in self.text.split() if t.startswith('#')]
-        m=[t for t in self.text.split() if t.startswith('@')]
-        d=list(dict.fromkeys(d))
-        m=list(dict.fromkeys(m))
-        for h in d:
-            try:
-                hashtag = Hashtag.objects.filter(hashtags=h)[0]
-                hashtag.usecount +=1
-                hashtag.save()
-            except:
-                Hashtag.objects.create(hashtags=h)
+        try:
+            d=[t for t in self.text.split() if t.startswith('#')]
+            d=list(dict.fromkeys(d))
+            for h in d:
+                try:
+                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
+                    hashtag.usecount +=1
+                    hashtag.save()
+                except:
+                    Hashtag.objects.create(hashtags=h)
+        except:
+            pass
         super(Retweet, self).save(*args, **kwargs)
 
 class Comment(models.Model):

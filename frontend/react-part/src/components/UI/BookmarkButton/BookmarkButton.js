@@ -3,28 +3,26 @@ import classes from './BookmarkButton.module.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../../services/ServerService';
-// import { ReactComponent as Bookmarkbtn } from "../../../assets/icons/Bookmark.svg";
-// import  from '@material-ui/icons/BookmarkBorder';
-// import  from '@material-ui/icons/Bookmark';
 import Filledbookmark from '@material-ui/icons/TurnedIn';
 import Bookmarkbtn from '@material-ui/icons/TurnedInNot';
-// import { ReactComponent as  } from "../../../assets/icons/Filledbookmark.svg";
+
 
 class BookmarkButton extends Component {
 
     state = {
         likes: 1,
-        isclicked: false
+        isclicked: false,
+        pk: this.props.pk
     };
 
     componentDidMount(){
         const data= this.props.pk;
 
-      ServerService.readrecipe(data)
-      .then(response=>{
-        // console.log(response);
-        this.setState({isclicked: response.data.bookmark_is,})
-      })
+    //   ServerService.readrecipe(data)
+    //   .then(response=>{
+    //     // console.log(response);
+    //     this.setState({isclicked: response.data.bookmark_is,})
+    //   })
     }
 
     handlechange = () => {
@@ -32,9 +30,6 @@ class BookmarkButton extends Component {
           isclicked: ((this.state.isclicked)?false:true)
         });
 
-        const data={
-            pk: this.props.pk
-        }
         // console.log(data)
 
         // axios.post('https://776d58591d10.ngrok.io/recipe/bookmark/', data,
@@ -45,7 +40,13 @@ class BookmarkButton extends Component {
         //     },
             
         // }) 
-        ServerService.bookmark(data)
+        const pk= this.state.pk
+
+        const data={
+            tweetid: this.state.pk
+        }
+
+        ServerService.bookmark(pk,data)
         .then((resp)=>{
             console.log(resp)          
           })
@@ -54,24 +55,12 @@ class BookmarkButton extends Component {
 
     render() {
 
-        if(!localStorage.getItem('access_token')){
-            return (
-            
-               <Link to='/sign-in'><div className={classes.bookmarkbtn} > 
-               <Filledbookmark className={classes.filled}/><span className={classes.peoplecount}>{this.state.likes}</span>
-               </div>
-
-</Link> 
-            )
-        }
-
-
-
         if(this.state.isclicked){
             return (
             
                 <div onClick={this.handlechange} className={classes.bookmarkbtn} >
-                    <Filledbookmark className={classes.filled}/><span className={classes.peoplecount}>{this.state.likes}</span>
+                    <Filledbookmark className={classes.filled}/>
+                    {/* <span className={classes.peoplecount}>{this.state.likes}</span> */}
                 </div>
             )
         }
@@ -80,7 +69,8 @@ class BookmarkButton extends Component {
             return (
             
                 <div onClick={this.handlechange} className={classes.bookmarkbtn} > 
-                <Bookmarkbtn className={classes.icon}/><span className={classes.peoplecount}>{this.state.likes}</span>
+                <Bookmarkbtn className={classes.icon}/>
+                {/* <span className={classes.peoplecount}>{this.state.likes}</span> */}
                 </div>
             )
         }

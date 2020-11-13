@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://fdfecace8dd5.ngrok.io/";
+const BASE_URL = "http://d23800404ad3.ngrok.io/";
 
 class ServerService {
 
@@ -46,6 +46,18 @@ class ServerService {
 
     homecards(){
       return axios.get(BASE_URL+ 'api/feeds/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    }
+
+    notifications(){
+      return axios.get(BASE_URL + 'api/notifications/',
       {
         headers: {
             'Content-Type': 'application/json',
@@ -107,34 +119,6 @@ class ServerService {
       return axios.post(BASE_URL + 'search/',data)
     }
 
-    readrecipe(data){
-
-if(localStorage.getItem('access_token')){
-  return axios.get(BASE_URL + 'recipe/'+ data+'/',
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    },
-    
-}
-  )
-
-}
-
-else{
-  return axios.get(BASE_URL + 'recipe/'+ data+'/',
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': ``
-    },
-    
-}
-  )
-}
-
-}
 
 
   addrecipe(formdata){
@@ -252,27 +236,29 @@ bookmarklist(){
       return axios.get(BASE_URL +'others/')
     }
 
-    bookmark(data){
-      return axios.post(BASE_URL + 'recipe/bookmark/', data,
+    bookmark(pk, data){
+      return axios.post(BASE_URL + 'api/bookmarks/'+ pk+'/',data,
       {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          },
-          
-      }) 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
     }
+    )
+   }
 
-    like(data){
-      return axios.post(BASE_URL + 'recipe/like/', data,
+    like(pk, data){
+      return axios.post(BASE_URL + 'api/likes/'+ pk+'/',data,
       {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          },
-          
-      }) 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
     }
+    )
+   }
 
 }
   

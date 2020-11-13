@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Sidebar.css";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-// import {ReactComponent as NotificationsNoneIcon} from "../../assets/icons/Bell.svg";
+
+import PostModal from'../UI/PostModal/PostModal';
 
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
@@ -14,6 +15,15 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Button } from "@material-ui/core";
 
 function Sidebar({propactive}) {
+
+  // const [show, setShow] = useState("show");
+
+  // const handleClose = () => setShow("hide");
+  // const handleShow = () => setShow("show");
+
+  const [modalShow, setModalShow] = React.useState(false);
+
+
   return (
     <div className="sidebar">
       <TwitterIcon className="sidebar__twitterIcon" />
@@ -25,11 +35,18 @@ function Sidebar({propactive}) {
       {propactive==="profile"? <SidebarOption active Icon={PermIdentityIcon} redirect='/profile' text="Profile" />:<SidebarOption Icon={PermIdentityIcon} redirect='/profile' text="Profile" /> }
       
 
-      <SidebarOption Icon={ExitToAppIcon} text="Logout" />
+      <SidebarOption Icon={ExitToAppIcon} text="Logout" redirect="/log-in" />
 
-      <Button variant="outlined" className="sidebar__tweet" fullWidth>
+      <Button onClick={() => setModalShow(true)} variant="outlined" className="sidebar__tweet" fullWidth>
         Post
       </Button>
+
+      {/* <PostModal showvar={show}/> */}
+
+      <PostModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </div>
   );
 }

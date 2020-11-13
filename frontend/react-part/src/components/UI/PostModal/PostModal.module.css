@@ -1,0 +1,29 @@
+.modalfield{
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.postbtn{
+    background-color: var(--twitter-color) !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.postbtn:hover{
+background-color: #4563ff!important;
+border: none !important;
+outline: none !important;
+box-shadow: none !important;
+}
+
+.galleryicon{
+    color: var(--twitter-color) !important;
+    margin-right: 80%;
+}
+
+.galleryicon:hover{
+    color: #4563ff!important;
+    
+}

@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import "./Post.css";
+import "../Feed/Post.css";
 import { Avatar } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 // import ChatBubbleOutlineIcon from "../../assets/icons/Vector.svg";
@@ -13,8 +13,8 @@ import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 // import FavoriteBorderIcon from "@material-ui/icons/Heart.svg";
 // import  from "@material-ui/icons/Publish";
 
-const Post = forwardRef(
-    ({ displayName, username, likes, isliked, verified, text, image, avatar, id}, ref) => {
+const CommentCard = forwardRef(
+    ({ displayName, username, verified, text, image, avatar }, ref) => {
       return (
         <div className="post" ref={ref}>
           <div className="posthead">
@@ -41,23 +41,10 @@ const Post = forwardRef(
               <div  className="imgwrap">
             {image? <img className="foodimg" src={image} alt="" />: null}
             </div>
-            <div className="post__footer">
-              <div><ChatBubbleOutlineIcon /><span className="peoplecount">12</span></div>
-              {/* <div><FavoriteBorderIcon /><span className="peoplecount">12</span></div> */}
-              {/* <LikeButton /> */}
-              <LikeButton 
-                pk={id} 
-                likeis= {isliked} 
-                points= {likes} 
-                />
-              <div><RepeatIcon /><span className="peoplecount">12</span></div>
-              {/* <div><PublishIcon /><span className="peoplecount">12</span></div> */}
-              <BookmarkButton pk={id} />
-            </div>
           </div>
         //  </div>
       );
     }
   );
   
-  export default Post;
+  export default CommentCard;

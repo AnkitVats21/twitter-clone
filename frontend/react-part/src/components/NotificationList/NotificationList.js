@@ -1,9 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import '../Trending/Trending.css';
 import {ReactComponent as Star} from '../../assets/icons/Star.svg'
+import ServerService from'../../services/ServerService'
+import axios from 'axios';
+import NotificationCard from '../UI/Cards/NotificationCard/NotificationCard'
 
-function NotificationList() {
+class NotificationList extends Component {
 
+  state = {
+    isLoading: true,
+    notificationlist: [],
+    error: null
+  }
+
+  componentDidMount(){
+
+  ServerService.notifications()
+    .then(response=>{
+      console.log(response.data);
+      this.setState({notificationlist: response.data, isLoading:false})
+    })
+  }
+render(){
+
+  const notificationlist= this.state.notificationlist.map(notificationlist=>{
+    return <NotificationCard notificationtext={notificationlist.text} />
+    })
 
   return (
     <div className="feed">
@@ -11,15 +33,12 @@ function NotificationList() {
         <h2>Notifications</h2>
       </div>
 
-    <div class="card">
-        <div class="card-body">
-        <h6 className="trendingtag"><Star className="staricon" />There was a login to your account from a new device </h6>
-        {/* <h5 className="tagname">There was a login to your account from a new device on Oct 25, 2020. Review it now.</h5> */}
-        </div>
-    </div>
-          
+    {/* <NotificationCard notificationtext="yo yuoyoodtysxodrop"/>
+    <NotificationCard notificationtext="yo yuoyoodtysxodrop"/> */}
+          {notificationlist}
     </div>
   );
+}
 }
 
 export default NotificationList;

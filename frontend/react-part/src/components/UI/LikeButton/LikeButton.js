@@ -9,21 +9,17 @@ import { ReactComponent as Filledheart } from "../../../assets/icons/Filledheart
 class LikeButton extends Component {
 
     state = {
-        // likes: 0,
-        isclicked: false,
-        likes: 0
+        likes: this.props.points,
+        isclicked: this.props.likeis,
+        pk: this.props.pk
     };
 
 
-    componentDidMount(){
-        const data= this.props.pk;
 
-      ServerService.readrecipe(data)
-      .then(response=>{
-        // console.log(response);
-        this.setState({isclicked: response.data.like_is, likes: response.data.points})
-      })
-    }
+
+    // componentDidMount(){
+    //    console.log(this.state.isclicked)
+    // }
 
     addLike = () => {
  
@@ -38,12 +34,13 @@ class LikeButton extends Component {
           isclicked: ((this.state.isclicked)?false:true)
         });
 
+        // const pk: this.state.pk;
+        const pk= this.state.pk
         const data={
-            pk: this.props.pk
+            tweetid: this.state.pk
         }
-        // console.log(data)
 
-        ServerService.like(data)
+        ServerService.like(pk,data)
         .then((resp)=>{
             console.log(resp)          
           })
@@ -51,18 +48,6 @@ class LikeButton extends Component {
     };
 
     render() {
-
-        if(!localStorage.getItem('access_token')){
-            return (
-            
-               <Link to='/sign-in'><button onClick={this.addLike} className={classes.likebtn} > 
-               <FavoriteBorderIcon className={classes.icon}/> <span className={classes.peoplecount}>{this.state.likes}</span>
-               </button>
-
-</Link> 
-            )
-        }
-
 
         if(this.state.isclicked){
             return (

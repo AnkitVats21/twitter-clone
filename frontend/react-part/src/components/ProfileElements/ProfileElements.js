@@ -10,7 +10,7 @@ function ProfileElements() {
 
   return (
     <div className="feed">
-    <Details />
+    <Details propactive="posts"/>
 
     <div className="feed__header">
         <h2>My Posts</h2>

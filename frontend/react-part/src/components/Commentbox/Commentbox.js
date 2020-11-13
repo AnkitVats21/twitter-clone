@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Component} from "react";
 // import TweetBox from "./TweetBox";
 import Post from "../Feed/Post";
+import CommentCard from "./CommentCard";
 import "./Commentbox.css";
 // import db from "./firebase";
 // import FlipMove from "react-flip-move";
+import {Button} from 'react-bootstrap'
 import ServerService from '../../services/ServerService';
 
 class Commentbox extends Component {
@@ -62,7 +64,14 @@ render(){
             image="https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
           />
           
+<CommentCard displayName="Narendra Modi"
+            username="PMOIndia"
+            verified="true"
+            text="Dear citizens. It's high time that we fight against COVID-19 since it is a very treacherous disease that can hollow our whole system and economy"
+            />
 
+            <input className="commentfield" />
+            <Button className="commentbtn">Comment</Button>
           {postlist}
     </div>
   );

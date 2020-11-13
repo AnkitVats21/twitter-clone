@@ -8,7 +8,10 @@ import Notifications from './components/Routes/Notifications/Notifications';
 import Search from './components/Routes/Search/Search';
 import Comments from './components/Routes/Comments/Comments';
 import Profile from './components/Routes/Profile/Profile';
+import Followers from './components/Routes/Profile/Followers';
 import LogIn from './components/Routes/Authentication/Login/Login';
+import ForgotPassword from './components/Routes/Authentication/ForgotPassword/ForgotPassword';
+import PasswordResetOtp from './components/Routes/Authentication/PasswordResetOtp/PasswordResetOtp';
 import SignUp from './components/Routes/Authentication/Signup/Signup'
 import OTP from './components/Routes/Authentication/OTP/OTP'
 
@@ -25,8 +28,11 @@ function App() {
     <Route path='/explore' component={Explore} />
     <Route path='/bookmarks' component={Bookmarks} />
     <Route path='/profile' component={Profile} />
+    <Route path='/followers' component={Followers} />
     <Route path='/notifications' component={Notifications} />
     <Route path='/log-in' component={LogIn} />
+    <Route path='/forgot-password' component={ForgotPassword} />
+    <Route path='/password-reset-otp' component={PasswordResetOtp} />
     <Route path='/sign-up' component={SignUp} />
     <Route path='/otp' component={OTP} />
 

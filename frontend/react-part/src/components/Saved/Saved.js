@@ -18,8 +18,16 @@ function Saved() {
   useEffect(() => {
 
     async function fetchData(){
-    const request= await Axios.get('https://reqres.in/api/users?page=2');
-    setPosts(request.data.data);
+    const request= await Axios.get('http://d23800404ad3.ngrok.io/api/bookmarks/all/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    setPosts(request.data);
     return request
   }
   fetchData();
@@ -28,7 +36,8 @@ function Saved() {
   console.log(savedposts)
 
   const postlist= savedposts.map(postlist=>{
-    return <Post image={savedposts.id} displayName={postlist.first_name} username={postlist.email} />
+    // return <Post image={savedposts.id} displayName={postlist.first_name} username={postlist.email} />
+    return <Post image={postlist.photos} likes={postlist.likes} isliked={postlist.liked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
     })
 
   return (

@@ -5,7 +5,7 @@ import Sidebar from '../../Sidebar/Sidebar'
 import Feed from '../../Feed/Feed'
 import Trending from '../../Trending/Trending'
 import NotificationList from '../../NotificationList/NotificationList'
-import ProfileElements from '../../ProfileElements/ProfileElements'
+import FollowersList from '../../ProfileElements/FollowersList'
 import Widgets from '../../../components/Widgets/Widgets'
 
 class Profile extends Component {
@@ -15,7 +15,7 @@ class Profile extends Component {
       return(
       <div className={classes.flexbox}>
         <Sidebar propactive="profile" />
-        <ProfileElements/>
+        <FollowersList/>
         <Widgets />
       </div>
       )

@@ -233,7 +233,7 @@ class Login extends Component{
     className= {classes.sub}
     /><br/>
 
-    <div className={classes.resign}><Link to='/sign-in' className={classes.linkswitch1}>Already a user? Sign In</Link></div>
+    <div className={classes.resign}><Link to='/log-in' className={classes.linkswitch1}>Already a user? Sign In</Link></div>
     
           </form>
         </div>

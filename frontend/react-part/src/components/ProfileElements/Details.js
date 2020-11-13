@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Post from '../Feed/Post'
 
-function Details() {
+function Details({propactive}) {
 
 
   return (
@@ -38,27 +38,41 @@ backgroundRepeat: 'no-repeat'
 <p className="biotext">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut mattis nibh lorem. Tincidunt tellus ultricies viverra nunc, diam, at. Tincidunt fermentum in dignissim imperdiet euismod semper ac et. In arcu, fermentum quam diam, quisque massa nec.</p>
 
 <div className="options">
-<Link to="/following" className="profilenums"><div>
+<Link to="/profile" className="profilenums">
+{propactive==="posts"? <div className="activeoption">
 <h5 className="headingnums">23</h5>
 <p className="nums">Posts</p>
-</div>
+</div>: <div>
+<h5 className="headingnums">23</h5>
+<p className="nums">Posts</p>
+</div> }
 </Link>
 
-<Link to="/followers"  className="profilenums"><div>
+<Link to="/followers"  className="profilenums">
+{propactive==="followers"? <div className="activeoption">
 <h5 className="headingnums">23</h5>
 <p className="nums">Followers</p>     
-</div>
+</div>: <div>
+<h5 className="headingnums">23</h5>
+<p className="nums">Followers</p>     
+</div> }
 </Link>
-<Link className="profilenums" to="/profile"><div>
+
+<Link className="profilenums" to="/following">
+
+{propactive==="following"? <div className="activeoption">
 <h5 className="headingnums">23</h5>
 <p className="nums">Following</p>
-</div></Link>
+</div>: <div>
+<h5 className="headingnums">23</h5>
+<p className="nums">Following</p>
+</div> }
+</Link>
 
 </div>
 </div>
 </div>
 </>
-
 
   )
 }

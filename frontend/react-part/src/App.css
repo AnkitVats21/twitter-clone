@@ -18,3 +18,10 @@ body{
   background-color: #f1f1f1;
 }
 
+.activeoption{
+  color: #657EFF;
+}
+
+.trendcard{
+  margin-bottom: 8px !important;
+}

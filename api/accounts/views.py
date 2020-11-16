@@ -48,6 +48,11 @@ class CreateUserAccount(APIView):
     serializer_class = UserSerializer
     
     def post(self, request):
+        serializer = UserSerializer(data = request.data)
+        if serializer.is_valid():
+            pass
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         user_email  = request.data.get("email")
         username    = request.data.get("username")
         req_data    = request.data
@@ -96,10 +101,9 @@ class ProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ResendOTP(APIView):
-    #serializer_class = OTPSerializer
-    def post(self,request):
+    serializer_class = OTPSerializer
+    def post(self,request,pk):
         email    = request.data.get('email')
-        
         try:
             user      = User.objects.filter(email=email)
         except:
@@ -109,17 +113,19 @@ class ResendOTP(APIView):
         else:
             return Response({"details":"user does not exist"})
         otp = OTP.objects.filter(email__iexact=email)
-        # if otp.exists():s
-        otp.delete()
-        otp  = randint(100000, 999999) 
+        if otp.exists():
+            otp.delete()
+        otp  = randint(100000, 999999)
         t    = int(time.time())
-        OTP.objects.create(otp = otp, email = email, time= t)
+        if pk == 'send':
+            OTP.objects.create(otp=otp, email=email, time=t, reset=True)
+        if pk == 'resend':
+            OTP.objects.create(otp=otp, email=email, time=t)
         # context      = {'otp':otp}
         # html_message = render_to_string('otp_template.html', context)
-        # head         = 'OTP Verification'
-        # body = ("Your One Time Password is {} for registration on Scrummy.").format(otp)
-        print(otp)
-        #send_mail(head, str(body), 'scrummy4u@gmail.com', [user_email], html_message = html_message)
+        head         = 'OTP Verification'
+        body = ("Your One Time Password is {} for talkpiper registration.").format(otp)
+        send_mail(head, str(body), 'scrummy4u@gmail.com', [email])
         return Response({"details":"OTP sent successfully"})
 
 class VerifyOTP(APIView):
@@ -128,7 +134,6 @@ class VerifyOTP(APIView):
         email   = request.data.get('email')
         otp     = request.data.get('otp')
         reset   = request.data.get('reset')
-        print(email,otp)
         try:
             obj     = OTP.objects.filter(email__iexact=email)[0]
             user    = User.objects.filter(email__iexact=email)[0]
@@ -181,7 +186,7 @@ class UserLoginView(TokenObtainPairView):
             else:
                 if user[0].check_password(password)==False:
                     return Response({"details":"wrong password"}, status=status.HTTP_400_BAD_REQUEST)
-                return ResendOTP.post(self,request)
+                return ResendOTP.post(self,request,'resend')
         else:
             return Response({"details":"no user found"}, status=status.HTTP_400_BAD_REQUEST)
         user = user[0]
@@ -323,3 +328,4 @@ class NotificationSeenView(APIView):
         obj.seen = True
         obj.save()
         return Response({"notification marked as read."})
+

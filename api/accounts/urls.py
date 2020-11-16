@@ -8,8 +8,8 @@ app_name='accounts'
 urlpatterns = [
     path('api/signup/', views.CreateUserAccount.as_view()),
     path('api/profile/', views.ProfileView.as_view()),
-    path('api/resendotp/', views.ResendOTP.as_view()),
-    path('api/sendotp/', views.ResendOTP.as_view(), name='forgot-password-send-otp'),
+    path('api/otp/<pk>/', views.ResendOTP.as_view()),
+    # path('api/otp/send', views.ResendOTP.as_view(), name='forgot-password-send-otp'),
     path('api/verifyotp/', views.VerifyOTP.as_view()),
     path('api/login/', views.UserLoginView.as_view()),
     path('api/token-refresh/', jwt_views.TokenRefreshView.as_view()),

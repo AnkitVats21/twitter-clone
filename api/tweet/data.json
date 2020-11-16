@@ -1,0 +1,237 @@
+[
+    {
+        "id": 2,
+        "name": "Ankit Mishra",
+        "username": "user1",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic_Yz4kk41.jpeg",
+        "text": "Idol of Devi Isvara without torso from the temple of Chausath Yogini, Jabalpur Madhya Pradesh.\r\n\r\nJust imagine If they can do this with idols what will they do with the living one?\r\n\r\n#FranceTerrorAttack \r\n#FranceBeheading",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-03T18:35:22.800246Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": true,
+        "comments": [
+            {
+                "id": 1,
+                "text": "yestsfhaskjhlkvndsk",
+                "photos": null,
+                "gif": null,
+                "videos": null,
+                "timestamp": "2020-11-01T07:20:14.760475Z",
+                "replies": false,
+                "tweet": 2,
+                "reply": [],
+                "user": "user4",
+                "replying_to": [
+                    "user2",
+                    "user3"
+                ]
+            }
+        ],
+        "retweets": 0
+    },
+    {
+        "id": 12,
+        "name": "User",
+        "username": "user3",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic_SI2KO5G.jpeg",
+        "text": "Having departed for India's tour of Australia, #YuzvendraChahal has taken to social media to score some brownie points with his fiancee #DhanashreeVerma",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-12T13:47:46.258779Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": false,
+        "comments": [],
+        "retweets": 0
+    },
+    {
+        "id": 10,
+        "name": "User",
+        "username": "user3",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic_SI2KO5G.jpeg",
+        "text": "Having departed for India's tour of Australia, #YuzvendraChahal has taken to social media to score some brownie points with his fiancee #DhanashreeVerma",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-12T13:39:52.914775Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 1,
+        "bookmarked": false,
+        "comments": [
+            {
+                "id": 4,
+                "text": "& Today there will be small activity from 5pm onwards , kindly suggest a tagline in the reply section Down pointing backhand index\r\n\r\n#AsimRiaz | #DJSnake | #Dubai | #Collaboration | #International | #Bollywood | #Hollywood | #AsimSquad | #TeamAsimRiaz",
+                "photos": null,
+                "gif": null,
+                "videos": null,
+                "timestamp": "2020-11-16T05:20:09.383807Z",
+                "replies": false,
+                "tweet": 10,
+                "reply": [],
+                "user": "user3",
+                "replying_to": [
+                    "user4"
+                ]
+            }
+        ],
+        "retweets": 0
+    },
+    {
+        "id": 9,
+        "name": "User",
+        "username": "user3",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic_SI2KO5G.jpeg",
+        "text": "This notice has came from  Ajay kumar garg engineering college gzb.They are collecting fees for online classes.This is very frustrating . How a middle class family student is going to pay fees in this pandemic.\nPlzz do something for us\n@myogiadityanath\n\n@ravishndtv\n\n@narendramodi",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-12T13:37:57.378179Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": false,
+        "comments": [],
+        "retweets": 0
+    },
+    {
+        "id": 4,
+        "name": "User",
+        "username": "user3",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic_SI2KO5G.jpeg",
+        "text": "How did you got the idea of #पंचर_पुत्रम_कभी_न_मित्रम\r\nLe me and my boys:",
+        "photos": null,
+        "gif": "http://127.0.0.1:8000/tweets/gifs/tenor.gif",
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-10-31T05:22:35.814296Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 5,
+        "bookmarked": false,
+        "comments": [
+            {
+                "id": 3,
+                "text": "",
+                "photos": null,
+                "gif": null,
+                "videos": null,
+                "timestamp": "2020-11-15T19:23:41.541868Z",
+                "replies": false,
+                "tweet": 4,
+                "reply": [
+                    {
+                        "id": 1,
+                        "text": "xghxc",
+                        "photos": null,
+                        "gif": null,
+                        "videos": null,
+                        "topic": null,
+                        "timestamp": "2020-11-15T19:23:41.544850Z",
+                        "tweet": 4,
+                        "comment": 3,
+                        "user": "user2",
+                        "replying_to": [
+                            "user5"
+                        ]
+                    }
+                ],
+                "user": "user3",
+                "replying_to": [
+                    "user1",
+                    "user2"
+                ]
+            }
+        ],
+        "retweets": 1
+    },
+    {
+        "id": 32,
+        "name": "User",
+        "username": "user4",
+        "profile_pic": null,
+        "text": "just heard about the collaboration between #AsimRiaz and #DjSnake!\r\nDon't you think this is the most Fire news on social media?",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-16T05:16:28.164784Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": false,
+        "comments": [],
+        "retweets": 0
+    },
+    {
+        "id": 6,
+        "name": "User",
+        "username": "user4",
+        "profile_pic": null,
+        "text": "#play\r\n#play\r\n#play\r\n#play",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-11-03T18:25:45.155927Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": false,
+        "comments": [],
+        "retweets": 0
+    },
+    {
+        "id": 3,
+        "name": "User5",
+        "username": "user5",
+        "profile_pic": "http://127.0.0.1:8000/profile/profilepic.jpeg",
+        "text": "Now it is felt that charlie hebdo goes on right direction #पंचर_पुत्रम_कभी_न_मित्रम",
+        "photos": null,
+        "gif": null,
+        "videos": null,
+        "topic": null,
+        "timestamp": "2020-10-31T05:20:12.980199Z",
+        "privacy": "Everyone",
+        "location": null,
+        "liked": null,
+        "likes": 0,
+        "bookmarked": true,
+        "comments": [
+            {
+                "id": 2,
+                "text": "Helloworld how are you.",
+                "photos": null,
+                "gif": null,
+                "videos": null,
+                "timestamp": "2020-11-15T17:09:28.890232Z",
+                "replies": true,
+                "tweet": 3,
+                "reply": [],
+                "user": "user1",
+                "replying_to": [
+                    "user2",
+                    "user3"
+                ]
+            }
+        ],
+        "retweets": 0
+    }
+]

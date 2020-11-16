@@ -41,7 +41,6 @@ class ChatSerializer(serializers.ModelSerializer):
         data    = {"message":str(queryset[0].content),
             "timestamp":str(queryset[0].timestamp), 
             "sender":  queryset[0].sender.username if str(queryset[0].sender.username) != str(sender.username) else str(sender.username)}
-        print(queryset[0].sender.username,  sender.username)
         return data
 
 

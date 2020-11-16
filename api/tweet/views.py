@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from .serializers import HashtagSerializer, TweetSerializer, TweetPostSerializer, RetweetSerializer
 from .models import Hashtag, Tweet, Likes, Bookmark, Mention, Retweet
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import viewsets, status, generics, mixins, permissions
 from accounts.models import Connections, User, Notification
 from django.shortcuts import get_object_or_404
 import json
@@ -25,7 +25,6 @@ class FeedsView(APIView):
             rquery   += retweet
             queryset += tweet
         serializer  = TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
-        print(serializer.data)
         return Response(serializer.data)
     def post(self, request):
         followers = Connections.objects.filter(user=request.user.id)[0].follower.all()
@@ -185,3 +184,127 @@ class RetweetView(APIView):
                 pass
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from .models import Comment, CommentReply
+from .serializers import CommentSerializer, CommentReplySerializer
+
+class CommentView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request):
+        queryset = Comment.objects.all()
+        serializer = CommentSerializer(queryset, many=True)
+        return Response(serializer.data)
+    def post(self, request):
+        data = request.data.copy()
+        data['user']=request.user.id
+        users= []
+        for i in data['replying_to']:
+            obj = User.objects.filter(username=str(i))[0]
+            users.append(obj.id)
+        data['replying_to']=users
+        serializer = CommentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def patch(self, request):
+        comment    = Comment.objects.get(id=request.data['id'])
+        data = request.data.copy()
+        users= []
+        for i in data['replying_to']:
+            obj = User.objects.filter(username=str(i))[0]
+            users.append(obj.id)
+        data['replying_to']=users
+        serializer = CommentSerializer(comment, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        try:
+            comment    = Comment.objects.get(id=request.data['id'])
+            comment.delete()
+            return Response({"details":"comment deleted successfully."})
+        except:
+            return Response({"details":"Please entera valid comment id."})
+
+class CommentReplyView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request):
+        queryset = CommentReply.objects.all()
+        serializer = CommentReplySerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        data = request.data.copy()
+        data['user']=request.user.id
+        users= []
+        for i in data['replying_to']:
+            obj = User.objects.filter(username=str(i))[0]
+            users.append(obj.id)
+        data['replying_to']=users
+        serializer = CommentReplySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        commentreply    = CommentReply.objects.get(id=request.data['id'])
+        data = request.data.copy()
+        users= []
+        for i in data['replying_to']:
+            obj = User.objects.filter(username=str(i))[0]
+            users.append(obj.id)
+        data['replying_to']=users
+        serializer = CommentSerializer(commentreply, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        try:
+            comment    = CommentReply.objects.get(id=request.data['id'])
+            comment.delete()
+            return Response({"details":"comment reply deleted successfully."})
+        except:
+            return Response({"details":"Please entera valid comment reply id."})
+
+from rest_framework import filters
+from tweet.models import Tweet
+from accounts.serializers import UserSerializer
+from .serializers import GlobalSearchSerializer
+
+class UserListView(generics.ListAPIView):
+    queryset         = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends  = [filters.SearchFilter]
+    search_fields    = ['username', 'profile__name']
+
+class TweetListView(generics.ListAPIView):
+    queryset         = Tweet.objects.all()
+    serializer_class = TweetSerializer
+    filter_backends  = [filters.SearchFilter]
+    search_fields    = ['text']
+
+class RetweetListView(generics.ListAPIView):
+    queryset         = Retweet.objects.all()
+    serializer_class = RetweetSerializer
+    filter_backends  = [filters.SearchFilter]
+    search_fields    = ['text']
+
+from django.db.models import Q
+from itertools import chain
+
+class GlobalSearchList(APIView):
+    def get(self, request):
+        query       = self.request.query_params.get('query', None)
+        users       = User.objects.filter(Q(username__icontains=query) | Q(profile__name__icontains=query))
+        tweets      = Tweet.objects.filter(text__icontains='#'+str(query))
+        all_results = list(chain(users, tweets)) 
+        # all_results.sort(key=lambda x: x.timestamp)
+        serializer  = GlobalSearchSerializer(all_results, many=True, context={'request':request,'user': request.user.id})
+        return Response(serializer.data)

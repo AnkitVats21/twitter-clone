@@ -124,6 +124,22 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))
+    
+    def save(self, *args, **kwargs):
+        try:
+            d=[t for t in self.text.split() if t.startswith('#')]
+            d=list(dict.fromkeys(d))
+            for h in d:
+                try:
+                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
+                    hashtag.usecount +=1
+                    hashtag.save()
+                except:
+                    Hashtag.objects.create(hashtags=h)
+        except:
+            pass
+        super(Comment, self).save(*args, **kwargs)
+    
 
 class CommentReply(models.Model):
     tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='replyingto_tweet')
@@ -146,6 +162,21 @@ class CommentReply(models.Model):
         if(l == 1):
             return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))
         return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))+","+str((self.replying_to.all()[1].username))+"...."
+    
+    def save(self, *args, **kwargs):
+        try:
+            d=[t for t in self.text.split() if t.startswith('#')]
+            d=list(dict.fromkeys(d))
+            for h in d:
+                try:
+                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
+                    hashtag.usecount +=1
+                    hashtag.save()
+                except:
+                    Hashtag.objects.create(hashtags=h)
+        except:
+            pass
+        super(CommentReply, self).save(*args, **kwargs)
 
 class Bookmark(models.Model):
     user        = models.ForeignKey(User,  on_delete=models.CASCADE, related_name='user_bookmarks')

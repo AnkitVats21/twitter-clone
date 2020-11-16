@@ -37,7 +37,7 @@ function Saved() {
 
   const postlist= savedposts.map(postlist=>{
     // return <Post image={savedposts.id} displayName={postlist.first_name} username={postlist.email} />
-    return <Post image={postlist.photos} likes={postlist.likes} isliked={postlist.liked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
+    return <Post image={postlist.photos} likes={postlist.likes} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
     })
 
   return (

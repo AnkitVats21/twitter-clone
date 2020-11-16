@@ -9,6 +9,7 @@ import Search from './components/Routes/Search/Search';
 import Comments from './components/Routes/Comments/Comments';
 import Profile from './components/Routes/Profile/Profile';
 import Followers from './components/Routes/Profile/Followers';
+import Following from './components/Routes/Profile/Following';
 import LogIn from './components/Routes/Authentication/Login/Login';
 import ForgotPassword from './components/Routes/Authentication/ForgotPassword/ForgotPassword';
 import PasswordResetOtp from './components/Routes/Authentication/PasswordResetOtp/PasswordResetOtp';
@@ -29,6 +30,7 @@ function App() {
     <Route path='/bookmarks' component={Bookmarks} />
     <Route path='/profile' component={Profile} />
     <Route path='/followers' component={Followers} />
+    <Route path='/following' component={Following} />
     <Route path='/notifications' component={Notifications} />
     <Route path='/log-in' component={LogIn} />
     <Route path='/forgot-password' component={ForgotPassword} />

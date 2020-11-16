@@ -14,7 +14,7 @@ import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 // import  from "@material-ui/icons/Publish";
 
 const Post = forwardRef(
-    ({ displayName, username, likes, isliked, verified, text, image, avatar, id}, ref) => {
+    ({ displayName, username, likes, isliked, isbookmarked, verified, text, image, avatar, id}, ref) => {
       return (
         <div className="post" ref={ref}>
           <div className="posthead">
@@ -52,7 +52,9 @@ const Post = forwardRef(
                 />
               <div><RepeatIcon /><span className="peoplecount">12</span></div>
               {/* <div><PublishIcon /><span className="peoplecount">12</span></div> */}
-              <BookmarkButton pk={id} />
+              <BookmarkButton pk={id} 
+              bookmarkedis= {isbookmarked} 
+              />
             </div>
           </div>
         //  </div>

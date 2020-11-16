@@ -11,7 +11,8 @@ class BookmarkButton extends Component {
 
     state = {
         likes: 1,
-        isclicked: false,
+        // isclicked: true,
+        isclicked: this.props.bookmarkedis,
         pk: this.props.pk
     };
 

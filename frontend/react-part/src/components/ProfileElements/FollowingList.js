@@ -6,7 +6,7 @@ import Details from './Details'
 import FollowerCards from '../UI/Cards/FollowerCards/FollowerCards'
 import axios from 'axios'
 
-class FollowersList extends Component {
+class FollowingList extends Component {
 
   state={
     followlist: []
@@ -14,7 +14,7 @@ class FollowersList extends Component {
 
   componentDidMount(){
     // axios.get('https://d23800404ad3.ngrok.io/follower/request')
-    axios.get('https://d23800404ad3.ngrok.io/api/user/follower/',
+    axios.get('https://d23800404ad3.ngrok.io/api/user/following/',
       {
         headers: {
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ render(){
 
   return (
     <div className="feed">
-    <Details propactive="followers"/>
+    <Details propactive="following"/>
 
     <div className="feed__header">
         <h2>Followers</h2>
@@ -57,4 +57,4 @@ render(){
   );
 }
 }
-export default FollowersList;
+export default FollowingList;

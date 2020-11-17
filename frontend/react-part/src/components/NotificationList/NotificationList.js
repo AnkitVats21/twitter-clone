@@ -24,7 +24,7 @@ class NotificationList extends Component {
 render(){
 
   const notificationlist= this.state.notificationlist.map(notificationlist=>{
-    return <NotificationCard notificationtext={notificationlist.text} />
+    return <NotificationCard notificationtext={notificationlist.extra.data} />
     })
 
   return (

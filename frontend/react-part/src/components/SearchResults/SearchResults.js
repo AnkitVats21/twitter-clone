@@ -1,34 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 // import TweetBox from "./TweetBox";
 import Post from "../Feed/Post";
 import "../Feed/Feed.css";
 import "./SearchResults.css"
-import Axios from "axios";
+import axios from "axios";
 import SearchIcon from "@material-ui/icons/Search";
 
-function SearchResults() {
-  const [savedposts, setPosts] = useState([]);
+class SearchResults extends Component {
 
-//   useEffect(() => {
-//     db.collection("posts").onSnapshot((snapshot) =>
-//       setPosts(snapshot.docs.map((doc) => doc.data()))
-//     );
-//   }, []);
-
-  useEffect(() => {
-
-    async function fetchData(){
-    const request= await Axios.get('https://reqres.in/api/users?page=2');
-    setPosts(request.data.data);
-    return request
+  state={
+    savedposts:[],
+    newsearch:this.props.term
   }
-  fetchData();
-  }, [])
 
-  console.log(savedposts)
+  handlechangeall = (event) =>{
+    this.setState ( { [event.target.name] :event.target.value  } )
+   }
 
-  const postlist= savedposts.map(postlist=>{
-    return <Post image={savedposts.id} displayName={postlist.first_name} username={postlist.email} />
+  handlesubmit = () => {
+    const searchterm=this.state.newsearch
+console.log(searchterm)
+      axios.get('http://04f70d4ed7ff.ngrok.io/api/search/?query='+searchterm,
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+      .then(response=>{
+        console.log(response.data.tweet);
+        this.setState({savedposts: response.data.tweet})
+      })
+    
+
+  }
+
+  componentDidMount(){
+    axios.get('http://04f70d4ed7ff.ngrok.io/api/search/?query='+this.props.term,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
+    )
+    .then(response=>{
+      console.log(response.data.tweet);
+      this.setState({savedposts: response.data.tweet})
+    })
+  }
+
+  render(){
+
+  const postlist= this.state.savedposts.map(postlist=>{
+    return <Post image={postlist.photos} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
     })
 
   return (
@@ -38,8 +66,9 @@ function SearchResults() {
       </div>
 
       <div className="widget__input">
-        <SearchIcon className="widgets__searchIcon" />
-        <input className="widgets__searchbar" placeholder="Search Twitter" type="text" />
+        
+        <input className="widgets__searchbar"  name="newsearch" onChange={this.handlechangeall} placeholder="Search Twitter" type="text" />
+        <SearchIcon className="widgets__searchIcon" onClick={this.handlesubmit} />
       </div>
       {/* <TweetBox />
 
@@ -85,6 +114,7 @@ function SearchResults() {
           {postlist}
     </div>
   );
+}
 }
 
 export default SearchResults;

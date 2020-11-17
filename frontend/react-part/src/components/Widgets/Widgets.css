@@ -13,6 +13,7 @@
 .widgets__input {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: var(--twitter-background);
   padding: 10px;
   border-radius: 20px;
@@ -29,6 +30,9 @@
 
 .widgets__searchIcon {
   color: gray;
+}
+.widgets__searchIcon:hover {
+  color: var(--twitter-color);
 }
 
 .widgets__searchbar:focus,

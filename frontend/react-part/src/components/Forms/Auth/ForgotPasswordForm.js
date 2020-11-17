@@ -24,29 +24,25 @@ class Login extends Component{
 
 
         const data={
-          email: this.state.email,
-          password: this.state.password
+          email: this.state.email
         }
              
       event.preventDefault();
     
       console.log(data);
     
-    ServerService.login(data)
+    ServerService.forgotpassword(data)
     .then((resp)=>{
       console.log(resp)
 
       if (resp.status === 200) {
-        localStorage.setItem("refresh_token",resp.data.refresh)
-        localStorage.setItem("access_token",resp.data.access)
-        // this.setState({isLoading: false});
-        this.setState({ redirect: "/" });
-        // console.log(resp.data.refresh)
+        this.setState({isLoading: false});
+        this.setState({ redirect: "/password-reset-otp" });
       }
     
       // if (resp.data.message === "otp_sent") {
       //   this.createSuccess("OTP sent to the mail")
-      //   localStorage.setItem('email', this.state.email)
+        localStorage.setItem('useremail', this.state.email)
       //   localStorage.setItem('password', this.state.password)
       //   this.setState({isLoading: false});
       //   this.setState({ redirect: "/otp" });

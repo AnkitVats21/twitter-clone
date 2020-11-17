@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://d23800404ad3.ngrok.io/";
+const BASE_URL = "http://04f70d4ed7ff.ngrok.io/";
 
 class ServerService {
 
@@ -16,12 +16,13 @@ class ServerService {
       return axios.post(BASE_URL + 'api/verifyotp/', data)
    }
 
-    forgototp(data){
-      return axios.post(BASE_URL + 'auth/forgot-password/otp/',data)
-   }
+   resetotp(data){
+    return axios.post(BASE_URL + 'api/verifyotp/', data)
+ }
 
-    forgotform(data){
-      return axios.post(BASE_URL + 'auth/forgot-password/',data)
+
+    forgotpassword(data){
+      return axios.post(BASE_URL + 'api/otp/send/',data)
    }
 
     passresetform(data){
@@ -44,6 +45,10 @@ class ServerService {
     return axios.post(BASE_URL + 'auth/register/otp/resend/',resenddata)
    }
 
+   resetpass(resenddata){
+    return axios.post(BASE_URL + 'api/resetpass/',resenddata)
+   }
+
     homecards(){
       return axios.get(BASE_URL+ 'api/feeds/',
       {
@@ -53,6 +58,30 @@ class ServerService {
         }
         
     }
+      )
+    }
+
+    addcomment(data){
+      return axios.post(BASE_URL+ 'api/comment/', data,
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    }
+
+    userdetails(){
+      return axios.get(BASE_URL+ 'api/profile/',
+      {
+         headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+         }
+         
+     }
       )
     }
 
@@ -103,17 +132,6 @@ class ServerService {
       })
     }
 
-    userdetails(){
-      return axios.get(BASE_URL+ 'my-account/',
-      {
-         headers: {
-             'Content-Type': 'application/json',
-             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-         }
-         
-     }
-      )
-    }
 
     searchpage(data){
       return axios.post(BASE_URL + 'search/',data)
@@ -216,25 +234,6 @@ bookmarklist(){
   )
 }
 
-    starters(){
-      return axios.get(BASE_URL +'starters/')
-    }
-
-    maincourse(){
-      return axios.get(BASE_URL +'main-course/')
-    }
-    
-    desserts(){
-      return axios.get(BASE_URL +'desserts/')
-    }
-
-    drinks(){
-      return axios.get(BASE_URL +'drinks/')
-    }
-
-    others(){
-      return axios.get(BASE_URL +'others/')
-    }
 
     bookmark(pk, data){
       return axios.post(BASE_URL + 'api/bookmarks/'+ pk+'/',data,

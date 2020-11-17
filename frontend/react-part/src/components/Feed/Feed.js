@@ -33,7 +33,7 @@ componentDidMount(){
 render(){
 
   const postlist= this.state.postlist.map(postlist=>{
-    return <Post image={postlist.photos} likes={postlist.likes} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
+    return <Post image={postlist.photos} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
     })
 
   return (

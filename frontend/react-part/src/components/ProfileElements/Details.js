@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import '../ProfileElements/ProfileElements.css'
 import { Redirect, Link } from 'react-router-dom';
 import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Post from '../Feed/Post'
+import ServerService from'../../services/ServerService'
 
-function Details({propactive}) {
+class Details extends Component{
 
+  state={
+    userdetails:[],
+    profiledet:[],
+    connect:[]
+  }
 
+  componentDidMount(){
+    // axios.get('https://60bb5774f441.ngrok.io/')
+    ServerService.userdetails()
+    .then(response=>{
+      console.log(response.data);
+      this.setState({userdetails: response.data, profiledet: response.data.profile, connect: response.data.connections})
+    })
+  }
+
+  render(){
   return (
 <>
 <div className="feed__header">
@@ -24,47 +40,50 @@ function Details({propactive}) {
 </div> */}
 
 <div className="coverimg" style={{  
-backgroundImage: "url(" + "https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" + ")",
+// backgroundImage: this.state.uuu,
+backgroundImage: "url(" + this.state.profiledet.cover_pic + ")",
 backgroundPosition: 'center',
 backgroundSize: 'cover',
 backgroundRepeat: 'no-repeat'
 }}>
-<img className="profileimg" src={Background} />
+<img className="profileimg" src={this.state.profiledet.picture} />
 </div>
   
 <div className="profiledetails">
-<h4 className="personname">Username</h4>
-<h5 className="personusername">@PMOIndia</h5>
-<p className="biotext">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut mattis nibh lorem. Tincidunt tellus ultricies viverra nunc, diam, at. Tincidunt fermentum in dignissim imperdiet euismod semper ac et. In arcu, fermentum quam diam, quisque massa nec.</p>
+<h4 className="personname">{this.state.profiledet.name}</h4>
+<h5 className="personusername">@{this.state.userdetails.username}</h5>
+<p className="biotext">{this.state.profiledet.bio}
+  {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut mattis nibh lorem. Tincidunt tellus ultricies viverra nunc, diam, at. Tincidunt fermentum in dignissim imperdiet euismod semper ac et. In arcu, fermentum quam diam, quisque massa nec. */}
+  </p>
 
 <div className="options">
 <Link to="/profile" className="profilenums">
-{propactive==="posts"? <div className="activeoption">
-<h5 className="headingnums">23</h5>
+{this.props.propactive==="posts"? <div className="activeoption">
+<h5 className="headingnums">{this.state.userdetails.posts}</h5>
 <p className="nums">Posts</p>
 </div>: <div>
-<h5 className="headingnums">23</h5>
+<h5 className="headingnums">{this.state.userdetails.posts}</h5>
 <p className="nums">Posts</p>
 </div> }
 </Link>
 
 <Link to="/followers"  className="profilenums">
-{propactive==="followers"? <div className="activeoption">
-<h5 className="headingnums">23</h5>
+{this.props.propactive==="followers"? <div className="activeoption">
+<h5 className="headingnums">{this.state.connect.follower}</h5>
 <p className="nums">Followers</p>     
 </div>: <div>
-<h5 className="headingnums">23</h5>
+<h5 className="headingnums">{this.state.connect.follower}</h5>
 <p className="nums">Followers</p>     
 </div> }
 </Link>
 
 <Link className="profilenums" to="/following">
 
-{propactive==="following"? <div className="activeoption">
-<h5 className="headingnums">23</h5>
+{this.props.propactive==="following"? <div className="activeoption">
+<h5 className="headingnums">{this.state.connect.following}</h5>
 <p className="nums">Following</p>
 </div>: <div>
-<h5 className="headingnums">23</h5>
+<h5 className="headingnums">{this.state.connect.following}</h5>
 <p className="nums">Following</p>
 </div> }
 </Link>
@@ -76,5 +95,6 @@ backgroundRepeat: 'no-repeat'
 
   )
 }
+}
 
-export default Details
+export default Details;

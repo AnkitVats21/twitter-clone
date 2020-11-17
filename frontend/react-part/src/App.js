@@ -13,9 +13,9 @@ import Following from './components/Routes/Profile/Following';
 import LogIn from './components/Routes/Authentication/Login/Login';
 import ForgotPassword from './components/Routes/Authentication/ForgotPassword/ForgotPassword';
 import PasswordResetOtp from './components/Routes/Authentication/PasswordResetOtp/PasswordResetOtp';
+import PasswordChange from './components/Routes/Authentication/PasswordChange/PasswordChange';
 import SignUp from './components/Routes/Authentication/Signup/Signup'
 import OTP from './components/Routes/Authentication/OTP/OTP'
-
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
     <Route path='/log-in' component={LogIn} />
     <Route path='/forgot-password' component={ForgotPassword} />
     <Route path='/password-reset-otp' component={PasswordResetOtp} />
+    <Route path='/change-password' component={PasswordChange} />
     <Route path='/sign-up' component={SignUp} />
     <Route path='/otp' component={OTP} />
 

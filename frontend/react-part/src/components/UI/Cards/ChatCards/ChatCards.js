@@ -29,7 +29,6 @@ const FollowerCards = forwardRef(
 
             </div>
 </div>
-            <div className={classes.btnwrap}><Button>Follow</Button></div>
             </div>
 
             </div>

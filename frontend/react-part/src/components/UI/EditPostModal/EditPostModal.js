@@ -33,8 +33,7 @@ for (let formElement in data) {
   console.log(formElement, data[formElement]);
 }
 
-// console.log(data)
-    axios.post( 'http://04f70d4ed7ff.ngrok.io/api/post/',formdata,
+    axios.patch( 'http://50e62b962574.ngrok.io/api/tweet/' + props.id + '/',formdata,
         {
           headers: {
               'Content-Type': 'application/json',
@@ -83,3 +82,17 @@ for (let formElement in data) {
     );
   }
 export default EditPostModal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

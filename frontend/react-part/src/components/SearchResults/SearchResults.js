@@ -38,7 +38,7 @@ console.log(searchterm)
   }
 
   componentDidMount(){
-    axios.get('http://04f70d4ed7ff.ngrok.io/api/search/?query='+this.props.term,
+    axios.get('http://50e62b962574.ngrok.io/api/search/?query='+this.props.term,
     {
       headers: {
           'Content-Type': 'application/json',

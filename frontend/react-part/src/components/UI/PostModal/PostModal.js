@@ -33,7 +33,7 @@ for (let formElement in data) {
 }
 
 // console.log(data)
-    axios.post( 'http://72253e0529ef.ngrok.io/api/post/',formdata,
+    axios.post( 'http://50e62b962574.ngrok.io/api/post/',formdata,
         {
           headers: {
               'Content-Type': 'application/json',

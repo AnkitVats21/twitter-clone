@@ -22,9 +22,10 @@ function PostModal(props) {
   const handlepost=()=>{
     // console.log("hi")
 const data={
+  tweet: props.id,
   text: text,
   photos:img,
-  videos:vid,
+  videos:vid
 }
 
 const formdata = new FormData();
@@ -34,7 +35,7 @@ for (let formElement in data) {
 }
 
 // console.log(data)
-    axios.post( 'http://04f70d4ed7ff.ngrok.io/api/post/',formdata,
+    axios.post( 'http://50e62b962574.ngrok.io/api/retweet/',formdata,
         {
           headers: {
               'Content-Type': 'application/json',

@@ -47,7 +47,12 @@ componentDidMount(){
 render(){
 
   const postlist= this.state.postlist.map((postlist,index)=>{
-    return <Post image={postlist.photos} isowned={postlist.owner} deletepost={this.deletepost} postindex={index} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
+    return <Post image={postlist.photos} retweeted={postlist.retweeted} isowned={postlist.owner} 
+    deletepost={this.deletepost} postindex={index} likes={postlist.likes} comments={postlist.TotalComments} 
+    isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} 
+    displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}
+  rtweet={postlist}
+    />
     })
 
   return (

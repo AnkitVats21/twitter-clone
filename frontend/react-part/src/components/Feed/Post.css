@@ -18,6 +18,18 @@
     white-space: pre-line;
   }
 
+  .highlighted-text{
+    color: var(--twitter-color);
+  }
+
+
+  .reheaderDescription{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    /* padding-bottom: 10px; */
+  }
+
   .post__body {
     flex: 1;
     padding: 10px;
@@ -49,9 +61,48 @@ color: #657786 !important;
     /* justify-content: center; */
     align-items: center;
     border-radius: 60px;
+    margin-top: 20px;
+    /* margin-bottom: 80px; */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+  .reimgwrap{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    align-items: center;
+    border-radius: 60px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+  .rewrapper{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    align-items: center;
+    border-radius: 60px;
     /* margin-bottom: 4%; */
     padding-left: 20px;
     padding-right: 20px;
+
+    border-radius: 20px;
+    /* margin: 20px;
+    margin-top: 0; */
+}
+
+.rewrap{
+  border: 2px solid rgba(101, 126, 255,0.2);
+  /* padding-left: 20px;
+  padding-right: 20px; */
+
+  border-radius: 20px;
+  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
   
 .foodimg{
@@ -103,6 +154,11 @@ height: 300px;
 
   .post__avatar {
     padding: 20px;
+
+  }
+  .reavatar{
+    padding: 20px;
+    padding-left: 0;
 
   }
 

@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap'
-import classes from './PostModal.module.css'
+import classes from '../PostModal/PostModal.module.css'
 import ImageIcon from '@material-ui/icons/Image';
 import VideoIcon from '@material-ui/icons/Movie';
 import axios from 'axios'
+import CommentCard from '../../Commentbox/CommentCard'
 
-function PostModal(props) {
+function EditPostModal(props) {
   const [text, setText] = useState(null);
   const [img, setImg] = useState(null);
   const [vid, setVid] = useState(null);
@@ -19,7 +20,7 @@ function PostModal(props) {
 }
 
   const handlepost=()=>{
-    // console.log("hi")
+    console.log("hi")
 const data={
   text: text,
   photos:img,
@@ -33,7 +34,7 @@ for (let formElement in data) {
 }
 
 // console.log(data)
-    axios.post( 'http://72253e0529ef.ngrok.io/api/post/',formdata,
+    axios.post( 'http://04f70d4ed7ff.ngrok.io/api/post/',formdata,
         {
           headers: {
               'Content-Type': 'application/json',
@@ -59,12 +60,14 @@ for (let formElement in data) {
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
-            What's on Your Mind?
+            Edit Tweet
             {/* <Button className={classes.postbtn}>Add Media</Button> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-<textarea onChange={event => setText(event.target.value)} type="text" rows="6" className={classes.modalfield} />
+        <textarea onChange={event => setText(event.target.value)} type="text" rows="2" className={classes.modalfield} >
+          {props.text}</textarea>
+
         </Modal.Body>
         <Modal.Footer>
 
@@ -74,9 +77,9 @@ for (let formElement in data) {
           <input onChange={handlevideo} className={classes.hidden} id="postvideo" type="file" name="file" />
           <label  htmlFor="postvideo"><VideoIcon className={classes.galleryicon} /></label>
 
-          <Button className={classes.postbtn} onClick={handlepost}>Post</Button>
+          <Button className={classes.postbtn} onClick={handlepost}>Edit</Button>
         </Modal.Footer>
       </Modal>
     );
   }
-export default PostModal;
+export default EditPostModal;

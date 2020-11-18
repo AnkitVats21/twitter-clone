@@ -14,6 +14,10 @@
     background-color: #f1f1f1;
   }
 
+  .post__headerDescription>p{
+    white-space: pre-line;
+  }
+
   .post__body {
     flex: 1;
     padding: 10px;
@@ -100,4 +104,41 @@ height: 300px;
   .post__avatar {
     padding: 20px;
 
+  }
+
+ #dropdown-item-button{
+   padding: 0 !important;
+    background-color:  rgba(0,0,0,0) !important;
+    color: #657786 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+ #dropdown-item-button:active,
+ #dropdown-item-button:visited,
+ #dropdown-item-button:hover{
+   padding: 0 !important;
+    background-color:  rgba(0,0,0,0) !important;
+    color: #657786 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+  }
+
+  .dropitem:active,
+  .dropitem:focus{
+    background-color:  white!important;
+    color: var(--twitter-color);
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .dropitem:hover{
+    color: var(--twitter-color);
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }

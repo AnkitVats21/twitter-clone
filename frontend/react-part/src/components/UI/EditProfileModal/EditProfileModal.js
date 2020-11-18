@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap'
-import classes from './PostModal.module.css'
+import classes from './EditProfileModal.module.css'
 import ImageIcon from '@material-ui/icons/Image';
 import VideoIcon from '@material-ui/icons/Movie';
 import axios from 'axios'

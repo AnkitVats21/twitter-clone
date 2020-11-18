@@ -11,12 +11,22 @@ import BookmarkButton from "../UI/BookmarkButton/BookmarkButton"
 import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 // import PostModal from'../UI/PostModal/PostModal';
 import RetweetModal from'../UI/RetweetModal/RetweetModal';
+import EditPostModal from'../UI/EditPostModal/EditPostModal';
 import {DropdownButton, Dropdown} from 'react-bootstrap'
 
 const Post = (
+
+
     (props) => {
     // ({ displayName, username, likes, isliked, isbookmarked, verified, text, image, avatar, id} ) => {
       const [modalShow, setModalShow] = React.useState(false);
+      const [editShow, setEditShow] = React.useState(false);
+
+      
+  const handledelete=()=>{
+    props.deletepost(props.postindex, props.id)
+  }
+
       return (
         <div className="post">
           <div className="postheadwrap">
@@ -38,13 +48,11 @@ const Post = (
               </div>
 
             </div>
-            {/*  */}
-            <DropdownButton id="dropdown-item-button" title="">
-  {/* <Dropdown.ItemText>Dropdown item text</Dropdown.ItemText> */}
-  <Dropdown.Item as="button">Edit</Dropdown.Item>
-  <Dropdown.Item as="button">Delete</Dropdown.Item>
-  {/* <Dropdown.Item as="button">Something else</Dropdown.Item> */}
-</DropdownButton>
+            {props.isowned? <DropdownButton id="dropdown-item-button" title="">
+  <Dropdown.Item as="button" className="dropitem" onClick={() => setEditShow(true)}>Edit</Dropdown.Item>
+  <Dropdown.Item as="button" className="dropitem" onClick={handledelete}>Delete</Dropdown.Item>
+</DropdownButton>: null}
+            
             </div>
             <div className="post__headerDescription">
                 <p>{props.text}</p>
@@ -81,6 +89,18 @@ const Post = (
         name={props.displayName}
         key={props.id} displayName={props.name} 
       />
+
+        <EditPostModal
+        show={editShow}
+        onHide={() => setEditShow(false)}
+        avatar={props.avatar}
+        username={props.username} text={props.text} 
+        image={props.image} 
+        name={props.displayName}
+        key={props.id} displayName={props.name} 
+      />
+
+
             </div>
           </div>
         //  </div>

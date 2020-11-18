@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://283eb2a85b73.ngrok.io/";
+const BASE_URL = "http://72253e0529ef.ngrok.io/";
 
 class ServerService {
 
@@ -188,17 +188,15 @@ class ServerService {
   )
   }
 
-    deletepost(deletepk){
-      return axios.delete(BASE_URL +'recipe/'+ deletepk+'/',
-
+    deletepost(data){
+      return axios.delete(BASE_URL +'api/tweet/delete/'+ data + '/',
       {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        },
+        }
         
-    }
-      
+    }    
       )
     }
 
@@ -215,7 +213,7 @@ class ServerService {
       headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      },
+      }
       
   }
     )
@@ -227,7 +225,7 @@ followers(){
     headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    },
+    }
     
 }
   )

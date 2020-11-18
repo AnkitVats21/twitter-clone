@@ -21,6 +21,20 @@ state={
   postlist:[]
 }
 
+deletepost=(index, tweetid)=>{
+  //   console.log(index)
+  // console.log(tweetid)
+  let oldItems = this.state.postlist;
+  oldItems.splice(index,1);
+  this.setState({postlist : oldItems});
+
+  ServerService.deletepost(tweetid)
+  .then(response=>{
+    console.log(response);
+  })
+
+}
+
 componentDidMount(){
   // axios.get('https://60bb5774f441.ngrok.io/')
   ServerService.homecards()
@@ -32,14 +46,14 @@ componentDidMount(){
 
 render(){
 
-  const postlist= this.state.postlist.map(postlist=>{
-    return <Post image={postlist.photos} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
+  const postlist= this.state.postlist.map((postlist,index)=>{
+    return <Post image={postlist.photos} isowned={postlist.owner} deletepost={this.deletepost} postindex={index} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
     })
 
   return (
     <div className="feed">
       <div className="feed__header">
-        <h2>Home</h2>
+        <h2 onClick={()=>this.state.postlist.splice(0,1)}>Home</h2>
       </div>
 
 

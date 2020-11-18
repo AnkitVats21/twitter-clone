@@ -154,3 +154,8 @@ class Notification(models.Model):
 
     def username(self):
         return str(self.user.username)
+
+class ChatConnection(models.Model):
+    user    = models.OneToOneField(User, on_delete=models.CASCADE, related_name="status")
+    status  = models.IntegerField(default=0)
+    last_seen= models.DateTimeField(auto_now = True)

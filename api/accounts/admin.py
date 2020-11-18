@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import User, UserProfile, OTP, Connections, Notification
+from .models import User, UserProfile, OTP, Connections, Notification, ChatConnection
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -40,6 +40,7 @@ class OTPAdmin(admin.ModelAdmin):
     list_display = ('email','otp')
 
 admin.site.register(Connections)
+admin.site.register(ChatConnection)
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('username', 'category')

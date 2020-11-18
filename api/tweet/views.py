@@ -1,17 +1,65 @@
 from rest_framework.views import APIView
 from .serializers import HashtagSerializer, TweetSerializer, TweetPostSerializer, RetweetSerializer
-from .models import Hashtag, Tweet, Likes, Bookmark, Mention, Retweet
+from tweet import serializers
+from .models import Hashtag, Tweet, Likes, Bookmark, Mention
 from rest_framework.response import Response
 from rest_framework import viewsets, status, generics, mixins, permissions
 from accounts.models import Connections, User, Notification
 from django.shortcuts import get_object_or_404
+from rest_framework import filters
+from tweet.models import Tweet
+from accounts.serializers import UserSerializer
+from .serializers import GlobalSearchSerializer
+from django.db.models import Q
+import html
+from itertools import chain
 import json
 
 class HashtagView(APIView):
     def get(self, request):
-        queryset    = Hashtag.objects.all()
+        queryset    = Hashtag.objects.order_by('-use_count').all()
         serializer  = HashtagSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class TweetView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, pk):
+        try:
+            query       = Tweet.objects.get(id=pk)
+        except:
+            return Response({"details":"invalid tweet id"})
+        serializer  = TweetSerializer(query, context={'request':request,'user': request.user.id})
+        return Response(serializer.data)
+
+class UserTweetView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, pk):
+        if pk=='self':
+            return Response(self.get_data(request.user.id))
+        else:
+            user = User.objects.filter(id=pk)
+            if user.exists():
+                return Response(self.get_data(pk))
+            else:
+                return Response({"details":"invalid pk"}, status=status.HTTP_400_BAD_REQUEST)
+    def get_data(self,id):
+        queryset    = Tweet.objects.filter(user=id)
+        rquery=[]
+        tquery=[]
+        if queryset.exists():
+            for i in queryset:
+                if i.tweet != None:
+                    rquery.append(i)
+                else:
+                    tquery.append(i)
+            
+        serializer  = TweetSerializer(tquery, many=True, context={'request':self.request,'user': self.request.user},
+            fields  = ('id','name','username','profile_pic',
+            'text','photos', 'videos','topic',
+            'timestamp','privacy','location',
+            'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
+        retweet     = RetweetSerializer(rquery, many=True, context={'request':self.request,'user': self.request.user})
+        return serializer.data + retweet.data
 
 class FeedsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -21,11 +69,18 @@ class FeedsView(APIView):
         rquery      = []
         for i in Following.following.all():
             tweet     = Tweet.objects.filter(user=i)
-            retweet   = Retweet.objects.filter(user=i)
-            rquery   += retweet
-            queryset += tweet
-        serializer  = TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
-        return Response(serializer.data)
+            if tweet.exists():
+                if tweet[0].tweet != None:
+                    rquery   += tweet
+                else:
+                    queryset += tweet
+        serializer  = TweetSerializer(queryset, many=True, context={'request':request,'user': request.user},
+        fields  = ('id','name','username','profile_pic',
+        'text','photos', 'videos','topic',
+        'timestamp','privacy','location',
+        'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
+        retweet     = RetweetSerializer(rquery, many=True, context={'request':request,'user': request.user})
+        return Response(serializer.data + retweet.data)
     def post(self, request):
         followers = Connections.objects.filter(user=request.user.id)[0].follower.all()
         try:
@@ -33,7 +88,16 @@ class FeedsView(APIView):
             profile_pic="http://{}{}".format(request.headers['host'],profile_pic)
         except:
             profile_pic=None
-        data = request.data.copy()
+        list1=['text','photo','videos']
+        key  = list(request.data.keys())
+        if request.data.get('tweet',None) == None:
+            if not any(elem in list1  for elem in key):
+                return Response({"details":"please enter text, photo or video"})
+        data={}
+        for i in request.data:
+            if request.data[i] != "null":
+                data[i]=request.data[i]
+        print(data)
         data['user']=str(request.user.id)
         keys = list(data.keys())
         serializer = TweetPostSerializer(data=data)
@@ -83,7 +147,7 @@ class LikeView(APIView):
         try:
             tweet   = Tweet.objects.filter(id=pk)[0]
         except:
-            return Response({"details":"tweet with this id doesn't exist"})
+            return Response({"details":"tweet with this id doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
         tweet_user= User.objects.filter(username=str(tweet.username()))[0]
         userid = request.user.id
         name     = request.user.profile.name
@@ -100,7 +164,7 @@ class LikeView(APIView):
             return Response({'details':'you unliked this post.'}, status=status.HTTP_200_OK)
 
     def send_notification(self, name, userid, tweet, tweetUser, *args):
-        fetch_data = """{}"tweet_id":{},""".format('{',tweet.id)
+        # fetch_data = """{}"tweet_id":{},""".format('{',tweet.id)
         obj = Notification.objects.filter(user=tweetUser).filter(category='Likes').filter(tweet_id=tweet.id)
         if len(obj) != 0:
             obj=obj[0]
@@ -169,7 +233,7 @@ class BookmarkView(APIView):
 class RetweetView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def post(self, request):
-        serializer = RetweetSerializer(data=request.data)
+        serializer = TweetPostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()   
             try:
@@ -195,17 +259,28 @@ class CommentView(APIView):
         serializer = CommentSerializer(queryset, many=True)
         return Response(serializer.data)
     def post(self, request):
+        serializer = serializers.CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            pass
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = request.data.copy()
         data['user']=request.user.id
         users= []
-        for i in data['replying_to']:
-            obj = User.objects.filter(username=str(i))[0]
-            users.append(obj.id)
-        data['replying_to']=users
-        serializer = CommentSerializer(data=data)
+        # for i in data['replying_to']:
+        #     obj = User.objects.filter(username=str(i))[0]
+        #     users.append(obj.id)
+        # data['replying_to']=users
+        serializer = serializers.CommentCreateSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            tweet = Tweet.objects.get(id=request.data['tweet'])
+            text_data = {"data":"{} replied to your tweet".format(request.user.profile.name),
+            "username": request.user.username}
+            text_data = json.dumps(text_data)
+            obj = Notification.objects.create(user=tweet.user, text=text_data, category="Replies")
             return Response(serializer.data)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     def patch(self, request):
@@ -216,7 +291,7 @@ class CommentView(APIView):
             obj = User.objects.filter(username=str(i))[0]
             users.append(obj.id)
         data['replying_to']=users
-        serializer = CommentSerializer(comment, data=data)
+        serializer = serializers.CommentCreateSerializer(comment, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -273,10 +348,6 @@ class CommentReplyView(APIView):
         except:
             return Response({"details":"Please entera valid comment reply id."})
 
-from rest_framework import filters
-from tweet.models import Tweet
-from accounts.serializers import UserSerializer
-from .serializers import GlobalSearchSerializer
 
 class UserListView(generics.ListAPIView):
     queryset         = User.objects.all()
@@ -290,21 +361,63 @@ class TweetListView(generics.ListAPIView):
     filter_backends  = [filters.SearchFilter]
     search_fields    = ['text']
 
-class RetweetListView(generics.ListAPIView):
-    queryset         = Retweet.objects.all()
-    serializer_class = RetweetSerializer
-    filter_backends  = [filters.SearchFilter]
-    search_fields    = ['text']
-
-from django.db.models import Q
-from itertools import chain
-
 class GlobalSearchList(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
     def get(self, request):
         query       = self.request.query_params.get('query', None)
+        # query = html.unescape(query)
+        if len(query) == 0:
+            return Response({"details":"please enter query keyword"})
         users       = User.objects.filter(Q(username__icontains=query) | Q(profile__name__icontains=query))
-        tweets      = Tweet.objects.filter(text__icontains='#'+str(query))
-        all_results = list(chain(users, tweets)) 
+        tweets      = Tweet.objects.filter(text__icontains=query)
+        serializer  = UserSerializer(users, many=True, context={'request':request,'user': request.user}, 
+                        fields=('id', 'username', 'profile'))
+        serializer1 = TweetSerializer(tweets, many=True, context={'request':request,'user': request.user}, 
+                fields  = ('id','name','username','profile_pic',
+                'text','photos', 'videos','topic',
+                'timestamp','privacy','location',
+                'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
+
+        # all_results = list(chain(users, tweets)) 
         # all_results.sort(key=lambda x: x.timestamp)
-        serializer  = GlobalSearchSerializer(all_results, many=True, context={'request':request,'user': request.user.id})
-        return Response(serializer.data)
+        # serializer  = GlobalSearchSerializer(all_results, many=True, context={'request':request,'user': request.user})
+        result={"user":serializer.data,"tweet":serializer1.data}
+        return Response(result)
+
+    def get_searchdata(self, obj, request):
+        if isinstance(obj, Tweet): 
+            serializer = TweetSerializer(obj,context={'request':request,'user': request.user}, 
+                fields  = ('id','name','username','profile_pic',
+                'text','photos', 'videos','topic',
+                'timestamp','privacy','location',
+                'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
+        elif isinstance(obj, User):
+            serializer = UserSerializer(obj, context={'request':request,'user': request.user}, 
+                fields=('id', 'username', 'profile'))
+        else:
+            raise Exception("Neither a Tweet nor User instance!")
+        return serializer.data
+
+# from datetime import datetime
+from datetime import date
+
+class TrendingView(APIView):
+    def get(self, request):
+        queryset = Hashtag.objects.order_by('-timestamp','-usecount').all()[:20]
+        d={}
+        for i in queryset:
+            obj = Tweet.objects.filter(text__icontains=i.hashtags).filter(timestamp__month=date.today().month)
+            if len(obj) != 0:
+                d[i.hashtags]=len(obj)
+        k=sorted(d.items(), key=lambda item: item[1], reverse=True)
+        data=[]
+        j=1
+        for i in k:
+            x = {
+                "serial_no":j,
+                "hashtag":i[0],
+                "count":i[1]
+            }
+            j += 1
+            data.append(x)
+        return Response(data)

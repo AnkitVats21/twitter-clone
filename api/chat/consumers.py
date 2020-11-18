@@ -1,4 +1,4 @@
-from accounts.models import User
+from accounts.models import User, ChatConnection
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
@@ -9,7 +9,7 @@ from .serializers import MessageSerializer
 from channels.consumer import SyncConsumer
 from json.decoder import JSONDecodeError as e
 from requests import get,post
-
+from channels.db import database_sync_to_async
 
 class ChatConsumer(WebsocketConsumer):
 
@@ -70,11 +70,24 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        self.set_status(True)
+        # chat = ChatConnection.objects.get_or_create(user=self.scope['user'])[0]
+        # chat.status +=1
+        # chat.save()
         self.fetch_messages()
         message={
             "message"   : "Your message"
         }
         self.send_message(message)
+
+    # @database_sync_to_async
+    def set_status(self, value):
+        chat = ChatConnection.objects.get_or_create(user=self.scope['user'])[0]
+        if value:
+            chat.status +=1
+        else:
+            chat.status -=1
+        chat.save()
 
     def receive(self, text_data=None, bytes_data=None):
         try:
@@ -85,6 +98,7 @@ class ChatConsumer(WebsocketConsumer):
 
 
     def disconnect(self, close_code):
+        self.set_status(False)
         async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
 
     def send_message(self, message):

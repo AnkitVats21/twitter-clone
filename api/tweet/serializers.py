@@ -1,39 +1,28 @@
 from rest_framework import serializers
-from .models import Tweet, Hashtag, Likes, Bookmark, Retweet, Comment, CommentReply
+from .models import Tweet, Hashtag, Likes, Bookmark, Comment, CommentReply
 from accounts.models import User, UserProfile
-from accounts.serializers import UserProfileSerializer, UserSerializer
-
-class DynamicFieldsModelSerializer(serializers.ModelSerializer):
-    """
-    A ModelSerializer that takes an additional `fields` argument that
-    controls which fields should be displayed.
-    """
-
-    def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
-        fields = kwargs.pop('fields', None)
-
-        # Instantiate the superclass normally
-        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
-
-        if fields is not None:
-            # Drop any fields that are not specified in the `fields` argument.
-            allowed = set(fields)
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
+from accounts.serializers import UserProfileSerializer, UserSerializer, DynamicFieldsModelSerializer
+from tweet.serializers import DynamicFieldsModelSerializer
 
 class TweetPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet
         fields= '__all__'
 
-class CommentSerializer(serializers.ModelSerializer):
-    reply       = serializers.SerializerMethodField('replies')
+class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields= ("id", "text", "photos", "gif", "videos",
-                "timestamp", "replies", "tweet", "reply")
+        fields= '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    reply       = serializers.SerializerMethodField('replies')
+    username    = serializers.SerializerMethodField('USERNAME')
+    name        = serializers.SerializerMethodField('NAME')
+    profile_pic = serializers.SerializerMethodField('PIC')
+    class Meta:
+        model = Comment
+        fields= ("id", "username", "name", "profile_pic", "text", "photos", "videos",
+                "timestamp", "tweet", "reply")
     
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -43,10 +32,26 @@ class CommentSerializer(serializers.ModelSerializer):
     
     def replies(self, instance):
         obj = CommentReply.objects.filter(comment=instance.id)
-        serializer = CommentReplySerializer(obj, many=True)
+        serializer = CommentReplySerializer(obj, many=True, context={'request': self.context.get('request')})
+        return serializer.data
+
+    def user(self, instance):
+        user = User.objects.filter(username=str(instance.user.username))[0]
+        serializer = UserSerializer(user, context={'request': self.context.get('request')},fields=('username','profile'))
         return serializer.data
     
+    def USERNAME(self, instance):
+        return self.user(instance).get('username')
+
+    def NAME(self, instance):
+        return self.user(instance).get("profile")["name"]
+
+    def PIC(self, instance):
+        return self.user(instance).get("profile")["picture"]
+
+    
 class CommentReplySerializer(serializers.ModelSerializer):
+    user_detail = serializers.SerializerMethodField('user')
     class Meta:
         model = CommentReply
         fields= '__all__'
@@ -56,27 +61,33 @@ class CommentReplySerializer(serializers.ModelSerializer):
         ret['replying_to']=[t.username for t in instance.replying_to.all()]
         return ret
 
+    def user(self, instance):
+        user = User.objects.filter(username=str(instance.user.username))[0]
+        serializer = UserSerializer(user, context={'request': self.context.get('request')},fields=('username','profile'))
+        return serializer.data
+
+
+
 class TweetSerializer(DynamicFieldsModelSerializer):
-    liked       = serializers.SerializerMethodField('get_status')
-    likes       = serializers.SerializerMethodField('total_likes')
-    profile_pic = serializers.SerializerMethodField('profile')
-    bookmarked  = serializers.SerializerMethodField('Bookmark')
-    comments    = serializers.SerializerMethodField('totalComments')
-    retweets    = serializers.SerializerMethodField('totalRetweets')
+    liked         = serializers.SerializerMethodField('get_status')
+    likes         = serializers.SerializerMethodField('total_likes')
+    profile_pic   = serializers.SerializerMethodField('profile')
+    bookmarked    = serializers.SerializerMethodField('Bookmark')
+    TotalComments = serializers.SerializerMethodField('totalComments')
+    comments      = serializers.SerializerMethodField('Comments')
+    retweets      = serializers.SerializerMethodField('totalRetweets')
     class Meta:
         model   = Tweet
         fields  = ('id','name','username','profile_pic',
-        'text','photos','gif','videos','topic',
+        'text','photos', 'videos','topic',
         'timestamp','privacy','location',
-        'liked', 'likes', 'bookmarked', 'comments', 'retweets')
+        'liked', 'likes', 'bookmarked', 'comments','TotalComments', 'retweets')
     def get_status(self, instance):
-        user_id = self.context.get("user")
-        try:
-            like = Likes.objects.filter(user=user_id).filter(tweet=instance)
-            if len(like)!=0:
-                return  True
-        except:
-            return False
+        user = self.context.get("user")
+        like = Likes.objects.filter(user=user).filter(tweet=instance)
+        if len(like)!=0:
+            return  True
+        return False
     
     def total_likes(self, instance):
         like = Likes.objects.filter(tweet=instance)
@@ -89,7 +100,7 @@ class TweetSerializer(DynamicFieldsModelSerializer):
         return serializer.data.get('picture')
     
     def Bookmark(self, instance):
-        user    = self.context.get('request').user
+        user    = self.context.get('user')
         try:
             bookmarks = Bookmark.objects.filter(user=user)[0]
             return instance in bookmarks.tweet.all()
@@ -97,34 +108,56 @@ class TweetSerializer(DynamicFieldsModelSerializer):
             return False
     
     def totalComments(self, instance):
+        return len(Comment.objects.filter(tweet=instance.id))
+    
+    def Comments(self, instance):
         obj = Comment.objects.filter(tweet=instance.id)
-        serializer = CommentSerializer(obj, many=True)
-        # print(dict(serializer.data))
-        # serializer.data['total']=len(serializer.data)
+        serializer = CommentSerializer(obj, many=True, context={'request': self.context.get('request')})
         return serializer.data
     
     def totalRetweets(self, instance):
-        return len(Retweet.objects.filter(tweet=instance.id))
+        return len(Tweet.objects.filter(tweet=instance.id))
+
+class RetweetSerializer(serializers.ModelSerializer):
+    retweet_msg = serializers.SerializerMethodField('message')
+    class Meta:
+        model   = Tweet
+        fields  = '__all__'
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        tweet_data   = TweetSerializer(instance.tweet, context={"request":self.context.get("request"),"user":self.context.get("user")}, fields  = ('id','name','username','profile_pic',
+            'text','photos', 'videos','topic',
+            'timestamp','privacy','location',
+            'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets')).data
+        ret['tweet'] = tweet_data
+        return ret
+
+    def message(self, instance):
+        return "{} Retweeted".format(instance.user.profile.name)
+
 
 
 class HashtagSerializer(serializers.ModelSerializer):
+    # time = serializers.SerializerMethodField('timestamp')
     class Meta:
         model = Hashtag
         fields= '__all__'
 
-class RetweetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Retweet
-        fields= '__all__'
 
 class GlobalSearchSerializer(serializers.Serializer):
     search_data = serializers.SerializerMethodField('to_native')
 
     def to_native(self, obj):
         if isinstance(obj, Tweet): 
-            serializer = TweetSerializer(obj,context={'request':self.context.get('request'),'user': self.context.get('user')})
+            serializer = TweetSerializer(obj,context={'request':self.context.get('request'),'user': self.context.get('user')}, 
+            fields  = ('id','name','username','profile_pic',
+            'text','photos', 'videos','topic',
+            'timestamp','privacy','location',
+            'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
         elif isinstance(obj, User):
-            serializer = UserSerializer(obj)
+            serializer = UserSerializer(obj, context={'request':self.context.get('request'),'user': self.context.get('user')}, 
+            fields=('id', 'username', 'profile'))
         else:
             raise Exception("Neither a Tweet nor User instance!")
         return serializer.data

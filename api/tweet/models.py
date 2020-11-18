@@ -23,17 +23,15 @@ class Hashtag(models.Model):
 comment_privacy=(('Everyone','Everyone'),('Followers','Followers'),('mentioned','mentioned'),)
 
 class Tweet(models.Model):
+    tweet       = models.ForeignKey('self', on_delete=models.CASCADE, related_name='tweetid', blank = True, null = True)
     user        = models.ForeignKey(User, on_delete=models.CASCADE)
     text        = models.TextField(max_length=280, blank=True, null=True)
     photos      = models.ImageField(upload_to = 'tweets/images/', blank = True, null = True, max_length = 1000)
-    gif         = models.ImageField( upload_to='tweets/gifs/', max_length=5000, blank=True, null=True)
     videos      = models.FileField(upload_to='tweets/videos/', max_length=100000, blank=True, null=True)
     topic       = models.CharField(max_length=140, blank=True, null=True)
     timestamp   = models.DateTimeField(auto_now=True)
     privacy     = models.CharField(choices=comment_privacy, max_length=50, default='Everyone')
     location    = models.CharField(max_length=140, blank=True, null=True)
-    retweets    = models.IntegerField(default=0)
-    comments    = models.IntegerField(default=0)
 
     # def __str__(self):
     #     return str(self.user.username)+"-->"+str(self.text[:6])+"..."
@@ -81,49 +79,15 @@ class Mention(models.Model):
     def __str__(self):
         return self.user.username
 
-class Retweet(models.Model):
-    tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    text        = models.TextField(max_length =280, blank=True, null=True)
-    photos      = models.ImageField(upload_to ='retweets/images/', max_length=1000,  blank=True, null=True)
-    gif         = models.ImageField(upload_to ='retweets/gifs/',   max_length=5000,  blank=True, null=True)
-    videos      = models.FileField(upload_to  ='retweets/videos/', max_length=100000,blank=True, null=True)
-    topic       = models.CharField(max_length =140, blank=True, null=True)
-    timestamp   = models.DateTimeField(auto_now=True)
-    privacy     = models.CharField(choices=comment_privacy, max_length=50, default='Everyone')
-    location    = models.CharField(max_length=140, blank=True, null=True)
-    
-    def __str__(self):
-        return self.user.username
-
-    def save(self, *args, **kwargs):
-        try:
-            d=[t for t in self.text.split() if t.startswith('#')]
-            d=list(dict.fromkeys(d))
-            for h in d:
-                try:
-                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
-                    hashtag.usecount +=1
-                    hashtag.save()
-                except:
-                    Hashtag.objects.create(hashtags=h)
-        except:
-            pass
-        super(Retweet, self).save(*args, **kwargs)
-
 class Comment(models.Model):
     tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE)
     user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    replying_to = models.ManyToManyField(User, related_name='replying_to')
+    replying_to = models.ManyToManyField(User, related_name='replying_to', blank=True, null=True)
     text        = models.TextField(max_length =280, blank=True, null=True)
     photos      = models.ImageField(upload_to ='retweets/images/', max_length=1000,  blank=True, null=True)
-    gif         = models.ImageField(upload_to ='retweets/gifs/',   max_length=5000,  blank=True, null=True)
     videos      = models.FileField(upload_to  ='retweets/videos/', max_length=100000,blank=True, null=True)
     timestamp   = models.DateTimeField(auto_now=True)
-    replies     = models.BooleanField(default=False)
 
-    def __str__(self):
-        return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))
     
     def save(self, *args, **kwargs):
         try:
@@ -148,7 +112,6 @@ class CommentReply(models.Model):
     replying_to = models.ManyToManyField(User, related_name='comment_replying_to')
     text        = models.TextField(max_length =280, blank=True, null=True)
     photos      = models.ImageField(upload_to ='retweets/images/', max_length=1000,  blank=True, null=True)
-    gif         = models.ImageField(upload_to ='retweets/gifs/',   max_length=5000,  blank=True, null=True)
     videos      = models.FileField(upload_to  ='retweets/videos/', max_length=100000,blank=True, null=True)
     topic       = models.CharField(max_length =140, blank=True, null=True)
     timestamp   = models.DateTimeField(auto_now=True)

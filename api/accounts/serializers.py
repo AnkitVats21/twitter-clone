@@ -2,6 +2,27 @@ from rest_framework import serializers
 from .models import User, UserProfile, OTP, Connections, Notification
 from rest_framework.response import Response
 import json
+from tweet.models import Tweet
+
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
 
 class UserProfileSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -9,12 +30,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields  = ('name','dob','picture', 'cover_pic','bio','location','website')
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(DynamicFieldsModelSerializer):
     profile     = UserProfileSerializer(required=True)
     connections = serializers.SerializerMethodField('connection')
+    posts = serializers.SerializerMethodField('totalpost')
     class Meta:
         model       = User
-        fields      = ('id', 'email', 'username', 'password','date_joined', 'last_login', 'profile', 'connections')
+        fields      = ('id', 'email', 'username', 'password','date_joined', 'last_login', 'posts', 'profile', 'connections')
         extra_kwargs= {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -43,6 +65,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'following': len(obj.following.all())
         }
         return data
+    def totalpost(self, instance):
+        obj = Tweet.objects.filter(user=instance.id)
+        return len(obj)
 
 
 class OTPSerializer(serializers.ModelSerializer):
@@ -51,32 +76,6 @@ class OTPSerializer(serializers.ModelSerializer):
         fields  = ('email','otp','reset')
 
 
-class ConnectionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model   = Connections
-        fields  = ('username','follower','following')
-
-    def to_representation(self, instance):
-        """
-        Convert `follower` to username.
-        """
-        ret     = super().to_representation(instance)
-        id      = ret['follower']
-        id2     = ret['following']
-        data    =[]
-        data2   =[]
-        for i in id:
-            data += User.objects.filter(id=int(i))
-        for j in id2:
-            data2 += User.objects.filter(id=int(j))
-        serializer  = UserSerializer(data, many=True)
-        serializer2 = UserSerializer(data2, many=True)
-        lst ={}
-        lst['follower']=serializer.data
-        lst['following']=serializer2.data
-        lst['total followers']=len(id)
-        lst['total following']=len(id2)
-        return lst
 
 class FollowerSerializer(serializers.ModelSerializer):
     following   = serializers.SerializerMethodField('follow')
@@ -111,4 +110,32 @@ class NotificationSerializer(serializers.ModelSerializer):
         return host+'/api/notifications/mark_as_read/'+str(instance.id)+"/"
     def extra_data(self, instance):
         data = json.loads(instance.text)
+
+
+# class ConnectionsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model   = Connections
+#         fields  = ('username','follower','following')
+
+#     def to_representation(self, instance):
+#         """
+#         Convert `follower` to username.
+#         """
+#         ret     = super().to_representation(instance)
+#         id      = ret['follower']
+#         id2     = ret['following']
+#         data    =[]
+#         data2   =[]
+#         for i in id:
+#             data += User.objects.filter(id=int(i))
+#         for j in id2:
+#             data2 += User.objects.filter(id=int(j))
+#         serializer  = UserSerializer(data, many=True)
+#         serializer2 = UserSerializer(data2, many=True)
+#         lst ={}
+#         lst['follower']=serializer.data
+#         lst['following']=serializer2.data
+#         lst['total followers']=len(id)
+#         lst['total following']=len(id2)
+#         return lst
         return data

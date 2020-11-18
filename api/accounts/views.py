@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User, OTP, Connections, Notification
-from .serializers import UserSerializer, OTPSerializer, ConnectionsSerializer, NotificationSerializer, FollowerSerializer
+from .serializers import UserSerializer, OTPSerializer,  NotificationSerializer, FollowerSerializer#ConnectionsSerializer,
 from rest_framework import viewsets, status, generics, mixins, permissions
 from random import randint
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -221,8 +221,8 @@ class ForgotPasswordView(APIView):
              status=status.HTTP_400_BAD_REQUEST)
         user.set_password(password)
         user.save()
-        return Response({"details":"password reset successfully"},
-         status=status.HTTP_200_OK)
+        data = get_tokens_for_user(user)
+        return Response(data, status=status.HTTP_200_OK)
 
 class ChangePassword(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -246,18 +246,33 @@ class EditUserProfileView(APIView):
         return Response(serializer.data)
 
 from collections import OrderedDict
+import html
 
 class FollowerView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, connection):
-        user_id     = request.user.id
-        queryset    = Connections.objects.filter(user=request.user)[0]
+        try:
+            user= self.request.query_params.get('user', None)
+            user = html.unescape(user)
+        except:
+            return Response({"details":"please enter valid keyword either self or id of user"})
+        if user=='self':
+            return Response(self.get_data(connection, request.user.id))
+        else:
+            user = User.objects.filter(id=int(user))
+            if user.exists():
+                return Response(self.get_data(connection, user[0].id))
+            else:
+                return Response({"details":"invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def get_data(self, connection, user):
+        queryset    = Connections.objects.filter(user=user)[0]
         if connection=='follower':
             query   = queryset.follower.all()
         else:
             query   = queryset.following.all()
-        serializer  = FollowerSerializer(query, many=True, context={'request': request, 'user_id': user_id})
-        return Response(serializer.data)
+        serializer  = FollowerSerializer(query, many=True, context={'request': self.request, 'user_id': self.request.user.id})
+        return serializer.data
 
 
 class ConnectionsView(APIView):
@@ -329,3 +344,20 @@ class NotificationSeenView(APIView):
         obj.save()
         return Response({"notification marked as read."})
 
+class UserProfileView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, pk):
+        user = User.objects.filter(id=pk)
+        if len(user)==0:
+            return Response({"details":"please enter valid id"})
+        else:
+            following = False
+            connection = Connections.objects.filter(user=user[0])[0]
+            if request.user in connection.following.all():
+                following = True
+            else:
+                following = False
+            serializer = UserSerializer(user[0], context={"request":request})
+            data = serializer.data.copy()
+            data['following']=following
+            return Response(data)

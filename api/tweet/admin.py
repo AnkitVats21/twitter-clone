@@ -7,7 +7,6 @@ from tweet import models
 #     list_display = ('')
 admin.site.register(models.Hashtag)
 admin.site.register(models.Tweet)
-admin.site.register(models.Retweet)
 admin.site.register(models.Mention)
 
 class CommentReplyInline(admin.StackedInline):

@@ -19,7 +19,7 @@ class MessageView(APIView):
 class ChatView(APIView):
     permission_classes  = (permissions.IsAuthenticated,)
     def get(self, request):
-        user    = User.objects.filter(email=str(request.user))[0]
+        user    = User.objects.filter(id=request.user.id)[0]
         # try:
         #     chat        = Chat.objects.filter(id=int(request.data.get('chatId'))[0]
         #     queryset    = Message.objects.filter(contact=chat)
@@ -38,13 +38,7 @@ class ChatView(APIView):
 
     
     def post(self, request):
-        # print(request.data)
-        # serializer = ChatSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     pass
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        sender  = User.objects.filter(email=str(request.user))[0]
+        sender  = request.user
         try:
             reciever= User.objects.filter(username=request.data['reciever'])[0]
         except:

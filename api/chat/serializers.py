@@ -6,11 +6,12 @@ from django.shortcuts import get_object_or_404
 
 class ChatSerializer(serializers.ModelSerializer):
     profile_pic = serializers.SerializerMethodField('profile')
-    reciever    = serializers.SerializerMethodField('user')
+    r_name      = serializers.SerializerMethodField('name')
+    r_username  = serializers.SerializerMethodField('username')
     last_chat   = serializers.SerializerMethodField('chat')
     class Meta:
         model = Chat
-        fields= ('id', 'reciever', 'profile_pic', 'last_chat')
+        fields= ('id', 'r_username', 'r_name', 'profile_pic', 'last_chat')
 
     def profile(self, obj):
         sender=self.context.get('request').user
@@ -25,12 +26,16 @@ class ChatSerializer(serializers.ModelSerializer):
     
     def user(self, obj):
         sender=self.context.get('request').user
-        if str(obj)==str(sender):
-            email = obj.reciever
+        if obj.sender.username==sender.username:
+            return obj.reciever
         else:
-            email   = obj
-        user    = User.objects.filter(email=str(email))[0]
-        return str(user.username)
+            return obj.sender
+
+    def username(self, obj):
+        return self.user(obj).username
+    
+    def name(self,obj):
+        return self.user(obj).profile.name
 
     def chat(self, obj):  
         chat        = get_object_or_404(Chat, id=obj.id)

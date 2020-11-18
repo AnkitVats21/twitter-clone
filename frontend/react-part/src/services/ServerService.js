@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://04f70d4ed7ff.ngrok.io/";
+const BASE_URL = "http://283eb2a85b73.ngrok.io/";
 
 class ServerService {
 
@@ -71,6 +71,18 @@ class ServerService {
         
     }
       )
+    }
+
+    postcomment(data){
+      return axios.get(BASE_URL +"api/tweet/"+data+"/",
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
     }
 
     userdetails(){

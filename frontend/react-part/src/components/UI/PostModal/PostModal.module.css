@@ -27,3 +27,7 @@ box-shadow: none !important;
     color: #4563ff!important;
     
 }
+
+.hidden{
+    display: none;
+}

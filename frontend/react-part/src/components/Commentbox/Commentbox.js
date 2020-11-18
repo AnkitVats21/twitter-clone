@@ -33,15 +33,7 @@ handlechangeall = (event) =>{
 componentDidMount(){
   // ServerService.homecards()
   const data= this.props.location.state.tweetid;
-  axios.get("http://bc3a730fa13d.ngrok.io/"+"api/tweet/"+data+"/",
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    },
-    
-}
-  )
+  ServerService.postcomment(data)
   .then(response=>{
     console.log(response);
     this.setState({postlist: response.data, commentlist:response.data.comments})

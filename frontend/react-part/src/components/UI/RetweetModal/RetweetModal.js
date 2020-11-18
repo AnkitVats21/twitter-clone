@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap'
-import classes from './PostModal.module.css'
+import classes from '../PostModal/PostModal.module.css'
 import ImageIcon from '@material-ui/icons/Image';
 import VideoIcon from '@material-ui/icons/Movie';
 import axios from 'axios'
+import CommentCard from '../../Commentbox/CommentCard'
 
 function PostModal(props) {
   const [text, setText] = useState(null);
@@ -59,12 +60,21 @@ for (let formElement in data) {
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
-            What's on Your Mind?
+            Retweet
             {/* <Button className={classes.postbtn}>Add Media</Button> */}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-<textarea onChange={event => setText(event.target.value)} type="text" rows="6" className={classes.modalfield} />
+        <textarea onChange={event => setText(event.target.value)} type="text" rows="2" className={classes.modalfield} />
+{/*  */}
+    <CommentCard 
+    image={props.image}
+    key={props.id} displayName={props.name} 
+    username={props.username} text={props.text} 
+    avatar={props.avatar}
+    />
+    {/*  */}
+
         </Modal.Body>
         <Modal.Footer>
 
@@ -74,7 +84,7 @@ for (let formElement in data) {
           <input onChange={handlevideo} className={classes.hidden} id="postvideo" type="file" name="file" />
           <label  htmlFor="postvideo"><VideoIcon className={classes.galleryicon} /></label>
 
-          <Button className={classes.postbtn} onClick={handlepost}>Post</Button>
+          <Button className={classes.postbtn} onClick={handlepost}>Retweet</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -23,7 +23,12 @@ body{
 }
 
 .trendcard{
-  margin-bottom: 8px !important;
+  margin-bottom: 16px !important;
+}
+
+.trendhead{
+background-color: white !important;
+box-shadow: none !important;
 }
 
 .messageheader{

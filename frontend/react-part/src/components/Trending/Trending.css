@@ -1,12 +1,21 @@
 .trendingtag{
     font-size: 14px;
+    margin-top: 0;
+    color: #5f5f5f;
+}
+
+.trendingfoot{
+    font-size: 14px;
+    margin-bottom: 0;
+    color: #5f5f5f;
 }
 
 .tagname{
     font-size: 18px;
     font-weight: 600;
-    
+    color: #14171A;
 }
+
 
 .feed::-webkit-scrollbar {
     display: none;

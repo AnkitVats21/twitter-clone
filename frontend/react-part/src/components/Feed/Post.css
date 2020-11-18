@@ -23,6 +23,13 @@
 .posthead{
   display:flex;
   align-items: center;
+
+}
+.postheadwrap{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 20px;
 }
   
 .post__commt

@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "antd": "^4.8.4",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "react": "^17.0.1",
@@ -19,7 +20,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-twitter-embed": "^3.0.3",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "websocket": "^1.0.32"
   },
   "scripts": {
     "start": "react-scripts start",

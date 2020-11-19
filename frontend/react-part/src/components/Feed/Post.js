@@ -24,6 +24,41 @@ const Post = (
 
 
     (props) => {
+// console.log(props.isowned)
+      let authorprofile
+      if(props.isowned){
+        authorprofile= <h3>
+
+                        <Link to= {{
+                pathname:'/profile'
+              }}>{props.displayName}</Link>
+                          <span className="post__headerSpecial">
+              {props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link to= {{
+                pathname:'/profile'
+              }}>@
+                            {props.username}</Link></div>
+                          </span>
+
+                          
+                        </h3>
+      }
+      else{
+        authorprofile= <h3>
+
+        <Link to= {{
+pathname:'/user-profile',
+state:{userid: props.user}
+}}>{props.displayName}</Link>
+          <span className="post__headerSpecial">
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link to= {{
+pathname:'/user-profile',
+state:{userid: props.user}
+}}>@
+            {props.username}</Link></div>
+          </span>
+        </h3>
+      }
+
     // ({ displayName, username, likes, isliked, isbookmarked, verified, text, image, avatar, id} ) => {
       const [modalShow, setModalShow] = React.useState(false);
       const [editShow, setEditShow] = React.useState(false);
@@ -35,26 +70,110 @@ const Post = (
   const handledelete=()=>{
     props.deletepost(props.postindex, props.id)
   }
+console.log(props)
 
   if(props.retweeted){
+    let retweetauthor
+    let reprofile
+    if(props.rtweet.tweet.owner){
+      retweetauthor= <h3>
+      <Link to= {{
+                pathname:'/profile'
+              }}
+                  >{props.rtweet.tweet.name}</Link>
+        <span className="post__headerSpecial">
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
+<Link to= {{
+                pathname:'/profile'
+              }}
+                  >{props.rtweet.tweet.username}</Link></div>
+        </span>
+      </h3>
+    }
+    else{
+      retweetauthor= <h3>
+      <Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.tweet.user_id}
+              }}
+                  >{props.rtweet.tweet.name}</Link>
+        <span className="post__headerSpecial">
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
+<Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.tweet.user_id}
+              }}
+                  >{props.rtweet.tweet.username}</Link></div>
+        </span>
+      </h3>
+    }
+
+    if(props.rtweet.owner){
+      reprofile=<h3>
+      <Link to= {{
+    pathname:'/profile'
+  }}
+      >{props.rtweet.user.profile.name}</Link>
+      <span className="post__headerSpecial">
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
+<Link to= {{
+    pathname:'/profile'
+  }}
+      >{props.rtweet.user.username}</Link></div>
+      </span>
+    </h3>
+    }
+
+    else{
+      reprofile=<h3>
+      <Link to= {{
+    pathname:'/user-profile',
+    state:{userid: props.rtweet.user_id}
+  }}
+      >{props.rtweet.user.profile.name}</Link>
+      <span className="post__headerSpecial">
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
+<Link to= {{
+    pathname:'/user-profile',
+    state:{userid: props.rtweet.user_id}
+  }}
+      >{props.rtweet.user.username}</Link></div>
+      </span>
+    </h3>
+    }
+
+
+
 console.log(props.rtweet.tweet)
       return (
         <div className="post">
           <div className="postheadwrap">
           <div className="posthead">
           <div className="post__avatar">
-            <Avatar src={props.rtweet.tweet.profile_pic} />
+            <Avatar src={props.rtweet.user.profile.picture} />
           </div>
           {/* <div className="post__body"> */}
             <div className="post__header">
               <div className="post__headerText">
-                <h3>
-                  {props.rtweet.tweet.name}{" "}
+
+
+                {/* <h3>
+                  <Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.user_id}
+              }}
+                  >{props.rtweet.user.profile.name}</Link>
                   <span className="post__headerSpecial">
       {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-                    {props.rtweet.tweet.username}</div>
+      <Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.user_id}
+              }}
+                  >{props.rtweet.user.username}</Link></div>
                   </span>
-                </h3>
+                </h3> */}
+
+                {reprofile}
               </div>
               </div>
 
@@ -86,13 +205,22 @@ console.log(props.rtweet.tweet)
 {/* <div className="post__body"> */}
   <div className="post__header">
     <div className="post__headerText">
-      <h3>
-        {props.rtweet.tweet.name}{" "}
+      {/* <h3>
+      <Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.tweet.user_id}
+              }}
+                  >{props.rtweet.tweet.name}</Link>
         <span className="post__headerSpecial">
 {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-          {props.rtweet.tweet.username}</div>
+<Link to= {{
+                pathname:'/user-profile',
+                state:{userid: props.rtweet.tweet.user_id}
+              }}
+                  >{props.rtweet.tweet.username}</Link></div>
         </span>
-      </h3>
+      </h3> */}
+      {retweetauthor}
     </div>
     </div>
     </div>
@@ -103,7 +231,6 @@ console.log(props.rtweet.tweet)
     searchWords={[/\B\@([\w\-]+)/gim, /#[A-Za-z0-9]*/g]}
     highlightTag ={Highlight}
     textToHighlight={props.rtweet.tweet.text}
-    // textToHighlight={props.text}
   />
   <div className="reimgwrap">
     {props.rtweet.tweet.photos? <img className="foodimg" src={props.rtweet.tweet.photos} alt="" />: null}
@@ -173,19 +300,23 @@ console.log(props.rtweet.tweet)
                   {/* <div className="post__body"> */}
                     <div className="post__header">
                       <div className="post__headerText">
-                        <h3>
+                        {/* <h3>
+
                         <Link to= {{
                 pathname:'/user-profile',
-                state:{tweetid: props.id}
+                state:{userid: props.user}
               }}>{props.displayName}</Link>
                           <span className="post__headerSpecial">
               {props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link to= {{
                 pathname:'/user-profile',
-                state:{tweetid: props.id}
+                state:{userid: props.user}
               }}>@
                             {props.username}</Link></div>
                           </span>
-                        </h3>
+
+                          
+                        </h3> */}
+                        {authorprofile}
                       </div>
                       </div>
         
@@ -222,7 +353,7 @@ console.log(props.rtweet.tweet)
                         likeis= {props.isliked} 
                         points= {props.likes} 
                         />
-                      <div onClick={() => setModalShow(true)}><RepeatIcon /><span className="peoplecount">12</span></div>
+                      <div onClick={() => setModalShow(true)}><RepeatIcon /><span className="peoplecount">{props.retweetcount}</span></div>
                       {/* <div><PublishIcon /><span className="peoplecount">12</span></div> */}
                       <BookmarkButton pk={props.id} 
                       bookmarkedis= {props.isbookmarked} 

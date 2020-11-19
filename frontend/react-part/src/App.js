@@ -8,6 +8,7 @@ import Notifications from './components/Routes/Notifications/Notifications';
 import Search from './components/Routes/Search/Search';
 import Comments from './components/Routes/Comments/Comments';
 import Profile from './components/Routes/Profile/Profile';
+import EditProfile from './components/Routes/Profile/EditProfile';
 import UserProfile from './components/Routes/UserProfile/UserProfile';
 import Followers from './components/Routes/Profile/Followers';
 import Following from './components/Routes/Profile/Following';
@@ -18,6 +19,8 @@ import PasswordChange from './components/Routes/Authentication/PasswordChange/Pa
 import SignUp from './components/Routes/Authentication/Signup/Signup'
 import OTP from './components/Routes/Authentication/OTP/OTP'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import 'antd/dist/antd.css';
 
 function App() {
   return (
@@ -30,6 +33,7 @@ function App() {
     <Route path='/explore' component={Explore} />
     <Route path='/bookmarks' component={Bookmarks} />
     <Route path='/profile' component={Profile} />
+    <Route path='/edit-profile' component={EditProfile} />
     <Route path='/user-profile' component={UserProfile} />
     <Route path='/followers' component={Followers} />
     <Route path='/following' component={Following} />

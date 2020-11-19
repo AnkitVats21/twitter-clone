@@ -97,3 +97,56 @@ border-bottom-right-radius: 20px;
     margin-top: 24px;
 
 }
+
+.detailsline{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editprofile{
+    padding: 8px;
+    padding-top:6px;
+    padding-bottom: 6px;
+    /* padding-left: 10px;
+    padding-right: 10px; */
+    color: var(--twitter-color);
+    background-color: white;
+    border-radius: 30px;
+    outline:none;
+    font-weight: 800;
+    box-shadow: 0 0 1px 1px #4563ff !important;
+    border:none;
+}
+
+.editprofile:focus,
+.editprofile:active{
+    outline:none;
+    border:none;
+}
+
+.editprofile:hover{
+    background-color: rgba(101, 126, 255,0.1);
+}
+
+.editprofiletext{
+    color: #657EFF;
+    text-decoration: none;
+}
+
+.editprofiletext:active,
+.editprofiletext:hover,
+.editprofiletext{
+    color: #657EFF;
+    text-decoration: none;
+}
+
+.hidden{
+    display:none;
+  }
+
+  .cameraicon{
+    margin-left: 20%;
+    margin-bottom: 15%;
+    color: white;
+  }

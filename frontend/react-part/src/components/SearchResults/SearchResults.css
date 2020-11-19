@@ -16,3 +16,25 @@
     background-color: var(--twitter-background);
     width: 100%
   }
+
+.optbar{
+  /* background: red; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 94%;
+  /* height: 50px; */
+  margin-left: 20px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.optbar>h3{
+  /* font-size: 20px; */
+  color: #5f5f5f;
+  
+}
+
+.optselected{
+  color: var(--twitter-color) !important;
+}

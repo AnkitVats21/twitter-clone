@@ -34,3 +34,70 @@ box-shadow: none !important;
 .messageheader{
   background-color: #F6F8FF !important;
 }
+
+.labelfield{
+  color: #5F5F5F;
+  margin-bottom: 0;
+  margin-left: 1%;
+}
+
+.field{
+  width: 100%;
+  height:40px;
+  padding: 5px 10px;
+  box-sizing: border-box;  
+  border: 1.3px solid rgba(101, 126, 255,0.2) ; 
+  font-family: Lato;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 2px 0px 14px 0px rgba(61, 100, 241,0.1);
+} 
+
+.editbtnwrap{
+  /* display:flex; */
+  text-align: right;
+}
+
+.editprofiledetails {
+  padding-left: 32px;
+  padding-right: 32px;
+  background-color: #F6F8FF;
+  border-left: 2px solid rgba(101, 126, 255,0.2);
+  border-bottom: 2px solid rgba(101, 126, 255,0.2);
+  border-right: 2px solid rgba(101, 126, 255,0.2);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+    }
+
+
+
+
+    /* trash */
+
+
+    /* .main {
+      height: 100vh;
+      width: 100vw;
+      background-color: #bae7ff;
+    }
+    
+    .title {
+      text-align: center;
+      width: 100%;
+      padding: 2%;
+      background-color: #91d5ff;
+      color: #efefef;
+    }
+    
+    .bottom {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+    }
+
+    .bbw{
+      z-index: 200000;
+      position: absolute;
+      right: 0;
+    } */

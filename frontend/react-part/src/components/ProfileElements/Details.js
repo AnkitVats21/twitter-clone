@@ -50,8 +50,19 @@ backgroundRepeat: 'no-repeat'
 </div>
   
 <div className="profiledetails">
+  <div className="detailsline">
+  <div>
 <h4 className="personname">{this.state.profiledet.name}</h4>
 <h5 className="personusername">@{this.state.userdetails.username}</h5>
+</div>
+<div><button className="editprofile"><Link 
+to= {{
+  pathname:'/edit-profile',
+  state:{name:this.state.profiledet.name, bio:this.state.profiledet.bio, 
+  cover_pic:this.state.profiledet.cover_pic ,picture:this.state.profiledet.picture }
+}}
+className="editprofiletext">Edit Profile</Link></button></div>
+</div>
 <p className="biotext">{this.state.profiledet.bio}
   {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut mattis nibh lorem. Tincidunt tellus ultricies viverra nunc, diam, at. Tincidunt fermentum in dignissim imperdiet euismod semper ac et. In arcu, fermentum quam diam, quisque massa nec. */}
   </p>

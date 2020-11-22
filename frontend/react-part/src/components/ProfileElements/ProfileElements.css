@@ -29,8 +29,6 @@ border-bottom-right-radius: 20px;
       height: 200px;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
-      /* margin-left: 20px; */
-      /* margin-right: 20px; */
       display: flex;
     align-items: flex-end;
   }
@@ -76,10 +74,9 @@ border-bottom-right-radius: 20px;
 }
 
 .options{
-    /* height: 10vh; */
-    /* background: chocolate; */
+
     display: flex;
-    /* align-items: baseline; */
+
     justify-content: space-around;
 }
 
@@ -114,8 +111,7 @@ color: #657EFF !important;
     padding: 8px;
     padding-top:6px;
     padding-bottom: 6px;
-    /* padding-left: 10px;
-    padding-right: 10px; */
+
     color: var(--twitter-color);
     background-color: white;
     border-radius: 30px;

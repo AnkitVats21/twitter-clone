@@ -1,7 +1,7 @@
-import Base from "antd/lib/typography/Base";
+// import Base from "antd/lib/typography/Base";
 import axios from "axios";
 
-const BASE_URL = "http://f892b131cf91.ngrok.io/";
+const BASE_URL = "http://5ced38e4a278.ngrok.io/";
 
 class ServerService {
 

@@ -4,7 +4,7 @@
     background-color: var(--twitter-background);
     padding: 10px;
     border-radius: 20px;
-    /* margin-top: 10px; */
+
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
@@ -18,12 +18,10 @@
   }
 
 .optbar{
-  /* background: red; */
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 94%;
-  /* height: 50px; */
   margin-left: 20px;
   margin-top: 0;
   margin-bottom: 10px;

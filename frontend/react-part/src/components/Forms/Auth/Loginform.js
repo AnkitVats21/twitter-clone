@@ -30,7 +30,7 @@ class Login extends Component{
 
    createNotification = (info) => {
 
-    NotificationManager.error( info, 'Error');
+    NotificationManager.error( info, '');
   
   
   };
@@ -71,7 +71,6 @@ class Login extends Component{
   
    handlesubmit = (event) => {
      console.log("hello world")
-     this.createNotification("Invalid Credentials")
 
 
         const data={
@@ -108,7 +107,7 @@ class Login extends Component{
       console.log(err.response)
       // this.setState({isLoading: false})
       // if(err.response.data.message){
-      this.createNotification("Invalid Credentials")
+      this.createNotification("Seems like the information entered is incorrect. Please check your information")
       // }
     })
     

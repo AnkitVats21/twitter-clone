@@ -16,7 +16,7 @@ function SidebarOption({ active, text, Icon, redirect }) {
       <Link className="sidebar_links" to={redirect} onClick={logoutHandler}>
       <div className={`sidebarOption ${active && "sidebarOption--active"}`}>
         <Icon />
-        <h2>{text}</h2>
+        <p>{text}</p>
       </div>
       </Link>
     );
@@ -26,7 +26,7 @@ function SidebarOption({ active, text, Icon, redirect }) {
     <Link className="sidebar_links" to={redirect}>
     <div className={`sidebarOption ${active && "sidebarOption--active"}`}>
       <Icon />
-      <h2>{text}</h2>
+      <p>{text}</p>
     </div>
     </Link>
   );

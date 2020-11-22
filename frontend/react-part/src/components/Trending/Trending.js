@@ -3,6 +3,7 @@ import Post from "../Feed/Post";
 import "./Trending.css";
 import axios from 'axios'
 import TrendingCards from '../UI/Cards/TrendingCards/TrendingCards'
+import ServerService from "../../services/ServerService";
 
 class Trending extends Component {
 
@@ -11,7 +12,7 @@ class Trending extends Component {
   }
 
   componentDidMount(){
-    axios.get('http://04f70d4ed7ff.ngrok.io/api/trending/')
+    ServerService.trending()
     .then(response=>{
       console.log(response);
       this.setState({savedposts: response.data})

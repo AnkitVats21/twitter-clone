@@ -31,9 +31,9 @@ const Post = (
 
                         <Link to= {{
                 pathname:'/profile'
-              }}>{props.displayName}</Link>
+              }} className="userlinks">{props.displayName}</Link>
                           <span className="post__headerSpecial">
-              {props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link to= {{
+              {props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link className="userlinks" to= {{
                 pathname:'/profile'
               }}>@
                             {props.username}</Link></div>
@@ -45,12 +45,12 @@ const Post = (
       else{
         authorprofile= <h3>
 
-        <Link to= {{
+        <Link className="userlinks" to= {{
 pathname:'/user-profile',
 state:{userid: props.user}
 }}>{props.displayName}</Link>
           <span className="post__headerSpecial">
-{props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link to= {{
+{props.verified && <VerifiedUserIcon className="post__badge" />} <div><Link className="userlinks" to= {{
 pathname:'/user-profile',
 state:{userid: props.user}
 }}>@
@@ -77,13 +77,13 @@ console.log(props)
     let reprofile
     if(props.rtweet.tweet.owner){
       retweetauthor= <h3>
-      <Link to= {{
+      <Link className="userlinks" to= {{
                 pathname:'/profile'
               }}
                   >{props.rtweet.tweet.name}</Link>
         <span className="post__headerSpecial">
 {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-<Link to= {{
+<Link className="userlinks" to= {{
                 pathname:'/profile'
               }}
                   >{props.rtweet.tweet.username}</Link></div>
@@ -92,14 +92,14 @@ console.log(props)
     }
     else{
       retweetauthor= <h3>
-      <Link to= {{
+      <Link className="userlinks" to= {{
                 pathname:'/user-profile',
                 state:{userid: props.rtweet.tweet.user_id}
               }}
                   >{props.rtweet.tweet.name}</Link>
         <span className="post__headerSpecial">
 {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-<Link to= {{
+<Link className="userlinks" to= {{
                 pathname:'/user-profile',
                 state:{userid: props.rtweet.tweet.user_id}
               }}
@@ -110,13 +110,13 @@ console.log(props)
 
     if(props.rtweet.owner){
       reprofile=<h3>
-      <Link to= {{
+      <Link className="userlinks" to= {{
     pathname:'/profile'
   }}
       >{props.rtweet.user.profile.name}</Link>
       <span className="post__headerSpecial">
 {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-<Link to= {{
+<Link className="userlinks" to= {{
     pathname:'/profile'
   }}
       >{props.rtweet.user.username}</Link></div>
@@ -126,14 +126,14 @@ console.log(props)
 
     else{
       reprofile=<h3>
-      <Link to= {{
+      <Link className="userlinks" to= {{
     pathname:'/user-profile',
     state:{userid: props.rtweet.user_id}
   }}
       >{props.rtweet.user.profile.name}</Link>
       <span className="post__headerSpecial">
 {props.verified && <VerifiedUserIcon className="post__badge" />} <div>@
-<Link to= {{
+<Link className="userlinks" to= {{
     pathname:'/user-profile',
     state:{userid: props.rtweet.user_id}
   }}

@@ -12,19 +12,10 @@ class UserInfo extends Component {
       }
 
       componentDidMount(){
-        // ServerService.userdetails()
         
             const data=this.props.userid
-            // axios.get('http://7d78f84402c4.ngrok.io/'+ 'api/userprofile/4/',
-            axios.get('http://7d78f84402c4.ngrok.io/'+ 'api/userprofile/'+data+'/',
-            {
-               headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-               }
-               
-           }
-            )
+
+          ServerService.otherdetails(data)
         .then(response=>{
           console.log(response.data);
           this.setState({userdetails: response.data, profiledet: response.data.profile, connect: response.data.connections})

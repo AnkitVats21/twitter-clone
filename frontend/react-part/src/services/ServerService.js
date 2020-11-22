@@ -1,6 +1,7 @@
+import Base from "antd/lib/typography/Base";
 import axios from "axios";
 
-const BASE_URL = "http://990c10222b34.ngrok.io/";
+const BASE_URL = "http://f892b131cf91.ngrok.io/";
 
 class ServerService {
 
@@ -39,6 +40,98 @@ class ServerService {
         
     }
     )
+   }
+
+   trending(){
+    return axios.get('http://f892b131cf91.ngrok.io/api/trending/hashtags/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
+    )
+   }
+
+   myposts(){
+    return axios.get(BASE_URL + 'api/usertweets/self/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
+    )
+   }
+
+   otherposts(data){
+    return axios.get(BASE_URL + 'api/usertweets/' +data+'/' ,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
+    )
+   }
+
+   editprofile(data){
+     return axios.post( BASE_URL + '/api/post/', data,
+     {
+       headers: {
+           'Content-Type': 'application/json',
+           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+       }
+       
+   })
+   }
+
+   editprofilebtn(data){
+    return axios.patch( BASE_URL +'api/updateprofile/' ,data,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  })
+   }
+
+   editpost(uid, data){
+    return axios.patch( BASE_URL +'api/tweet/' + uid + '/',data,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  })
+   }
+
+   bookmarkedposts(){
+    return axios.get(BASE_URL +'api/bookmarks/all/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
+    )
+   }
+
+   posttweet(data){
+    return axios.post( BASE_URL + 'api/post/',data,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  })
    }
 
    resendotp(resenddata){
@@ -133,6 +226,18 @@ class ServerService {
       )
     }
 
+    otherdetails(data){
+      return axios.get(BASE_URL+ 'api/userprofile/'+data+'/',
+      {
+         headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+         }
+         
+     }
+      )
+    }
+
     suggestions(data){
     return axios.post( BASE_URL+'recipe/suggestion/',data,
         {
@@ -144,49 +249,29 @@ class ServerService {
       })
     }
 
-
     searchpage(data){
-      return axios.post(BASE_URL + 'search/',data)
+      return axios.get(BASE_URL + 'api/search/?query='+data,
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
     }
 
-
-
-  addrecipe(formdata){
-
-  return axios.post(BASE_URL + 'recipe/post/', formdata,
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    }   
-}
-  )
-  }
-
-  editrecipe(formdata,recipeid){
-  return axios.put(BASE_URL+ 'recipe/'+recipeid+'/' , formdata,
-    {
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      },
-      
-  }
-    )
-  }
-
-
-  myrecipes(){
-
-  return axios.get(BASE_URL + 'user/recipe-list/',
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    }   
-}
-  )
-  }
+    searchnew(data){
+     return axios.get( BASE_URL + 'api/search/?query='+data,
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    }
 
     deletepost(data){
       return axios.delete(BASE_URL +'api/tweet/delete/'+ data + '/',
@@ -201,34 +286,29 @@ class ServerService {
     }
 
 
-    sort(sortdata){
-      return axios.post(BASE_URL + 'search/sort/',sortdata)
-    }
-
-
 
     following(){
-    return axios.get( BASE_URL +'user/following-list/',
-    {
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      }
-      
-  }
-    )
+      return axios.get(BASE_URL+'api/user/following/?user=self',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+     }
+      )
 }
 
 followers(){
- return axios.get(BASE_URL + 'user/follower-list/',
-  {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    }
-    
+ return axios.get(BASE_URL+'api/user/follower/?user=self',
+ {
+   headers: {
+       'Content-Type': 'application/json',
+       'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+   }
+   
 }
-  )
+ )
 }
 
 
@@ -242,6 +322,17 @@ bookmarklist(){
     
 }
   )
+}
+
+postretweet(data){
+  return axios.post( BASE_URL +'api/retweet/',data,
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+    
+})
 }
 
 

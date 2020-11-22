@@ -22,8 +22,16 @@
   margin: 14px;
 }
 
-.sidebarOption > h2 {
+.sidebarOption > p {
+  font-weight: bold;
+  font-size: 20px;
+  margin-right: 20px;
+  margin-bottom: 0;
+}
+
+.sidebarOption > h2:hover {
   font-weight: semibold;
+  color: var(--twitter-color);
   font-size: 20px;
   margin-right: 20px;
   margin-bottom: 0;
@@ -32,6 +40,12 @@
 .sidebarOption--active {
   color: var(--twitter-color);
 }
+
+.sidebarOption--active>h2 {
+  color: var(--twitter-color) !important;
+}
+
+
 
 /* @media(max-width: 500px){
   

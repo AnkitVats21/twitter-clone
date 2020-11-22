@@ -83,12 +83,18 @@ border-bottom-right-radius: 20px;
     justify-content: space-around;
 }
 
-.profilenums:hover{
+.profilenums:hover
+{
+    color: #657EFF !important;
     text-decoration: none;
     font-family: Roboto;
-    color: #657EFF;
-
 }
+
+
+.headingnums:hover{
+color: #657EFF !important;
+}
+
 .profilenums{
     text-decoration: none;
     font-family: Roboto;
@@ -149,4 +155,8 @@ border-bottom-right-radius: 20px;
     margin-left: 20%;
     margin-bottom: 15%;
     color: white;
+  }
+
+  .activeoption>h5{
+      color: var(--twitter-color) !important;
   }

@@ -6,6 +6,7 @@ import "../Feed/Feed.css";
 import "./SearchResults.css"
 import axios from "axios";
 import SearchIcon from "@material-ui/icons/Search";
+import ServerService from "../../services/ServerService";
 
 class SearchResults extends Component {
 
@@ -29,17 +30,9 @@ class SearchResults extends Component {
    }
 
   handlesubmit = () => {
-    const searchterm=this.state.newsearch
-console.log(searchterm)
-      axios.get('http://fa067537cf22.ngrok.io/api/search/?query='+searchterm,
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-        
-    }
-      )
+    const data=this.state.newsearch
+console.log(data)
+      ServerService.searchnew(data)
       .then(response=>{
         console.log(response.data);
         this.setState({savedposts: response.data.tweet, followlist: response.data.user})
@@ -49,15 +42,8 @@ console.log(searchterm)
   }
 
   componentDidMount(){
-    axios.get('http://fa067537cf22.ngrok.io/api/search/?query='+this.props.term,
-    {
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      }
-      
-  }
-    )
+    const data=this.props.term
+    ServerService.searchpage(data)
     .then(response=>{
       console.log(response.data);
       this.setState({savedposts: response.data.tweet, followlist: response.data.user})

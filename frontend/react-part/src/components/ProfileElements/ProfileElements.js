@@ -5,6 +5,7 @@ import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Post from '../Feed/Post'
 import Details from './Details'
 import axios from 'axios'
+import ServerService from "../../services/ServerService";
 
 class ProfileElements extends Component {
 
@@ -13,15 +14,7 @@ class ProfileElements extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://50e62b962574.ngrok.io/api/usertweets/self/',
-    {
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      }
-      
-  }
-    )
+    ServerService.myposts()
     .then(response=>{
       console.log(response);
       this.setState({postlist: response.data})

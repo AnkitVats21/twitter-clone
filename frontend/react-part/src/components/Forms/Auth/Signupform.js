@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import classes from './Loginform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import ServerService from '../../../services/ServerService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
 
 const validEmailRegex = RegExp(
   /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
@@ -44,13 +46,13 @@ class Login extends Component{
    }
    
    
-  //  createNotification = (info) => {
-  //    NotificationManager.error( info, 'Error');
-  //  };
+   createNotification = (info) => {
+     NotificationManager.error( info, 'Error');
+   };
    
-  //  createSuccess = (info) => {
-  //    NotificationManager.success( info, 'Success');
-  //  };
+   createSuccess = (info) => {
+     NotificationManager.success( info, 'Success');
+   };
    
    validemail=()=>{
    
@@ -168,7 +170,7 @@ class Login extends Component{
     
       if(resp.status===201){
         console.log('otp sent')
-        //   this.createSuccess("OTP sent to the mail")
+          this.createSuccess("OTP sent to the mail")
         this.setState({ redirect: "/otp" });
         localStorage.setItem('email', this.state.email)
         localStorage.setItem('password', this.state.password)
@@ -180,7 +182,7 @@ class Login extends Component{
       console.log(err.response)
       // this.setState({isLoading: false})
       // if(err.response.data.message){
-      // this.createNotification(err.response.data.message)
+      this.createNotification("Please check your entered information")
       // }
     })
     

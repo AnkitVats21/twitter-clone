@@ -5,6 +5,7 @@ import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Details from './Details'
 import FollowerCards from '../UI/Cards/FollowerCards/FollowerCards'
 import axios from 'axios'
+import ServerService from "../../services/ServerService";
 
 class FollowersList extends Component {
 
@@ -14,15 +15,7 @@ class FollowersList extends Component {
 
   componentDidMount(){
     // axios.get('https://d23800404ad3.ngrok.io/follower/request')
-    axios.get('https://50e62b962574.ngrok.io/api/user/follower/?user=self',
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-        
-    }
-      )
+    ServerService.followers()
     .then(response=>{
       console.log(response.data);
       this.setState({followlist: response.data})

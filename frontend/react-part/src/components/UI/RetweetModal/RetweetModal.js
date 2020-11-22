@@ -2,14 +2,17 @@ import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap'
 import classes from '../PostModal/PostModal.module.css'
 import ImageIcon from '@material-ui/icons/Image';
+import {Redirect} from 'react-router-dom'
 import VideoIcon from '@material-ui/icons/Movie';
 import axios from 'axios'
 import CommentCard from '../../Commentbox/CommentCard'
+import ServerService from '../../../services/ServerService';
 
 function PostModal(props) {
   const [text, setText] = useState(null);
   const [img, setImg] = useState(null);
   const [vid, setVid] = useState(null);
+  const [redirect, setredirect] = useState(null);
 
   const handleimg=(e)=>{
     setImg(e.target.files[0])
@@ -35,22 +38,20 @@ for (let formElement in data) {
 }
 
 // console.log(data)
-    axios.post( 'http://50e62b962574.ngrok.io/api/retweet/',formdata,
-        {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
-          
-      })
+      ServerService.postretweet(formdata)
       .then(response=>{
         console.log(response);
+        setredirect('/profile')
       })
 
       setImg(null);
       setVid(null);
 
     props.onHide()
+  }
+
+  if(redirect){
+    return <Redirect to= {redirect} />
   }
 
     return (

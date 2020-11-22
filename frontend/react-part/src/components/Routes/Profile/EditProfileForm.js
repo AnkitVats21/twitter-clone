@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 import { Redirect, Link } from 'react-router-dom';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import axios from 'axios'
+import ServerService from "../../../services/ServerService";
 // import Post from '../Feed/Post'
 // import ServerService from'../../services/ServerService'
 
@@ -19,7 +20,8 @@ state={
     cover_pic: this.props.cover_pic,
     picture: this.props.picture,
     profilepic:null,
-    coverimg: false
+    coverimg: false,
+    redirect:null
 
 }
 
@@ -96,28 +98,28 @@ state={
     }
 
 
-      
-
-
        const formdata = new FormData();
 for (let formElement in data) {
   formdata.append(formElement, data[formElement]);
   console.log(formElement, data[formElement]);
 }
 
-axios.patch( 'http://fa067537cf22.ngrok.io/api/updateprofile/' ,formdata,
-        {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
+// axios.patch( 'http://fa067537cf22.ngrok.io/api/updateprofile/' ,formdata,
+//         {
+//           headers: {
+//               'Content-Type': 'application/json',
+//               'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+//           }
           
-      })
+//       })
+
+      ServerService.editprofilebtn(formdata)
       .then(response=>{
         console.log(response);
       })
 
        console.log(data)
+       this.setState({redirect:'/profile'})
    }
 
 
@@ -131,7 +133,11 @@ axios.patch( 'http://fa067537cf22.ngrok.io/api/updateprofile/' ,formdata,
 //   }
 
   render(){
-    //   console.log(this.props)
+
+    if(this.state.redirect){
+      return <Redirect to= {this.state.redirect} />
+    }
+
   return (
 <div className="feed">
 <div className="feed__header">

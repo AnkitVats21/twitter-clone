@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap'
+import {Redirect} from 'react-router-dom'
 import classes from '../PostModal/PostModal.module.css'
 import ImageIcon from '@material-ui/icons/Image';
 import VideoIcon from '@material-ui/icons/Movie';
 import axios from 'axios'
 import CommentCard from '../../Commentbox/CommentCard'
+import ServerService from '../../../services/ServerService'
 
 function EditPostModal(props) {
   const [text, setText] = useState(null);
   const [img, setImg] = useState(null);
   const [vid, setVid] = useState(null);
+  const [redirect, setredirect] = useState(null);
 
   const handleimg=(e)=>{
     setImg(e.target.files[0])
@@ -27,28 +30,28 @@ const data={
   videos:vid,
 }
 
+const uid= props.id
+
 const formdata = new FormData();
 for (let formElement in data) {
   formdata.append(formElement, data[formElement]);
   console.log(formElement, data[formElement]);
 }
 
-    axios.patch( 'http://50e62b962574.ngrok.io/api/tweet/' + props.id + '/',formdata,
-        {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
-          
-      })
+    ServerService.editpost(uid, formdata)
       .then(response=>{
         console.log(response);
+        setredirect('/profile')
       })
 
       setImg(null);
       setVid(null);
 
     props.onHide()
+  }
+
+  if(redirect){
+    return <Redirect to= {redirect} />
   }
 
     return (

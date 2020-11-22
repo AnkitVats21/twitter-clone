@@ -9,7 +9,7 @@ const Protected = ({ component: Cmp, ...rest }) => (
                 <Cmp {...props} />
             ) :
                 <Redirect
-                    to={{ pathname: "/sign-in", state: { from: props.location } }}
+                    to={{ pathname: "/log-in", state: { from: props.location } }}
 
                 />
         }

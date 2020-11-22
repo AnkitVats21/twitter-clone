@@ -1,5 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Home from './components/Routes/Home/Home';
 import Messages from './components/Routes/Messages/Messages';
 import Explore from './components/Routes/Explore/Explore';
@@ -21,23 +23,24 @@ import OTP from './components/Routes/Authentication/OTP/OTP'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import 'antd/dist/antd.css';
+import Protected from './services/Protected'
 
 function App() {
   return (
     <Router>
     <Switch>
-    <Route path='/' exact component={Home} />
-    <Route path='/messages' component={Messages} />
-    <Route path='/search' component={Search} />
-    <Route path='/comments' component={Comments} />
-    <Route path='/explore' component={Explore} />
-    <Route path='/bookmarks' component={Bookmarks} />
-    <Route path='/profile' component={Profile} />
-    <Route path='/edit-profile' component={EditProfile} />
-    <Route path='/user-profile' component={UserProfile} />
-    <Route path='/followers' component={Followers} />
-    <Route path='/following' component={Following} />
-    <Route path='/notifications' component={Notifications} />
+    <Protected path='/' exact component={Home} />
+    <Protected path='/messages' component={Messages} />
+    <Protected path='/search' component={Search} />
+    <Protected path='/comments' component={Comments} />
+    <Protected path='/explore' component={Explore} />
+    <Protected path='/bookmarks' component={Bookmarks} />
+    <Protected path='/profile' component={Profile} />
+    <Protected path='/edit-profile' component={EditProfile} />
+    <Protected path='/user-profile' component={UserProfile} />
+    <Protected path='/followers' component={Followers} />
+    <Protected path='/following' component={Following} />
+    <Protected path='/notifications' component={Notifications} />
     <Route path='/log-in' component={LogIn} />
     <Route path='/forgot-password' component={ForgotPassword} />
     <Route path='/password-reset-otp' component={PasswordResetOtp} />
@@ -46,6 +49,7 @@ function App() {
     <Route path='/otp' component={OTP} />
 
     </Switch>
+    <NotificationContainer />
     </Router>
 
   );

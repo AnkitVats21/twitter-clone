@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import classes from './Loginform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import ServerService from '../../../services/ServerService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
+
+const validEmailRegex = RegExp(
+  /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
+);
+
+const validPasswordRegex = RegExp(
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+);
 
 class Login extends Component{
     
@@ -18,9 +28,50 @@ class Login extends Component{
     this.setState ( { [event.target.name] :event.target.value  } )
    }
 
+   createNotification = (info) => {
+
+    NotificationManager.error( info, 'Error');
+  
+  
+  };
+
+  validemail=()=>{
+
+    if(!validEmailRegex.test(this.state.email)){
+      this.setState({emailError:"Invalid email"})
+    }
+  
+    else{
+      return true
+    }
+   
+  }
+  
+  validpassword=()=>{
+  
+    if(!validPasswordRegex.test(this.state.password)){
+      this.setState({passwordError:"Invalid password"})
+    }
+  
+    else{
+      return true
+    }
+  
+  }
+  
+  
+  emailclean=()=>{
+    this.setState({emailError:"fine"})
+  }
+  
+  passwordclean=()=>{
+    this.setState({passwordError:"fine"})
+  }
+
   
    handlesubmit = (event) => {
      console.log("hello world")
+     this.createNotification("Invalid Credentials")
 
 
         const data={
@@ -39,7 +90,7 @@ class Login extends Component{
       if (resp.status === 200) {
         localStorage.setItem("refresh_token",resp.data.refresh)
         localStorage.setItem("access_token",resp.data.access)
-        // this.setState({isLoading: false});
+        this.setState({isLoading: false});
         this.setState({ redirect: "/" });
         // console.log(resp.data.refresh)
       }
@@ -57,7 +108,7 @@ class Login extends Component{
       console.log(err.response)
       // this.setState({isLoading: false})
       // if(err.response.data.message){
-      // this.createNotification(err.response.data.message)
+      this.createNotification("Invalid Credentials")
       // }
     })
     
@@ -81,7 +132,7 @@ class Login extends Component{
         <h1 className={classes.headline}>Welcome Back!</h1>
         <label className={classes.labelfield}> Email </label><br />
            <input name="email" className={classes.field} required placeholder= {this.state.email} 
-          onChange={this.handlechangeall} /> <br/>
+          onChange={this.handlechangeall} onBlur={this.validemail} onFocus={this.emailclean}/> <br/>
           <p  className={(this.state.emailError==="fine")? classes.invisible: classes.visible}>{this.state.emailError}</p>
       
           <label className={classes.labelfield}> Password </label><br />

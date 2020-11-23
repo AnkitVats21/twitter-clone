@@ -135,12 +135,12 @@ class NotificationSerializer(serializers.ModelSerializer):
     def extra_data(self, instance):
         data = json.loads(instance.text)
         try:
-            host = 'http://'+self.context.get('request').headers['host']
-            data["profile_pic"]=host+data['profile_pic']
+            if data['profile_pic'] is not None:
+                host = 'http://'+self.context.get('request').headers['host']
+                data["profile_pic"]=host+data['profile_pic']
         except:
             pass
         return data
-
 
 # class ConnectionsSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -168,4 +168,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 #         lst['total followers']=len(id)
 #         lst['total following']=len(id2)
 #         return lst
-        return data
+#         return data

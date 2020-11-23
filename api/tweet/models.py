@@ -15,15 +15,10 @@ class Hashtag(models.Model):
     def __str__(self):
         return self.hashtags
 
-    # def get_absolute_url(self):
-    #     return reverse("Hashtag_detail", kwargs={"pk": self.pk})
-
-
-
 comment_privacy=(('Everyone','Everyone'),('Followers','Followers'),('mentioned','mentioned'),)
-
+category = (('tweet','tweet'), ('comment','comment'), ('reply','reply'),('retweet','retweet'))
 class Tweet(models.Model):
-    tweet       = models.ForeignKey('self', on_delete=models.CASCADE, related_name='tweetid', blank = True, null = True)
+    retweet     = models.ForeignKey('self', on_delete=models.CASCADE, related_name='retweet_tweet', blank = True, null = True)
     user        = models.ForeignKey(User, on_delete=models.CASCADE)
     text        = models.TextField(max_length=480, blank=True, null=True)
     photos      = models.ImageField(upload_to = 'tweets/images/', blank = True, null = True, max_length = 1000)
@@ -32,9 +27,11 @@ class Tweet(models.Model):
     timestamp   = models.DateTimeField(auto_now=True)
     privacy     = models.CharField(choices=comment_privacy, max_length=50, default='Everyone')
     location    = models.CharField(max_length=140, blank=True, null=True)
+    tweet_type  = models.CharField(choices=category, default='tweet', max_length=50)
+    replying_to = models.ManyToManyField(User, related_name='replying_to_user', blank=True)
+    replying_to_tweet   = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replying_to_user_tweet', blank = True, null = True)
+    replying_to_comment = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replying_to_tweet_comment', blank = True, null = True)
 
-    # def __str__(self):
-    #     return str(self.user.username)+"-->"+str(self.text[:6])+"..."
     class Meta:
         ordering = ('-timestamp',)
     
@@ -43,6 +40,9 @@ class Tweet(models.Model):
 
     def username(self):
         return self.user.username
+        
+    def TweetType(self):
+        return str(self.tweet_type)
 
     def get_absolute_url(self):
         return reverse("Tweet", kwargs={"pk": self.pk})
@@ -78,68 +78,6 @@ class Mention(models.Model):
 
     def __str__(self):
         return self.user.username
-
-class Comment(models.Model):
-    tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    replying_to = models.ManyToManyField(User, related_name='replying_to', blank=True, null=True)
-    text        = models.TextField(max_length =280, blank=True, null=True)
-    photos      = models.ImageField(upload_to ='retweets/images/', max_length=1000,  blank=True, null=True)
-    videos      = models.FileField(upload_to  ='retweets/videos/', max_length=100000,blank=True, null=True)
-    timestamp   = models.DateTimeField(auto_now=True)
-
-    
-    def save(self, *args, **kwargs):
-        try:
-            d=[t for t in self.text.split() if t.startswith('#')]
-            d=list(dict.fromkeys(d))
-            for h in d:
-                try:
-                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
-                    hashtag.usecount +=1
-                    hashtag.save()
-                except:
-                    Hashtag.objects.create(hashtags=h)
-        except:
-            pass
-        super(Comment, self).save(*args, **kwargs)
-    
-
-class CommentReply(models.Model):
-    tweet       = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='replyingto_tweet')
-    comment     = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    replying_to = models.ManyToManyField(User, related_name='comment_replying_to')
-    text        = models.TextField(max_length =280, blank=True, null=True)
-    photos      = models.ImageField(upload_to ='retweets/images/', max_length=1000,  blank=True, null=True)
-    videos      = models.FileField(upload_to  ='retweets/videos/', max_length=100000,blank=True, null=True)
-    topic       = models.CharField(max_length =140, blank=True, null=True)
-    timestamp   = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = ("Comment Reply")
-        verbose_name_plural = ("Comment Replies")
-
-    def __str__(self):
-        l   = len(self.replying_to.all())
-        if(l == 1):
-            return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))
-        return str(self.user.username)+"-->"+str((self.replying_to.all()[0].username))+","+str((self.replying_to.all()[1].username))+"...."
-    
-    def save(self, *args, **kwargs):
-        try:
-            d=[t for t in self.text.split() if t.startswith('#')]
-            d=list(dict.fromkeys(d))
-            for h in d:
-                try:
-                    hashtag = Hashtag.objects.filter(hashtags=h)[0]
-                    hashtag.usecount +=1
-                    hashtag.save()
-                except:
-                    Hashtag.objects.create(hashtags=h)
-        except:
-            pass
-        super(CommentReply, self).save(*args, **kwargs)
 
 class Bookmark(models.Model):
     user        = models.ForeignKey(User,  on_delete=models.CASCADE, related_name='user_bookmarks')

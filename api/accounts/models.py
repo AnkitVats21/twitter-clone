@@ -133,12 +133,7 @@ class Connections(models.Model):
         verbose_name = "Connection"
         verbose_name_plural = "Connections"
 
-Notification_Category=( ('Mention','Mention'),
-    ('Replies', 'Replies'), ("Retweets", 'Retweets'),
-    ('Likes', 'Likes'), ('Followers', 'Followers'),
-    ('Direct Messages', 'Direct Messages'),
-    ('Tweet', 'Tweet'),
-)
+Notification_Category=( ('Text','Text'), ('Tweet', 'Tweet'),)
 
 
 class Notification(models.Model):

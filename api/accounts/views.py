@@ -315,13 +315,13 @@ class ConnectionsView(APIView):
             text_data = {
                 "username":user.username,
                 "profile_pic":profile_pic,
-                "notification data":"<b>{}</b> started following you.".format(user.profile.name)
+                "notification_data":"<b>{}</b> started following you.".format(user.profile.name)
                 }
             text_data = json.dumps(text_data)
             print(text_data)
             obj = Notification.objects.filter(user=user2).filter(text=text_data)
             if len(obj)==0:
-                Notification.objects.create(user=user2, text=text_data, category="Followers")
+                Notification.objects.create(user=user2, text=text_data, category="Text")
             return Response({'details':'You followed {}'.format(user2.profile.name)})
 
 class NotificationView(APIView):

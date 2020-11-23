@@ -51,12 +51,24 @@ class ChatSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender    = serializers.SerializerMethodField('user')
+    sender    = serializers.SerializerMethodField('username')
+    owner    = serializers.SerializerMethodField('message_owner')
     class Meta:
         model = Message
-        fields= ('id', 'content', 'timestamp', 'sender')
-    
-    def user(self, obj):
+        fields= ('id', 'content', 'timestamp', 'sender', 'owner')
+
+    def username(self, obj):
         user_id     = self.context.get('user_id')
         query_user  = User.objects.get(id=user_id)
         return str(obj.sender.username) if str(query_user.username)!=str(obj.sender.username) else str(query_user.username)
+    
+    def message_owner(self,obj):
+        user_id     = self.context.get('user_id')
+        query_user  = User.objects.get(id=user_id)
+        x = str(obj.sender.username) if str(query_user.username)!=str(obj.sender.username) else str(query_user.username)
+        return query_user.username == x
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['timestamp'] = instance.timestamp.strftime("%a %d, %I:%M %p")
+        return ret

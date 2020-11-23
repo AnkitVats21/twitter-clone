@@ -8,6 +8,7 @@ app_name = 'tweet'
 urlpatterns = [
     path('api/feeds/', views.FeedsView.as_view()),
     path('api/post/', views.FeedsView.as_view()),
+    path('api/tweet/delete/<pk>/', views.TweetDelete.as_view()),
     path('api/usertweets/<pk>/', views.UserTweetView.as_view()),
     path('api/tweet/<pk>/', views.TweetView.as_view()),
     path('api/hashtags/', views.HashtagView.as_view()),
@@ -18,5 +19,5 @@ urlpatterns = [
     path('api/commentreply/', views.CommentReplyView.as_view()),
     path('api/search/', views.GlobalSearchList.as_view()),
     path('api/hashtags/search/', views.TweetListView.as_view()),
-    path('api/trending/', views.TrendingView.as_view()),
+    path('api/trending/<pk>/', views.TrendingView.as_view()),
 ]

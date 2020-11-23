@@ -3,6 +3,7 @@ from .models import Tweet, Hashtag, Likes, Bookmark, Comment, CommentReply
 from accounts.models import User, UserProfile
 from accounts.serializers import UserProfileSerializer, UserSerializer, DynamicFieldsModelSerializer
 from tweet.serializers import DynamicFieldsModelSerializer
+from datetime import datetime, timezone
 
 class TweetPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,12 +77,15 @@ class TweetSerializer(DynamicFieldsModelSerializer):
     TotalComments = serializers.SerializerMethodField('totalComments')
     comments      = serializers.SerializerMethodField('Comments')
     retweets      = serializers.SerializerMethodField('totalRetweets')
+    owner         = serializers.SerializerMethodField('is_owned')
+    user_id       = serializers.IntegerField()
     class Meta:
         model   = Tweet
         fields  = ('id','name','username','profile_pic',
-        'text','photos', 'videos','topic',
-        'timestamp','privacy','location',
-        'liked', 'likes', 'bookmarked', 'comments','TotalComments', 'retweets')
+        'text','photos', 'videos','topic','user_id',
+        'timestamp','privacy','location','liked', 'likes', 
+        'bookmarked', 'comments','TotalComments', 'retweets', 'owner')
+
     def get_status(self, instance):
         user = self.context.get("user")
         like = Likes.objects.filter(user=user).filter(tweet=instance)
@@ -118,24 +122,67 @@ class TweetSerializer(DynamicFieldsModelSerializer):
     def totalRetweets(self, instance):
         return len(Tweet.objects.filter(tweet=instance.id))
 
+    def is_owned(self, instance):
+        return instance.user == self.context.get('user')
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['timestamp'] = instance.timestamp
+        ret['user_id']= instance.user.id
+        d=instance.timestamp.strptime(str(instance.timestamp)[:10], '%Y-%m-%d')
+        x=datetime.now(timezone.utc)-instance.timestamp
+        x=int(x.seconds/60)
+        # print(x)
+        if int(x/60)==0:
+            ret['timestamp'] = "{} min ago.".format(int(x))
+        elif int(x/60/24)==0:
+            ret['timestamp'] = "{} hours ago".format(int(x/60))
+        else:
+            ret['timestamp'] = d.strftime('%b %d, %Y')
+        # print(d.strftime('%b %d, %Y'))
+        return ret
+
 class RetweetSerializer(serializers.ModelSerializer):
     retweet_msg = serializers.SerializerMethodField('message')
+    retweeted   = serializers.SerializerMethodField('is_retweeted')
+    user_id       = serializers.IntegerField()
+    owner         = serializers.SerializerMethodField('is_owned')
     class Meta:
         model   = Tweet
         fields  = '__all__'
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        tweet_data   = TweetSerializer(instance.tweet, context={"request":self.context.get("request"),"user":self.context.get("user")}, fields  = ('id','name','username','profile_pic',
-            'text','photos', 'videos','topic',
-            'timestamp','privacy','location',
-            'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets')).data
-        ret['tweet'] = tweet_data
+        tweet_data   = TweetSerializer(instance.tweet, context={"request":self.context.get("request"),"user":self.context.get("user")}, 
+            fields  = ('id','name','username','profile_pic','text',
+                'photos', 'videos','topic','timestamp','privacy',
+                'location','liked', 'likes','bookmarked','user_id',
+                'TotalComments', 'retweets','owner'))
+        ret['tweet']    = tweet_data.data
+        ret['user_id']  = instance.user.id
+        ret['user']     = UserSerializer(instance.user, context={'request': self.context.get('request')}, fields=('username','profile')).data
+        ret['timestamp'] = instance.timestamp
+        d=instance.timestamp.strptime(str(instance.timestamp)[:10], '%Y-%m-%d')
+        x=datetime.now(timezone.utc)-instance.timestamp
+        x=int(x.seconds/60)
+        # print(x)
+        if int(x/60)==0:
+            ret['timestamp'] = "{} min ago.".format(int(x))
+        elif int(x/60/24)==0:
+            ret['timestamp'] = "{} hours ago".format(int(x/60))
+        else:
+            ret['timestamp'] = d.strftime('%b %d, %Y')
+        # print(d.strftime('%b %d, %Y'))
         return ret
+        # return ret
 
     def message(self, instance):
         return "{} Retweeted".format(instance.user.profile.name)
 
+    def is_retweeted(self, instance):
+        return True
+    def is_owned(self, instance):
+        return instance.user == self.context.get('user')
 
 
 class HashtagSerializer(serializers.ModelSerializer):
@@ -152,9 +199,9 @@ class GlobalSearchSerializer(serializers.Serializer):
         if isinstance(obj, Tweet): 
             serializer = TweetSerializer(obj,context={'request':self.context.get('request'),'user': self.context.get('user')}, 
             fields  = ('id','name','username','profile_pic',
-            'text','photos', 'videos','topic',
-            'timestamp','privacy','location',
-            'liked', 'likes', 'bookmarked', 'TotalComments', 'retweets'))
+            'text','photos', 'videos','topic','liked', 'likes', 
+            'timestamp','privacy','location','bookmarked', 
+            'TotalComments', 'retweets'))
         elif isinstance(obj, User):
             serializer = UserSerializer(obj, context={'request':self.context.get('request'),'user': self.context.get('user')}, 
             fields=('id', 'username', 'profile'))

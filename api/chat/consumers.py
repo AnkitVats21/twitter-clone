@@ -15,6 +15,12 @@ class ChatConsumer(WebsocketConsumer):
 
     def fetch_messages(self):
         messages = get_last_10_messages(self.chatId, self.user_id)
+        try:
+            if messages["details"]:
+                self.send_message(messages)
+                self.close(3000)
+        except:
+            pass
         self.send_message(messages)
 
     def new_message(self, data):
@@ -25,7 +31,7 @@ class ChatConsumer(WebsocketConsumer):
             obj     = Message.objects.create(chat=chat, content=message, sender=user)
             queryset= Message.objects.filter(id=obj.id)[0]
             serializer = MessageSerializer(queryset, context={'user_id': self.user_id})
-            return self.send_chat_message(serializer.data)
+            return self.send_chat_message([serializer.data])
         except:
             self.send_message({"details":"please enter valid data."})
 
@@ -70,15 +76,15 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-        self.set_status(True)
+        # self.set_status(True)
         # chat = ChatConnection.objects.get_or_create(user=self.scope['user'])[0]
         # chat.status +=1
         # chat.save()
         self.fetch_messages()
-        message={
-            "message"   : "Your message"
-        }
-        self.send_message(message)
+        # message={
+        #     "message"   : "Your message"
+        # }
+        # self.send_message(message)
 
     # @database_sync_to_async
     def set_status(self, value):
@@ -98,7 +104,7 @@ class ChatConsumer(WebsocketConsumer):
 
 
     def disconnect(self, close_code):
-        self.set_status(False)
+        # self.set_status(False)
         async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
 
     def send_message(self, message):

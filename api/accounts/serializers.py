@@ -29,6 +29,30 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model   = UserProfile
         fields  = ('name','dob','picture', 'cover_pic','bio','location','website')
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = User
+        fields = ('id', 'email', 'username', 'password','date_joined', 'last_login', 'profile')
+        extra_kwargs= {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile')
+        password    = validated_data.pop('password')
+        user        = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        UserProfile.objects.create(user=user, **profile_data)
+        return user
+    
+    def update(self, instance, validated_data):
+        if validated_data['username'] != "":
+            username    = validated_data.pop('username')
+            instance.username = username
+            instance.save()
+        if len(validated_data['profile']) != 0:
+            profile_data = validated_data.pop('profile')
+            UserProfileSerializer(instance.profile).update(instance.profile ,validated_data=profile_data)
+        return instance
 
 class UserSerializer(DynamicFieldsModelSerializer):
     profile     = UserProfileSerializer(required=True)
@@ -110,6 +134,12 @@ class NotificationSerializer(serializers.ModelSerializer):
         return host+'/api/notifications/mark_as_read/'+str(instance.id)+"/"
     def extra_data(self, instance):
         data = json.loads(instance.text)
+        try:
+            host = 'http://'+self.context.get('request').headers['host']
+            data["profile_pic"]=host+data['profile_pic']
+        except:
+            pass
+        return data
 
 
 # class ConnectionsSerializer(serializers.ModelSerializer):

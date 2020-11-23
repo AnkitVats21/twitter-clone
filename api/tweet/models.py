@@ -25,7 +25,7 @@ comment_privacy=(('Everyone','Everyone'),('Followers','Followers'),('mentioned',
 class Tweet(models.Model):
     tweet       = models.ForeignKey('self', on_delete=models.CASCADE, related_name='tweetid', blank = True, null = True)
     user        = models.ForeignKey(User, on_delete=models.CASCADE)
-    text        = models.TextField(max_length=280, blank=True, null=True)
+    text        = models.TextField(max_length=480, blank=True, null=True)
     photos      = models.ImageField(upload_to = 'tweets/images/', blank = True, null = True, max_length = 1000)
     videos      = models.FileField(upload_to='tweets/videos/', max_length=100000, blank=True, null=True)
     topic       = models.CharField(max_length=140, blank=True, null=True)

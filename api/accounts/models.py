@@ -102,7 +102,7 @@ class UserProfile(models.Model):
     user     = models.OneToOneField(User, on_delete=models.CASCADE, related_name ='profile')
     name     = models.CharField(max_length=30)
     dob      = models.DateField(blank=True, null=True)
-    bio      = models.TextField(max_length=160, blank=True, null=True)
+    bio      = models.TextField(max_length=240, blank=True, null=True)
     picture  = models.ImageField(upload_to = 'profile/', blank = True, null = True, max_length = 1000)
     cover_pic= models.ImageField(upload_to= 'profile/cover/', blank=True, null=True, max_length=2000)
     location = models.CharField(max_length=30, blank=True, null=True)

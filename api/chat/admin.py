@@ -9,6 +9,6 @@ class MessageInline(admin.TabularInline):
 
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ('sender_username','reciever_username')
+    list_display = ('id','sender_username','reciever_username')
     inlines = [MessageInline]
 

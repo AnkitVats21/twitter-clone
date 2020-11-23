@@ -237,13 +237,20 @@ class ChangePassword(APIView):
 
 class EditUserProfileView(APIView):
     serializer_class = UserSerializer
-    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     def patch(self,request):
         user = User.objects.filter(email=request.user)[0]
-        serializer = UserSerializer(user, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        # data ={}
+        # for i in request.data:
+        #     if i != "null":
+        #         data[i]=request.data[i]
+        data = {"username":user.username,"profile":request.data}
+        serializer = UserSerializer(user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 
 from collections import OrderedDict
 import html
@@ -302,7 +309,7 @@ class ConnectionsView(APIView):
             queryset2.save()
             try:
                 profile_pic=request.user.profile.picture.url
-                profile_pic="http://{}{}".format(request.headers['host'],profile_pic)
+                # profile_pic="http://{}{}".format(request.headers['host'],profile_pic)
             except:
                 profile_pic=None
             text_data = {
@@ -325,16 +332,10 @@ class NotificationView(APIView):
         serializer = NotificationSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     
-    def delete(self, request):
-        action=request.data.get('action')
-        if action=='clearall':
-            queryset   = Notification.objects.filter(user=request.user)
-            queryset.delete()
-            return Response({'details':'all clear'})
-        return Response({'info':'use the actsion below to clear all notifications',
-        'action':'clearall'})
+    
 
 class NotificationSeenView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, pk):
         try:
             obj      = Notification.objects.filter(id=pk)[0]
@@ -343,6 +344,11 @@ class NotificationSeenView(APIView):
         obj.seen = True
         obj.save()
         return Response({"notification marked as read."})
+    def delete(self, request, pk):
+        queryset   = Notification.objects.filter(user=request.user)
+        queryset.delete()
+        return Response({'details':'all clear'})
+
 
 class UserProfileView(APIView):
     permission_classes = (permissions.IsAuthenticated,)

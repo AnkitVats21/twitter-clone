@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\api"
+    "\\api",
+    "\\api\\tweet"
   ],
-  "SelectedNode": "\\api\\tweet",
+  "SelectedNode": "\\api\\tweet\\serializers.py",
   "PreviewInSolutionExplorer": false
 }

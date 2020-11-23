@@ -40,9 +40,9 @@ class ChatView(APIView):
     def post(self, request):
         sender  = request.user
         try:
-            reciever= User.objects.filter(username=request.data['reciever'])[0]
+            reciever= User.objects.filter(username=request.data['receiver'])[0]
         except:
-            return Response({"Please enter valid reciever"})
+            return Response({"Please enter valid receiver"})
              
         obj=Chat.objects.filter(sender=reciever.id)
         if len(obj)==0:
@@ -58,12 +58,12 @@ class ChatView(APIView):
 
     def delete(self, request):
         try:
-            user= User.objects.filter(username=request.data["reciever"])[0]
+            user= User.objects.filter(username=request.data["receiver"])[0]
             obj = Chat.objects.filter(sender=user.id)
             if len(obj)==0:
                 obj = Chat.objects.filter(reciever=user.id)
             if len(obj)==0:
-                return Response("please enter valid chat id or reciever's username")
+                return Response("please enter valid chat id or receiver's username")
             obj = obj[0]
             obj.delete()
             return Response({"details":"Chat deleted successfully."})

@@ -1,7 +1,9 @@
 // import Base from "antd/lib/typography/Base";
 import axios from "axios";
 
-const BASE_URL = "http://5ced38e4a278.ngrok.io/";
+const BASE_URL = "http://127.0.0.1:8000/";
+
+// const BASE_URL = "http://c441d5162587.ngrok.io/";
 
 class ServerService {
 
@@ -43,7 +45,7 @@ class ServerService {
    }
 
    trending(){
-    return axios.get('http://f892b131cf91.ngrok.io/api/trending/hashtags/',
+    return axios.get( BASE_URL +'api/trending/hashtags/',
     {
       headers: {
           'Content-Type': 'application/json',
@@ -155,7 +157,19 @@ class ServerService {
     }
 
     addcomment(data){
-      return axios.post(BASE_URL+ 'api/comment/', data,
+      return axios.post(BASE_URL+ 'api/comment/comment/', data,
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    }
+
+    addreply(data){
+      return axios.post(BASE_URL+ 'api/comment/reply/', data,
       {
         headers: {
             'Content-Type': 'application/json',

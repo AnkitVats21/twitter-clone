@@ -25,7 +25,7 @@ class FollowersList extends Component {
 render(){
 
   const followlist= this.state.followlist.map(postlist=>{
-    return <FollowerCards displayName={postlist.profile.name} isfollow={postlist.following} username={postlist.profile.username} avatar={postlist.profile_pic}/>
+    return <FollowerCards displayName={postlist.profile.name} id={postlist.profile.id} isfollow={postlist.following} username={postlist.profile.username} avatar={postlist.profile_pic}/>
     })
 
   return (

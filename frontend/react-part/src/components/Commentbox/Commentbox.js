@@ -1,11 +1,15 @@
 import React, { useState, useEffect, Component} from "react";
 import { withRouter } from 'react-router-dom';
 import Post from "../Feed/Post";
+import {Link, Redirect} from 'react-router-dom';
 import CommentCard from "./CommentCard";
+import CommentCards from "./CommentCards";
 import "./Commentbox.css";
 import {Button} from 'react-bootstrap'
 import ServerService from '../../services/ServerService';
 import axios from 'axios';
+
+// import CommentExampleComment from './CommentCards'
 
 class Commentbox extends Component {
   
@@ -23,7 +27,8 @@ state={
   postlist:[],
   commentlist:[],
   num:"",
-  comment:""
+  comment:"",
+  redirect:null
 }
 
 handlechangeall = (event) =>{
@@ -44,35 +49,39 @@ commentHandler=()=>{
 
   const data={
     text: this.state.comment,
-    tweet: this.state.postlist.id
+    replying_to_tweet: this.state.postlist.id
   }
 
   console.log(data)
 
+
   ServerService.addcomment(data)
   .then(response=>{
     console.log(response);
-    this.setState({postlist: response.data})
+    this.setState({redirect:'/'})
   })
 }
 
 render(){
 
+  if(this.state.redirect){
+    return <Redirect to= {this.state.redirect} />
+  }
   // console.log(this.props)
 
   const commentlist= this.state.commentlist.map(postlist=>{
-    return <CommentCard image={postlist.photos} 
-    key={postlist.id} displayName={postlist.name} 
+    return <CommentCards image={postlist.photos} replies={postlist.reply} postid={this.state.postlist.id}
+    key={postlist.id} displayName={postlist.name} commentid={postlist.id}
     username={postlist.username} text={postlist.text} 
     avatar={postlist.profile_pic}/>
     })
 
-  console.log(this.state.postlist)
+  console.log(this.state.commentlist)
 
   return (
     <div className="feed">
       <div className="feed__header">
-        <h2>Comments</h2>
+        <h2>Post</h2>
       </div>
 
           {/* <Post
@@ -85,7 +94,7 @@ render(){
             image="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_960_720.jpg"
           /> */}
            
-          <Post
+          <CommentCard
             key="hi"
             displayName={this.state.postlist.name}
             username={this.state.postlist.username}
@@ -108,11 +117,14 @@ render(){
             verified="true"
             text="Dear citizens. It's high time that we fight against COVID-19 since it is a very treacherous disease that can hollow our whole system and economy"
             /> */}
-
+<div className="feed__header commheader">
+        <h2>Comments</h2>
+      </div>
             {commentlist}
-
-            <input onChange={this.handlechangeall} name="comment"  className="commentfield" />
-            <Button className="commentbtn" onClick={this.commentHandler}>Comment</Button>
+            {/* <CommentExampleComment /> */}
+            <div className="pseudodiv"></div>
+            <div className="inputcommdiv"><input onChange={this.handlechangeall} name="comment"  className="commentfield" />
+            <Button className="commentbtn" onClick={this.commentHandler}>Comment</Button></div>
 
     </div>
   );

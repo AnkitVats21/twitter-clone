@@ -2,6 +2,7 @@ import React, {Component } from "react";
 import Post from "../Feed/Post";
 import "./Trending.css";
 import axios from 'axios'
+import MenuIcon from '@material-ui/icons/Menu';
 import TrendingCards from '../UI/Cards/TrendingCards/TrendingCards'
 import ServerService from "../../services/ServerService";
 
@@ -30,7 +31,7 @@ class Trending extends Component {
       <div className="feed__header">
         <h2>Explore</h2>
       </div>
-
+      <MenuIcon class="hamburgericon"/>
     {/* <div class="card">
         <div class="card-body">
         <h6 className="trendingtag">1. Trending</h6>

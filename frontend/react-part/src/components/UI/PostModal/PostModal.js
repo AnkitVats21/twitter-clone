@@ -52,7 +52,7 @@ for (let formElement in data) {
   }
 
     return (
-      <Modal
+      <Modal className="allmodals"
         {...props}
         // size="lg"
         // aria-labelledby="contained-modal-title-vcenter"

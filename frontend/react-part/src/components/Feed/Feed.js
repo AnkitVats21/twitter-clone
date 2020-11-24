@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component} from "react";
 // import TweetBox from "./TweetBox";
 import Post from "./Post";
 import "./Feed.css";
+import MenuIcon from '@material-ui/icons/Menu';
 // import db from "./firebase";
 // import FlipMove from "react-flip-move";
 import ServerService from '../../services/ServerService';
@@ -54,8 +55,10 @@ render(){
     />
     })
 
+
   return (
     <div className="feed">
+      <MenuIcon class="hamburgericon"/>
       <div className="feed__header">
         <h2 onClick={()=>this.state.postlist.splice(0,1)}>Home</h2>
       </div>

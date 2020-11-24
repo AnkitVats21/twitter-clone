@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 import '../Trending/Trending.css';
 import {ReactComponent as Star} from '../../assets/icons/Star.svg'
 import ServerService from'../../services/ServerService'
+import MenuIcon from '@material-ui/icons/Menu';
 import axios from 'axios';
 import NotificationCard from '../UI/Cards/NotificationCard/NotificationCard'
 
@@ -32,7 +33,7 @@ render(){
       <div className="feed__header">
         <h2>Notifications</h2>
       </div>
-
+      <MenuIcon class="hamburgericon"/>
     {/* <NotificationCard notificationtext="yo yuoyoodtysxodrop"/>
     <NotificationCard notificationtext="yo yuoyoodtysxodrop"/> */}
           {notificationlist}

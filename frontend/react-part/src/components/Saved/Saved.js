@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Post from "../Feed/Post";
 import "../Feed/Feed.css";
 import axios from "axios";
+import MenuIcon from '@material-ui/icons/Menu';
 // import db from "./firebase";
 // import FlipMove from "react-flip-move";
 import ServerService from '../../services/ServerService'
@@ -48,8 +49,9 @@ class Saved extends Component {
   
     return (
       <div className="feed">
+      <MenuIcon class="hamburgericon"/>
         <div className="feed__header">
-          <h2 onClick={()=>this.state.postlist.splice(0,1)}>Home</h2>
+          <h2>Bookmarks</h2>
         </div>
   
             {postlist}

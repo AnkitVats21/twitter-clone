@@ -21,8 +21,44 @@
     z-index: 100;
     padding: 15px 20px;
   }
+
+  .commheader {
+    padding-top: 20px;
+padding-bottom: 0px !important;
+  }
   
   .feed__header > h2 {
     font-size: 20px;
     font-weight: 800;
   }
+
+  @media(max-width:1280px){
+    .feed{
+      flex: 6.97;
+      /* margin-left: 0; */
+    }
+  }
+  
+
+  @media(max-width:1000px){
+    .widgets{
+      flex: 0;
+    }
+
+    }
+
+    .hamburgericon{
+      position: absolute;
+      top: 13px;
+      width: 30px;
+      height: 30px;
+      right: 30px;
+      z-index:50000;
+      display: none;
+    }
+
+    @media(max-width: 450px){    
+      .hamburgericon{
+        display:block;
+      }
+    }

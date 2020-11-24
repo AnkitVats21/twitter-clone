@@ -16,12 +16,11 @@ import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 const CommentCard = forwardRef(
     ({ displayName, username, verified, text, image, avatar }, ref) => {
       return (
-        <div className="post" ref={ref}>
+        <div className="commpost" ref={ref}>
           <div className="posthead">
           <div className="post__avatar">
             <Avatar src={avatar} />
           </div>
-          {/* <div className="post__body"> */}
             <div className="post__header">
               <div className="post__headerText">
                 <h3>
@@ -42,7 +41,7 @@ const CommentCard = forwardRef(
             {image? <img className="foodimg" src={image} alt="" />: null}
             </div>
           </div>
-        //  </div>
+
       );
     }
   );

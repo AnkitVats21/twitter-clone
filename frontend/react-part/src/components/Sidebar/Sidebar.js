@@ -5,6 +5,7 @@ import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
+import CreateIcon from '@material-ui/icons/Create';
 
 import PostModal from'../UI/PostModal/PostModal';
 
@@ -40,6 +41,13 @@ function Sidebar({propactive}) {
       <Button onClick={() => setModalShow(true)} variant="outlined" className="sidebar__tweet" fullWidth>
         Post
       </Button>
+
+      
+      <div className="sidebarOption">
+      <CreateIcon onClick={() => setModalShow(true)} className="addposticon"/>
+    </div>
+
+
 
       {/* <PostModal showvar={show}/> */}
 

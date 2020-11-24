@@ -53,3 +53,10 @@
   font-size: 18px;
   font-weight: 800;
 }
+
+@media(max-width:1000px){
+.widgets{
+  display: none !important;
+  flex: 0;
+}
+}

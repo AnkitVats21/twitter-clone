@@ -1,16 +1,18 @@
 .sidebar {
   flex: 0.2;
-
   height: 30vh;
-
   position: sticky;
   top: 12px;
+}
+
+.addposticon{
+  display: none !important;
 }
 
 .sidebar__twitterIcon {
   color: var(--twitter-color);
   font-size: 30px !important;
-  margin-left: 20px;
+  margin-left: 12px;
   margin-bottom: 20px;
 }
 
@@ -32,3 +34,27 @@
   outline: none !important;
 }
 
+
+@media(max-width:1280px){
+  .sidebar__tweet{
+    display: none !important;
+  }
+
+  .addposticon{
+    display: block !important;
+  }
+
+  .sidebar{
+    flex: 0.03;
+    /* margin-right: 0; */
+    margin-left: 0;
+  }
+}
+
+@media(max-width: 450px){
+  .sidebar{
+    display: none !important;
+    flex: 0
+  }
+
+}

@@ -45,5 +45,14 @@
   color: var(--twitter-color) !important;
 }
 
-
+@media(max-width:1280px){
+  .sidebarOption > p {
+    display: none;
+  }
+  .sidebarOption{
+    text-align: center;
+    width: 50px !important;
+    /* background-color: turquoise; */
+  }
+}
 

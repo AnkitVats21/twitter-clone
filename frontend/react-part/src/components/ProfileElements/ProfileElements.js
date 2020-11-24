@@ -1,7 +1,7 @@
 import React, { Component} from "react";
 import '../ProfileElements/ProfileElements.css'
 import { Redirect, Link } from 'react-router-dom';
-import Background from '../../assets/images/texting-1490691_1920.jpg'
+import MenuIcon from '@material-ui/icons/Menu';
 import Post from '../Feed/Post'
 import Details from './Details'
 import axios from 'axios'
@@ -34,6 +34,7 @@ render(){
 
   return (
     <div className="feed">
+    <MenuIcon class="hamburgericon"/>
     <Details propactive="posts"/>
 
     <div className="feed__header">

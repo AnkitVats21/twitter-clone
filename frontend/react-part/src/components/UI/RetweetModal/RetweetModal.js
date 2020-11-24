@@ -25,7 +25,8 @@ function PostModal(props) {
   const handlepost=()=>{
     // console.log("hi")
 const data={
-  tweet: props.id,
+  retweet: props.id,
+  tweet_type: 'retweet',
   text: text,
   photos:img,
   videos:vid

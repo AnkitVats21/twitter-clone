@@ -129,7 +129,7 @@ class FeedsView(APIView):
                         text_data   = {
                             "name": request.user.profile.name,
                             "username": request.user.username,
-                            "profile_pic": profile_pic,
+                            "profile_pic": str(profile_pic),
                             "tweet_id": serializer.data.get('id'),
                             "notification_data":"<b>{}</b> mentioned you in tweet.".format(request.user.profile.name),
                             "tweet_data": serializer.data.get('text')
@@ -143,7 +143,7 @@ class FeedsView(APIView):
                 text_data   = {
                     "name": request.user.profile.name,
                     "username": request.user.username,
-                    "profile_pic": profile_pic,
+                    "profile_pic": str(profile_pic),
                     "tweet_id": serializer.data.get('id'),
                     "notification_data":"Recent tweet from <b>{}</b>.".format(request.user.profile.name),
                     "tweet_data": serializer.data.get('text')
@@ -230,7 +230,7 @@ class LikeView(APIView):
                 "notification_data": "<b>{}</b> liked your tweet".format(name),
                 "tweet_id":tweet.id,
                 "tweet_data": tweet.text,
-                "profile_pic":None
+                "profile_pic":str(tweet_user.profile.picture)
             }
             extra_txt = json.dumps(extra_txt)
             text_data = json.dumps(text_data)
@@ -298,12 +298,12 @@ class CommentView(APIView):
                 data['tweet_type'] = pk
                 data['user']=request.user.id
                 tweet   = Tweet.objects.get(id=data['replying_to_tweet'])
-                data['replying_to'] = [tweet.user.id]
+                data['replying_to'] = tweet.user.id
                 if pk == 'reply':
                     try:
                         if data['replying_to_comment']:
                             tweet   = Tweet.objects.get(id=data['replying_to_comment'])
-                            data['replying_to'] = [tweet.user.id]
+                            data['replying_to'] = tweet.user.id
                     except:
                         return Response("replying_to_comment id either not given or not valid.")
                 serializer = serializers.TweetPostSerializer(data=data)
@@ -323,10 +323,12 @@ class CommentView(APIView):
                     serializer.save()
                     if pk=='reply':
                         tweet   = Tweet.objects.get(id=data['replying_to_comment'])
-                        self.send_notification(tweet.user,request.data['replying_to_tweet'],'reply')
+                        if tweet.user!=request.user:
+                            self.send_notification(tweet.user,request.data['replying_to_tweet'],'reply')
                     else:
                         tweet   = Tweet.objects.get(id=data['replying_to_tweet'])
-                        self.send_notification(tweet.user,request.data['replying_to_tweet'],'comment')
+                        if tweet.user!=request.user:
+                            self.send_notification(tweet.user,request.data['replying_to_tweet'],'comment')
                     return Response(serializer.data)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
@@ -346,16 +348,20 @@ class CommentView(APIView):
 
     def send_notification(self,user,tweet_id,tweet_type):
         tweet = Tweet.objects.get(id=tweet_id)
+        try:
+            profile_pic=user.profile.picture.url
+        except:
+            profile_pic=None
         if tweet_type =='reply':
             text_data = {
                 "notification_data":"<b>{}</b> replied to your comment.".format(user.profile.name),
                 "username": user.username,
-                "profile_pic":user.profile.picture}
+                "profile_pic":str(profile_pic)}
         else:
             text_data = {
                 "notification_data":"<b>{}</b> replied to your tweet.".format(user.profile.name),
                 "username": user.username,
-                "profile_pic":user.profile.picture}
+                "profile_pic":str(profile_pic)}
         text_data = json.dumps(text_data)
         obj = Notification.objects.create(user=user, text=text_data, category="Tweet")
         return

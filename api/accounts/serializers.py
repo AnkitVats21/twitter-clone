@@ -118,7 +118,8 @@ class FollowerSerializer(serializers.ModelSerializer):
         data = {'username' : temp['username'],
                 'name': temp['profile']['name'],
                 'bio' : temp['profile']['bio'],
-                'picture': temp['profile']['picture']
+                'picture': temp['profile']['picture'],
+                'id':temp['id']
         }
         return data
 
@@ -130,8 +131,8 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields= ('id', 'timestamp', 'category', 'seen', 'url', 'extra')
 
     def notification_url(self, instance):
-        host = 'http://'+self.context.get('request').headers['host']
-        return host+'/api/notifications/mark_as_read/'+str(instance.id)+"/"
+        host = 'http://'+self.context.get('request').headers['host']+"/"
+        return host+'api/notifications/mark_as_read/'+str(instance.id)+"/"
     def extra_data(self, instance):
         data = json.loads(instance.text)
         try:

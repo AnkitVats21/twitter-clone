@@ -288,7 +288,7 @@ class ConnectionsView(APIView):
 
         user    = request.user
         try:
-            user2       = User.objects.filter(username=pk)[0]
+            user2       = User.objects.filter(id=pk)[0]
         except:
             return Response({'details':'please enter valid pk'})
         # action      = request.data.get('action')

@@ -3,12 +3,19 @@ import classes from "./ChatCards.module.css";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { Avatar } from "@material-ui/core";
 import { Button } from "react-bootstrap";
+import {Link} from 'react-router-dom'
 
 const FollowerCards = forwardRef(
-    ({ displayName, username, verified,avatar }, ref) => {
+    ({ displayName, username, verified,avatar, chatid }, ref) => {
+
+      // function handlechats(){
+        // localStorage.setItem('chatid', chatid)
+      // }
+    
       return (
-        <div className={classes.post} ref={ref}>
-          
+        <div className={classes.post} ref={ref} 
+        // onClick={handlechats()}
+        >
           <div className={classes.headwrap}>
 <div className={classes.posthead}>
           <div className={classes.avatar}>
@@ -30,7 +37,6 @@ const FollowerCards = forwardRef(
             </div>
 </div>
             </div>
-
             </div>
       );
     }

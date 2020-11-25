@@ -120,9 +120,11 @@
     background-color: #f1f1f1;
   }
 
-  .post__headerDescription>p{
+ .post__headerDescription>p{
     white-space: pre-line;
   }
+
+
 
   .highlighted-text{
     color: var(--twitter-color);

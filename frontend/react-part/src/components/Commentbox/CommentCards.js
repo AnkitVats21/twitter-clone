@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../Feed/Post.css";
 import { Avatar } from "@material-ui/core";
+import {Link, Redirect} from 'react-router-dom';
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { ReactComponent as ChatBubbleOutlineIcon } from "../../assets/icons/Comment.svg";
 import { ReactComponent as RepeatIcon } from "../../assets/icons/Retweet.svg";
@@ -18,6 +19,7 @@ import axios from 'axios';
           postlist:this.props.replies,
           postid: this.props.postid,
           commentid: this.props.commentid,
+          redirect: null,
           reply:""
         }
         
@@ -50,6 +52,10 @@ import axios from 'axios';
          }
 
         render(){
+
+          if(this.state.redirect){
+            return <Redirect to= {this.state.redirect} />
+          }
 
           const postlist= this.state.postlist.map((postlist,index)=>{
             return <ReplyCards image={postlist.photos} replies={postlist.reply}

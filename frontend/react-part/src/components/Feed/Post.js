@@ -245,30 +245,30 @@ console.log(props.rtweet.tweet)
               <Link className="post__commt" 
               to= {{
                 pathname:'/comments',
-                state:{tweetid: props.id}
+                state:{tweetid: props.rtweet.tweet.id}
               }}
               ><div><ChatBubbleOutlineIcon /><span className="peoplecount">{props.rtweet.tweet.TotalComments}</span></div></Link>
               {/* <div><FavoriteBorderIcon /><span className="peoplecount">12</span></div> */}
               {/* <LikeButton /> */}
               <LikeButton 
-                pk={props.id} 
+                pk={props.rtweet.tweet.id} 
                 likeis= {props.rtweet.tweet.liked}
                 points= {props.rtweet.tweet.likes} 
                 />
-              <div onClick={() => setModalShow(true)}><RepeatIcon /><span className="peoplecount">12</span></div>
+              <div onClick={() => setModalShow(true)}><RepeatIcon /><span className="peoplecount">{props.rtweet.tweet.retweets}</span></div>
               {/* <div><PublishIcon /><span className="peoplecount">12</span></div> */}
-              <BookmarkButton pk={props.id} 
+              <BookmarkButton pk={props.rtweet.tweet.id} 
               bookmarkedis= {props.rtweet.tweet.bookmarked}
               />
 
         <RetweetModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        avatar={props.avatar}
-        username={props.username} text={props.text} 
-        image={props.image} 
-        name={props.displayName} id={props.id}
-        key={props.id} displayName={props.name} 
+        avatar={props.rtweet.tweet.avatar}
+        username={props.rtweet.tweet.username} text={props.rtweet.tweet.text} 
+        image={props.rtweet.tweet.image} 
+        name={props.rtweet.tweet.displayName} id={props.rtweet.tweet.id}
+        key={props.rtweet.tweet.id} displayName={props.rtweet.tweet.name} 
       />
 
         <EditPostModal

@@ -57,8 +57,10 @@ const { Text } = Typography;
 const { Meta } = Card;
 
 const token=localStorage.getItem("access_token")
+const chatid=localStorage.getItem("chatid")
 console.log(token)
-const client = new W3CWebSocket('ws://5ced38e4a278.ngrok.io/ws/chat/16/'+token+'/');
+
+const client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/'+chatid+ '/' +token+'/');
 export default class App extends Component {
 
   state ={
@@ -67,13 +69,18 @@ export default class App extends Component {
     messages: []
   }
 
+  
+
+
   onButtonClicked = (value) => {
+    // global client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/17/'+token+'/');
     client.send(JSON.stringify({
       message: value
     }));
     this.setState({ searchVal: '' })
   }
   componentDidMount() {
+    // const client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/17/'+token+'/');
     client.onopen = () => {
       console.log('WebSocket Client Connected');
     };

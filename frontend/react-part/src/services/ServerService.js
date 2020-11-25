@@ -1,9 +1,9 @@
 // import Base from "antd/lib/typography/Base";
 import axios from "axios";
 
-const BASE_URL = "http://127.0.0.1:8000/";
+// const BASE_URL = "http://127.0.0.1:8000/";
 
-// const BASE_URL = "http://c441d5162587.ngrok.io/";
+const BASE_URL = "http://32f32f11eae8.ngrok.io/";
 
 class ServerService {
 
@@ -93,6 +93,17 @@ class ServerService {
 
    editprofilebtn(data){
     return axios.patch( BASE_URL +'api/updateprofile/' ,data,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  })
+   }
+
+   recentchats(){
+    return axios.get(BASE_URL +'api/chats/ ',
     {
       headers: {
           'Content-Type': 'application/json',

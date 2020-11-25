@@ -53,11 +53,15 @@ console.log(data)
   render(){
 
   const postlist= this.state.savedposts.map(postlist=>{
-    return <Post image={postlist.photos} likes={postlist.likes} comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}/>
+    return <Post image={postlist.photos} user={postlist.user_id} likes={postlist.likes} 
+    comments={postlist.TotalComments} isliked={postlist.liked} isbookmarked={postlist.bookmarked} 
+    key={postlist.id} id={postlist.id} displayName={postlist.name} username={postlist.username} 
+    text={postlist.text} retweetcount={postlist.retweets} avatar={postlist.profile_pic}/> 
     })
 
     const followlist= this.state.followlist.map(postlist=>{
-      return <FollowerCards displayName={postlist.profile.name} isfollow={postlist.following} username={postlist.profile.username} avatar={postlist.profile_pic}/>
+      return <FollowerCards displayName={postlist.profile.name} isfollow={postlist.following} id={postlist.profile.id}
+      username={postlist.profile.username} avatar={postlist.profile.picture}/>
       })
 
   return (

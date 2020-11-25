@@ -4,6 +4,7 @@ import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { Avatar } from "@material-ui/core";
 import { Button } from "react-bootstrap";
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 class FollowerCards extends Component {
     // ({ displayName, username, verified,avatar, isfollow }, ref) => {
@@ -62,11 +63,16 @@ class FollowerCards extends Component {
             <div className={classes.header}>
               <div className={classes.headerText}>
                 <h3>
+<Link className="userlinks" to= {{
+                pathname:'/user-profile',
+                state:{userid: this.props.id}
+              }}>
                   {this.props.displayName}{" "}
                   <span className="post__headerSpecial">
       {this.props.verified && <VerifiedUserIcon className={classes.badge} />} <div>@
                     {this.props.username}</div>
                   </span>
+                  </Link>
                 </h3>
 
               </div>

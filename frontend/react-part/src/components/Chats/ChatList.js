@@ -35,7 +35,7 @@ render(){
     displayName={postlist.r_name}
       username={postlist.r_username}
       avatar={postlist.profile_pic}
-      chatid={postlist.id}
+      chatId={postlist.id}
     /> 
     })
       

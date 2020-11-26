@@ -51,6 +51,7 @@
 import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Card, Avatar, Input, Typography } from 'antd';
+import {withRouter, Redirect} from 'react-router-dom'
 
 const { Search } = Input;
 const { Text } = Typography;
@@ -61,21 +62,25 @@ console.log(token)
 
 
 
-export default class App extends Component {
+class MainChat extends Component {
 
-  client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+this.props.chatid+ '/' +token+'/')
+  // client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+"17"+ '/' +token+'/')
+  client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+this.props.match.params.chatId+ '/' +token+'/')
 
   state ={
-    userName: '',
-    isLoggedIn: true,
+      userName: '',
+      isLoggedIn: true,
+      redirect:null,
     messages: []
   }
 
   onButtonClicked = (value) => {
-    this.client.send(JSON.stringify({
-      message: value
-    }));
-    this.setState({ searchVal: '' })
+    // this.client.send(JSON.stringify({
+    //   message: value
+    // }));
+    // this.setState({ searchVal: '' })
+    // this.client.close();
+    this.setState({redirect:'/messages'})
   }
 
   componentDidMount() {
@@ -113,8 +118,19 @@ export default class App extends Component {
 
     };
   }
+
+  // componentWillUnmount() {
+
+  // }
+
   render() {
+
+    if(this.state.redirect){
+      return <Redirect to= {this.state.redirect} />
+    }
+
     console.log(this.state.messages)
+    console.log(this.props.match.params.chatId)
     return (
       <div className="main" id='wrapper'>
         {this.state.isLoggedIn ?
@@ -157,3 +173,5 @@ export default class App extends Component {
     )
   }
 }
+
+export default withRouter(MainChat)

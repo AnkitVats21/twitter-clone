@@ -47,6 +47,12 @@ function App() {
     <Route path='/change-password' component={PasswordChange} />
     <Route path='/sign-up' component={SignUp} />
     <Route path='/otp' component={OTP} />
+    {/* <Route path='/messages/chat/:chatId'>
+      <MainChat />
+    </Route>
+    <Route path='/messages'>
+      <MainChat />
+    </Route> */}
 
     </Switch>
     <NotificationContainer />

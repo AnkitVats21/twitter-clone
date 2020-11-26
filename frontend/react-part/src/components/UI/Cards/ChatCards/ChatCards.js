@@ -6,16 +6,12 @@ import { Button } from "react-bootstrap";
 import {Link} from 'react-router-dom'
 
 const FollowerCards = forwardRef(
-    ({ displayName, username, verified,avatar, chatid }, ref) => {
+    ({ displayName, username, verified,avatar, chatId }, ref) => {
 
-      // function handlechats(){
-        // localStorage.setItem('chatid', chatid)
-      // }
     
       return (
-        <div className={classes.post} ref={ref} 
-        // onClick={handlechats()}
-        >
+        <div className={classes.post} ref={ref}>
+          <Link to={`/messages/chat/${chatId}`}>
           <div className={classes.headwrap}>
 <div className={classes.posthead}>
           <div className={classes.avatar}>
@@ -37,6 +33,7 @@ const FollowerCards = forwardRef(
             </div>
 </div>
             </div>
+            </Link>
             </div>
       );
     }

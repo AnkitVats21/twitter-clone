@@ -57,11 +57,13 @@ const { Text } = Typography;
 const { Meta } = Card;
 
 const token=localStorage.getItem("access_token")
-const chatid=localStorage.getItem("chatid")
 console.log(token)
 
-const client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/'+chatid+ '/' +token+'/');
+
+
 export default class App extends Component {
+
+  client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+this.props.chatid+ '/' +token+'/')
 
   state ={
     userName: '',
@@ -69,23 +71,19 @@ export default class App extends Component {
     messages: []
   }
 
-  
-
-
   onButtonClicked = (value) => {
-    // global client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/17/'+token+'/');
-    client.send(JSON.stringify({
+    this.client.send(JSON.stringify({
       message: value
     }));
     this.setState({ searchVal: '' })
   }
+
   componentDidMount() {
-    // const client = new W3CWebSocket('ws://32f32f11eae8.ngrok.io/ws/chat/17/'+token+'/');
-    client.onopen = () => {
+    this.client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
     
-    client.onmessage = (message) => {
+    this.client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
       console.log('got reply! ', dataFromServer)
 

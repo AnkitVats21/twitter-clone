@@ -1,22 +1,13 @@
 import React, { useState, useEffect, Component} from "react";
-// import TweetBox from "./TweetBox";
 import Post from "./Post";
 import "./Feed.css";
 import MenuIcon from '@material-ui/icons/Menu';
-// import db from "./firebase";
-// import FlipMove from "react-flip-move";
 import ServerService from '../../services/ServerService';
 
-class Feed extends Component {
-//   const [posts, setPosts] = useState([]);
+import {connect} from 'react-redux';
+import {asyncAddPost} from '../../actions';
 
-  // useEffect(() => {
-  //   ServerService.homecards()
-  // .then(response=>{
-  //   console.log(response);
-  //   // this.setState({recipecards: response.data, isLoading:false})
-  // })
-  // }, []);
+class Feed extends Component {
 
 state={
   postlist:[]
@@ -37,16 +28,22 @@ deletepost=(index, tweetid)=>{
 }
 
 componentDidMount(){
-  ServerService.homecards()
-  .then(response=>{
-    console.log(response);
-    this.setState({postlist: response.data})
-  })
+  // ServerService.homecards()
+  // .then(response=>{
+  //   console.log(response);
+  //   this.setState({postlist: response.data})
+  // })
+  this.props.ShowHomePosts()
+
 }
 
 render(){
-
-  const postlist= this.state.postlist.map((postlist,index)=>{
+let postlist=null
+let {home}= this.props
+if(home)
+console.log(home.home)
+if(home){
+    postlist= home.home.map((postlist,index)=>{
     return <Post image={postlist.photos} retweeted={postlist.retweeted} isowned={postlist.owner} 
     deletepost={this.deletepost} postindex={index} likes={postlist.likes} comments={postlist.TotalComments} 
     isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} user={postlist.user_id}
@@ -55,7 +52,7 @@ render(){
     />
     })
 
-
+  }
   return (
     <div className="feed">
       <MenuIcon class="hamburgericon"/>
@@ -69,4 +66,20 @@ render(){
         }
 }
 
-export default Feed;
+const mapStateToProps = state => ({
+ home: state.home
+})
+
+const mapDispatchToProps =dispatch => {
+
+  return {
+      ShowHomePosts: ()=> dispatch(asyncAddPost())
+      // sort: (a,b,c,d)  => dispatch(sort(a,b,c,d)),
+         }
+
+
+  } 
+
+// export default Feed;
+
+export default connect(mapStateToProps,mapDispatchToProps)(Feed);

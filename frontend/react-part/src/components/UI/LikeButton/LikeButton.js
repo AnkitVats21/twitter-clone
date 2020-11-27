@@ -54,7 +54,10 @@ class LikeButton extends Component {
             
                 <div onClick={this.addLike} className={classes.likebtn} >
                     {/* <i className="fa fa-heart" aria-hidden="true"></i> {this.state.likes} */}
-                    <Filledheart className={classes.icon}/> <span className={classes.peoplecount}>{this.state.likes}</span>
+                    <Filledheart className={classes.icon}/> <Link to= {{
+                pathname:'/liked-by',
+                state:{postid: this.state.pk}
+              }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
                 </div>
             )
         }
@@ -64,7 +67,10 @@ class LikeButton extends Component {
             
                 <div onClick={this.addLike} className={classes.likebtn} > 
                 {/* <i className="far fa-heart"></i> {this.state.likes} */}
-                <FavoriteBorderIcon className={classes.icon}/> <span className={classes.peoplecount}>{this.state.likes}</span>
+                <FavoriteBorderIcon className={classes.icon}/> <Link to= {{
+                pathname:'/liked-by',
+                state:{postid: this.state.pk}
+              }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
                 </div>
             )
         }

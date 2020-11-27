@@ -4,6 +4,7 @@ import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { Avatar } from "@material-ui/core";
 import { Button } from "react-bootstrap";
 import axios from 'axios'
+import ServerService from '../../../../services/ServerService'
 import {Link} from 'react-router-dom'
 
 class FollowerCards extends Component {
@@ -16,16 +17,9 @@ class FollowerCards extends Component {
     }
 
       handlefollow=()=>{
-
-        axios.get('http://127.0.0.1:8000/api/connections/'+this.state.pk+'/',
-        {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          },
-          
-      }
-        )
+        const data = this.state.pk
+        
+        ServerService.connect(data)
         .then(response=>{
           console.log(response);
           this.setState({postlist: response.data, redirect:'/'})

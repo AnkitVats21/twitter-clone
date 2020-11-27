@@ -6,14 +6,14 @@ import ChatList from '../../Chats/ChatList'
 import MainChat from '../../../components/Chats/MainChat'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-class Messages extends Component {
+class PrivateChats extends Component {
 
   
     render() {
       return(
       <div className={classes.flexbox}>
                 <Sidebar propactive="messages" />
-<ChatList />
+<MainChat />
         {/* <Router>
         <ChatList />
 
@@ -35,6 +35,6 @@ class Messages extends Component {
   }
   
   
-  export default Messages;
+  export default PrivateChats;
   
   

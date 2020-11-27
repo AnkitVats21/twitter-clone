@@ -11,16 +11,13 @@
 
 .inputcommdiv{
     background-color: white;
-    width: 45%;
-    position: absolute;
-    bottom: 0px;
+    /* width: 45%; */
+    /* position: sticky;
+    bottom: 0; */
     padding-bottom: 20px;
     padding-left: 2px;
   }
 
-  .pseudodiv{
-      height: 100px;
-  }
 
 .commentfield:focus{
     border: none !important;

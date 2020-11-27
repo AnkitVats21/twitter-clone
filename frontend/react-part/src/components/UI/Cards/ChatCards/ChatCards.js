@@ -11,7 +11,10 @@ const FollowerCards = forwardRef(
     
       return (
         <div className={classes.post} ref={ref}>
-          <Link to={`/messages/chat/${chatId}`}>
+          <Link to= {{
+    pathname:'/user-messages',
+    state:{chatId: chatId, name:displayName, username: username, pic: avatar}
+  }}>
           <div className={classes.headwrap}>
 <div className={classes.posthead}>
           <div className={classes.avatar}>

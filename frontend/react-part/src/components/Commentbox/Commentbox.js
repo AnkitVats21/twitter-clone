@@ -121,8 +121,7 @@ render(){
         <h2>Comments</h2>
       </div>
             {commentlist}
-            {/* <CommentExampleComment /> */}
-            <div className="pseudodiv"></div>
+
             <div className="inputcommdiv"><input onChange={this.handlechangeall} name="comment"  className="commentfield" />
             <Button className="commentbtn" onClick={this.commentHandler}>Comment</Button></div>
 

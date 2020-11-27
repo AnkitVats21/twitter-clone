@@ -2,19 +2,22 @@ import React, { forwardRef } from "react";
 import "../Feed/Post.css";
 import { Avatar } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-// import ChatBubbleOutlineIcon from "../../assets/icons/Vector.svg";
 import { ReactComponent as ChatBubbleOutlineIcon } from "../../assets/icons/Comment.svg";
 import { ReactComponent as RepeatIcon } from "../../assets/icons/Retweet.svg";
 import { ReactComponent as FavoriteBorderIcon } from "../../assets/icons/Heart.svg";
 import LikeButton from "../UI/LikeButton/LikeButton"
 import BookmarkButton from "../UI/BookmarkButton/BookmarkButton"
 import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
-// import RepeatIcon from "@material-ui/icons/Repeat";
-// import FavoriteBorderIcon from "@material-ui/icons/Heart.svg";
-// import  from "@material-ui/icons/Publish";
+import Highlighter from "react-highlight-words";
+
 
 const CommentCard = forwardRef(
     ({ displayName, username, verified, text, image, avatar }, ref) => {
+
+      const Highlight = ({ children, highlightIndex }) => (
+        <strong className="highlighted-text">{children}</strong>
+      );
+
       return (
         <div className="commpost" ref={ref}>
           <div className="posthead">
@@ -35,7 +38,14 @@ const CommentCard = forwardRef(
             </div>
             </div>
             <div className="post__headerDescription">
-                <p>{text}</p>
+                {/* <p>{text}</p> */}
+                <Highlighter
+    highlightClassName="YourHighlightClass"
+    searchWords={[/\B\@([\w\-]+)/gim, /#[A-Za-z0-9]*/g]}
+    highlightTag ={Highlight}
+    textToHighlight={text}
+    // textToHighlight={props.text}
+  />
               </div> 
               <div  className="imgwrap">
             {image? <img className="foodimg" src={image} alt="" />: null}

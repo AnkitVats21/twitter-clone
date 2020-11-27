@@ -40,3 +40,18 @@
   outline:none;
   border: none;
 }
+
+@media(max-width:1280px){
+  .feed{
+    flex: 0.5;
+    padding-left: 2%;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+  }
+}
+
+@media(max-width: 450px){    
+  .feed{
+    flex: 1;
+  }
+}

@@ -9,7 +9,8 @@ class UserInfo extends Component {
     state={
         userdetails:[],
         profiledet:[],
-        connect:[]
+        connect:[],
+        redirect: null
       }
 
       componentDidMount(){
@@ -23,7 +24,23 @@ class UserInfo extends Component {
         })
       }
 
+      createchat=()=>{
+        const data={
+        receiver: this.state.userdetails.username
+        }
+        console.log(data)
+        ServerService.newchat(data)
+      .then((resp)=>{
+        console.log(resp)      
+        this.setState({ redirect: "/messages" })
+      })
+      }
+
       render(){
+
+        if(this.state.redirect){
+          return <Redirect to= {this.state.redirect} />
+        }
 
 return(
     <>
@@ -59,7 +76,7 @@ backgroundRepeat: 'no-repeat'
 </div>
 <div>
 
-<button className="editprofile msgbtn"><MessageIcon className="messageicon" /></button>
+<button onClick={this.createchat} className="editprofile msgbtn"><MessageIcon className="messageicon" /></button>
 <button className="editprofile"><span className="editprofiletext">Follow</span></button>
 </div>
 </div>

@@ -3,7 +3,7 @@ import axios from "axios";
 
 // const BASE_URL = "http://127.0.0.1:8000/";
 
-const BASE_URL = "http://6fc246ea7f7e.ngrok.io/";
+const BASE_URL = "http://2d8a6838506e.ngrok.io/";
 
 class ServerService {
 
@@ -44,6 +44,18 @@ class ServerService {
     )
    }
 
+   likedusers(data){
+     return axios.get(BASE_URL+'api/likes/'+data+'/',
+     {
+         headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+         }
+         
+     }
+     )
+   }
+
    trending(){
     return axios.get( BASE_URL +'api/trending/hashtags/',
     {
@@ -51,6 +63,18 @@ class ServerService {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
       }
+      
+  }
+    )
+   }
+
+   connect(data){
+    return axios.get(BASE_URL +'api/connections/'+data+'/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      },
       
   }
     )
@@ -93,6 +117,17 @@ class ServerService {
 
    editprofilebtn(data){
     return axios.patch( BASE_URL +'api/updateprofile/' ,data,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  })
+   }
+
+   newchat(data){
+    axios.post(BASE_URL+ 'api/chats/', data,
     {
       headers: {
           'Content-Type': 'application/json',

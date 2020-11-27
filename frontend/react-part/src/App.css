@@ -86,6 +86,43 @@ box-shadow: none !important;
   box-shadow: 2px 0px 14px 0px rgba(61, 100, 241,0.1);
 } 
 
+ .ant-btn-primary {
+  background-color: white !important;
+  border-radius: 0px 50px 50px 0px !important;
+  outline: none  !important;
+  border: 1px solid #d4d4d4  !important;
+  border-left: 1px solid white !important;
+  box-shadow: none !important;
+}
+ .ant-btn-primary:active,
+ .ant-btn-primary:focus,
+ .ant-btn-primary:active{
+  background-color: white !important;
+  border-radius: 0px 50px 50px 0px !important;
+  outline: none  !important;
+  border: 1px solid #d4d4d4  !important;
+  border-left: 1px solid white !important;
+  box-shadow: none !important;
+}
+ 
+
+.ant-input {
+  border-radius: 50px 0px 0px 50px !important;
+  border: 1px solid #d4d4d4  !important;
+  border-right: 1px solid white !important;
+  box-shadow: none !important;
+}
+
+.ant-input:focus, 
+.ant-input:active, 
+.ant-input:hover 
+{
+  border-radius: 50px 0px 0px 50px !important;
+  border: 1px solid #d4d4d4  !important;
+  border-right: 1px solid white !important;
+  box-shadow: none !important;
+}
+
 .editbtnwrap{
   text-align: right;
 }

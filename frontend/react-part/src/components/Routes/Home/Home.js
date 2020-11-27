@@ -5,6 +5,7 @@ import Sidebar from '../../Sidebar/Sidebar'
 import Feed from '../../Feed/Feed'
 import Widgets from '../../../components/Widgets/Widgets'
 
+
 class Home extends Component {
 
   

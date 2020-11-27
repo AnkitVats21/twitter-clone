@@ -21,6 +21,8 @@ import PasswordChange from './components/Routes/Authentication/PasswordChange/Pa
 import SignUp from './components/Routes/Authentication/Signup/Signup'
 import OTP from './components/Routes/Authentication/OTP/OTP'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import PrivateChats from './components/Routes/Messages/PrivateChats'
+import LikedUsers from './components/Routes/LikedUsers/LikedUsers'
 
 import 'antd/dist/antd.css';
 import Protected from './services/Protected'
@@ -47,12 +49,8 @@ function App() {
     <Route path='/change-password' component={PasswordChange} />
     <Route path='/sign-up' component={SignUp} />
     <Route path='/otp' component={OTP} />
-    {/* <Route path='/messages/chat/:chatId'>
-      <MainChat />
-    </Route>
-    <Route path='/messages'>
-      <MainChat />
-    </Route> */}
+    <Route path='/user-messages' component={PrivateChats} />
+    <Route path='/liked-by' component={LikedUsers} />
 
     </Switch>
     <NotificationContainer />

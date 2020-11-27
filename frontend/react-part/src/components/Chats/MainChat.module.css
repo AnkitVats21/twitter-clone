@@ -1,18 +1,104 @@
 
 .feed {
-    flex: 0.5;
+    flex: 0.4;
     background-color: #F6F8FF;
     /* padding-left: 2%;
     padding-right: 2%; */
+    /* min-height: 150vh; */
     overflow-y: scroll;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    /* background-image: url('https://i.imgur.com/TnNwdvV.png'); */
+  }
+
+  .pseudodiv{
+    height: 100vh;
+  }
+
+  .feed::-webkit-scrollbar {
+    display: none;
+  }
+
+  .widgetsinput {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 10px;
+    border-radius: 20px;
+    /* margin-top: 10px; */
+    
+    /* position: sticky;
+    bottom:0; */
+  
   }
   
+  .widgetsinput > input {
+    border: none;
+    background-color: white;
+    width: 100%;
+  }
+  
+  .mymessage{
+    margin-left: auto;
+    margin-right: 15px;
+    position: relative;
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-top: 15px;
+    padding: 6px;
+    border-radius: 8px;
+    width: fit-content;
+    color: #707C97;
+    background: white;
+    border-radius: 5px 5px 0px 5px;
+  }
+
+  .theirmessage{
+    margin-left: 15px;
+    position: relative;
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-top: 15px;
+    padding: 6px;
+    border-radius: 8px;
+    width: fit-content;
+    background-color: #657EFF;
+    color: white;
+    border-radius: 5px 5px 5px 0px;
+  }
+
   .posthead{
     display:flex;
+    position: sticky;
+    top: 0;
+    z-index: 999999;
+    background-color: #F6F8FF;
     /* background-color: crimson; */
     padding: 10px 20px;
     box-shadow: 2px 0px 20px 0px rgba(0,0,0,0.25);
+}
+
+.bottom{
+  position: sticky;
+  padding: 20px;
+  padding-top: 10px;
+  bottom: 0;
+  background-color: #F6F8FF;
+}
+
+.inputbar{
+  border-radius: 50px 0px 0px 50px !important;
+}
+
+.searchbar:focus,
+.searchbar:active {
+  outline:none;
+  border: none;
+}
+
+.icon{
+  width: 30px;
+  height: auto;
 }
 
 .headwrap{
@@ -79,3 +165,19 @@ width: 100%;
     .avatar{
       margin-right: 10px;
     }
+
+    
+@media(max-width:1280px){
+  .feed{
+    flex: 0.5;
+    padding-left: 2%;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+  }
+}
+
+@media(max-width: 450px){    
+  .feed{
+    flex: 1;
+  }
+}

@@ -10,7 +10,8 @@ import ServerService from "../../services/ServerService";
 class FollowersList extends Component {
 
   state={
-    followlist: []
+    followlist: [],
+    isloading:true
   }
 
   componentDidMount(){
@@ -18,11 +19,12 @@ class FollowersList extends Component {
     ServerService.followers()
     .then(response=>{
       console.log(response.data);
-      this.setState({followlist: response.data})
+      this.setState({followlist: response.data, isloading:false})
     })
   }
 
 render(){
+  
 
   const followlist= this.state.followlist.map(postlist=>{
     return <FollowerCards displayName={postlist.profile.name} id={postlist.profile.id} 

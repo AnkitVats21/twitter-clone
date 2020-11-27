@@ -5,9 +5,9 @@ import ServerService from '../../../services/ServerService';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import LoadingOverlay from 'react-loading-overlay';
 
-const validEmailRegex = RegExp(
-  /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
-);
+// const validEmailRegex = RegExp(
+//   /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
+// );
 
 const validPasswordRegex = RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
@@ -35,17 +35,17 @@ class Login extends Component{
   
   };
 
-  validemail=()=>{
+  // validemail=()=>{
 
-    if(!validEmailRegex.test(this.state.email)){
-      this.setState({emailError:"Invalid email"})
-    }
+  //   if(!validEmailRegex.test(this.state.email)){
+  //     this.setState({emailError:"Invalid email"})
+  //   }
   
-    else{
-      return true
-    }
+  //   else{
+  //     return true
+  //   }
    
-  }
+  // }
   
   validpassword=()=>{
   
@@ -71,10 +71,19 @@ class Login extends Component{
   
    handlesubmit = (event) => {
      console.log("hello world")
-
+     if(
+      this.state.emailError!=='fine'
+    ){
+      event.preventDefault();
+      this.createNotification("Please Check your entered information")
+    }
+  
+    else{
+    this.setState({ isLoading: true });
+    
 
         const data={
-          email: this.state.email,
+          username: this.state.email,
           password: this.state.password
         }
              
@@ -105,13 +114,13 @@ class Login extends Component{
     })
     .catch(err => {
       console.log(err.response)
-      // this.setState({isLoading: false})
+      this.setState({isLoading: false})
       // if(err.response.data.message){
       this.createNotification("Seems like the information entered is incorrect. Please check your information")
       // }
     })
     
-    
+  }
      }
 
     render(){
@@ -120,7 +129,13 @@ class Login extends Component{
         return <Redirect to= {this.state.redirect} />
       }
 
-       return(
+      return(
+        <LoadingOverlay
+        active={this.state.isLoading}
+        spinner
+        text='Loading...'
+        >
+
       
         <div className={classes.wrapbox}>
         <div className={classes.leftbox}>
@@ -131,7 +146,7 @@ class Login extends Component{
         <h1 className={classes.headline}>Welcome Back!</h1>
         <label className={classes.labelfield}> Email </label><br />
            <input name="email" className={classes.field} required placeholder= {this.state.email} 
-          onChange={this.handlechangeall} onBlur={this.validemail} onFocus={this.emailclean}/> <br/>
+          onChange={this.handlechangeall}/> <br/>
           <p  className={(this.state.emailError==="fine")? classes.invisible: classes.visible}>{this.state.emailError}</p>
       
           <label className={classes.labelfield}> Password </label><br />
@@ -147,6 +162,7 @@ class Login extends Component{
           </form>
         </div>
         </div>
+        </LoadingOverlay>
        )
       }
 }

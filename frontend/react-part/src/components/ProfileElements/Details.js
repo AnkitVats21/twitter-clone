@@ -4,50 +4,49 @@ import { Redirect, Link } from 'react-router-dom';
 import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Post from '../Feed/Post'
 import ServerService from'../../services/ServerService'
+import Loader from 'react-loader-spinner'
 
 class Details extends Component{
 
   state={
     userdetails:[],
     profiledet:[],
-    connect:[]
+    connect:[],
+    isloading: true
   }
 
   componentDidMount(){
-    // axios.get('https://60bb5774f441.ngrok.io/')
     ServerService.userdetails()
     .then(response=>{
       console.log(response.data);
-      this.setState({userdetails: response.data, profiledet: response.data.profile, connect: response.data.connections})
+      this.setState({userdetails: response.data, profiledet: response.data.profile, connect: response.data.connections, isloading: false})
     })
   }
 
   render(){
+
+    if(this.state.isloading){
+      return  (
+        <>
+      <Loader
+      type="TailSpin"
+      color="#657EFF"
+      height={100}
+      width={100}
+      className="profilespinner"
+   />
+   </>
+   );
+    }
+
+else{
   return (
 <>
 <div className="feed__header">
 <h2>Profile</h2>
 </div>
 
-<div className="profilewrap">{/*
-<div className="imgbox">
-<img src="https://www.hindustantimes.com/rf/image_size_960x540/HT/p2/2020/05/21/Pictures/_037138a2-9b47-11ea-a010-c71373fc244b.jpg" />
-</div>
-<div className="profiledetails">
-  <h4>Username</h4>
-
-</div>
-</div> */}
-
-{/* <div className="coverimg" style={{  
-// backgroundImage: this.state.uuu,
-backgroundImage: "url(" + this.state.profiledet.cover_pic + ")",
-backgroundPosition: 'center',
-backgroundSize: 'cover',
-backgroundRepeat: 'no-repeat'
-}}>
-<img className="profileimg" src={this.state.profiledet.picture} />
-</div> */}
+<div className="profilewrap">
   
 {this.state.profiledet.cover_pic?
 <div className="coverimg" style={{  
@@ -123,6 +122,7 @@ className="editprofiletext">Edit Profile</Link></button></div>
 </>
 
   )
+}
 }
 }
 

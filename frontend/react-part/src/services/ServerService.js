@@ -1,9 +1,10 @@
 // import Base from "antd/lib/typography/Base";
 import axios from "axios";
+import { trackPromise } from 'react-promise-tracker';
 
 // const BASE_URL = "http://127.0.0.1:8000/";
 
-const BASE_URL = "http://2d8a6838506e.ngrok.io/";
+const BASE_URL = "http://84f6e0f316f3.ngrok.io/";
 
 class ServerService {
 
@@ -127,7 +128,7 @@ class ServerService {
    }
 
    newchat(data){
-    axios.post(BASE_URL+ 'api/chats/', data,
+    return axios.post(BASE_URL+ 'api/chats/', data,
     {
       headers: {
           'Content-Type': 'application/json',
@@ -274,6 +275,8 @@ class ServerService {
         )
     }
 
+    
+
     otheruser(data){
       return axios.get(BASE_URL+ 'user/' +data+'/',
       {
@@ -310,7 +313,7 @@ class ServerService {
     }
 
     searchpage(data){
-      return axios.get(BASE_URL + 'api/search/?query='+data,
+      return trackPromise(axios.get(BASE_URL + 'api/search/?query='+data,
       {
         headers: {
             'Content-Type': 'application/json',
@@ -318,7 +321,7 @@ class ServerService {
         }
         
     }
-      )
+      ))
     }
 
     searchnew(data){

@@ -4,22 +4,40 @@ import ServerService from '../../services/ServerService';
 import SearchIcon from "@material-ui/icons/Search";
 import ChatCards from '../UI/Cards/ChatCards/ChatCards'
 import MenuIcon from '@material-ui/icons/Menu';
+import Loader from 'react-loader-spinner'
 
 class ChatList extends Component {
 
 state={
-  chatlist:[]
+  chatlist:[],
+  isloading: true
 }
 
 componentDidMount(){
   ServerService.recentchats()
   .then(response=>{
     console.log(response);
-    this.setState({chatlist: response.data})
+    this.setState({chatlist: response.data, isloading:false})
   })
 }
 
 render(){
+
+  if(this.state.isloading){
+    return  (
+      <div>
+    <Loader
+    type="TailSpin"
+    color="#657EFF"
+    height={100}
+    width={100}
+    className="commentspinner"
+ />
+ </div>
+ );
+  }
+
+  else{
 
   const chatlist= this.state.chatlist.map(postlist=>{
     return <ChatCards 
@@ -50,7 +68,7 @@ render(){
   );
 
 
-
+  }
 
 
   }

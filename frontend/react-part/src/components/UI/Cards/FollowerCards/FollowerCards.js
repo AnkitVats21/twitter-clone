@@ -22,7 +22,6 @@ class FollowerCards extends Component {
         ServerService.connect(data)
         .then(response=>{
           console.log(response);
-          this.setState({postlist: response.data, redirect:'/'})
         })
 
         console.log(this.state.follow)
@@ -32,15 +31,7 @@ class FollowerCards extends Component {
         else{
             this.setState({isfollow:true})
         }
-    
-        // const data={
-        //     userpk: this.state.userdetails.id
-        // }
-    
-        // serverService.followtoggle(data)
-        // .then((resp)=>{
-        //     console.log(resp)          
-        //   })
+
     }
 
     render(){

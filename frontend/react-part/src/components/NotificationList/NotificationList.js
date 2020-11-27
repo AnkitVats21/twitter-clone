@@ -5,11 +5,12 @@ import ServerService from'../../services/ServerService'
 import MenuIcon from '@material-ui/icons/Menu';
 import axios from 'axios';
 import NotificationCard from '../UI/Cards/NotificationCard/NotificationCard'
+import Loader from 'react-loader-spinner'
 
 class NotificationList extends Component {
 
   state = {
-    isLoading: true,
+    isloading: true,
     notificationlist: [],
     error: null
   }
@@ -19,7 +20,7 @@ class NotificationList extends Component {
   ServerService.notifications()
     .then(response=>{
       console.log(response.data);
-      this.setState({notificationlist: response.data, isLoading:false})
+      this.setState({notificationlist: response.data, isloading:false})
     })
   }
 render(){
@@ -27,6 +28,22 @@ render(){
   const notificationlist= this.state.notificationlist.map(notificationlist=>{
     return <NotificationCard notificationtext={notificationlist.extra.tweet_data} type={notificationlist.category} tweetid={notificationlist.extra.tweet_id} profilepic={notificationlist.extra.profile_pic} tweetdata={notificationlist.extra.notification_data}/>
     })
+
+    if(this.state.isloading){
+      return  (
+        <div className="feed">
+      <Loader
+      type="TailSpin"
+      color="#657EFF"
+      height={100}
+      width={100}
+      className="profilespinner"
+   />
+   </div>
+   );
+    }
+
+    else{
 
   return (
     <div className="feed">
@@ -39,6 +56,7 @@ render(){
           {notificationlist}
     </div>
   );
+}
 }
 }
 

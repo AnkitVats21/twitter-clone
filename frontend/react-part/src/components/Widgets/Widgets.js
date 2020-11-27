@@ -7,19 +7,50 @@ import {
   TwitterTweetEmbed,
 } from "react-twitter-embed";
 import SearchIcon from "@material-ui/icons/Search";
-import Post from '../Feed/Post'
+import WidgetPost from '../Feed/WidgetPost'
+// import CommentCard from 
+import axios from 'axios'
 
 class Widgets extends Component {
 
 state={
-  term:null
+  term:null,
+  postlist:[]
 }
 
 handlechangeall = (event) =>{
     this.setState ( { [event.target.name] :event.target.value  } )
    }
 
+
+
+  componentDidMount(){
+    axios.get('http://84f6e0f316f3.ngrok.io/'+ 'api/trending/tweets/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+      .then(response=>{
+        console.log(response);
+        this.setState({postlist: response.data})
+      })
+  }
+
    render(){
+
+      const postlist= this.state.postlist.map((postlist,index)=>{
+      return <WidgetPost image={postlist.photos} retweeted={postlist.retweeted} isowned={postlist.owner} 
+      deletepost={this.deletepost} postindex={index} likes={postlist.likes} comments={postlist.TotalComments} 
+      isliked={postlist.liked} isbookmarked={postlist.bookmarked} key={postlist.id} id={postlist.id} user={postlist.user_id}
+      displayName={postlist.name} username={postlist.username} text={postlist.text} avatar={postlist.profile_pic}
+      rtweet={postlist} retweetcount={postlist.retweets}
+      />
+      })
+
   return (
     <div className="widgets">
 
@@ -44,8 +75,9 @@ handlechangeall = (event) =>{
       <div className="widgets__widgetContainer">
         <h2>What's happening</h2>
 
-        <TwitterTweetEmbed tweetId={"1321108009754525700"} />
-        <TwitterTweetEmbed tweetId={"1321070234782973952"} />
+        {/* <TwitterTweetEmbed tweetId={"1321108009754525700"} />
+        <TwitterTweetEmbed tweetId={"1321070234782973952"} /> */}
+        {postlist}
 
 {/* <Post
             key="hi"

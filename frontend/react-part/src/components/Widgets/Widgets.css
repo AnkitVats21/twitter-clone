@@ -28,6 +28,10 @@
   width: 100%;
 }
 
+.widgets__sbar{
+  background-color: rgba(0,0,0,0);
+}
+
 .widgets__searchIcon {
   color: gray;
 }
@@ -36,7 +40,10 @@
 }
 
 .widgets__searchbar:focus,
-.widgets__searchbar:active {
+.widgets__searchbar:active,
+.widgets__sbar:focus,
+.widgets__sbar:active
+ {
   outline:none;
   border: none;
 }

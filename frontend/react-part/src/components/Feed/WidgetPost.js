@@ -20,7 +20,7 @@ const validusername = RegExp(
   /^(?!.*\bRT\b)(?:.+\s)?@\w+/i
 );
 
-const Post = (
+const WidgetPost = (
 
 
     (props) => {
@@ -146,7 +146,7 @@ console.log(props)
 
 console.log(props.rtweet.tweet)
       return (
-        <div className="post">
+        <div className="widgetpost">
           <div className="postheadwrap">
           <div className="posthead">
           <div className="post__avatar">
@@ -291,7 +291,7 @@ console.log(props.rtweet.tweet)
             }
             else{
               return (
-                <div className="post">
+                <div className="widgetpost">
                   <div className="postheadwrap">
                   <div className="posthead">
                   <div className="post__avatar">
@@ -387,4 +387,4 @@ console.log(props.rtweet.tweet)
     }
   );
   
-  export default Post;
+  export default WidgetPost;

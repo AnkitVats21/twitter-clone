@@ -9,7 +9,7 @@ const FollowerCards = forwardRef(
 if(type==="Tweet"){
 
       return (
-<div className="card trendcard" >
+<div className="card trendcard">
 <Link to= {{
                 pathname:'/comments',
                 state:{tweetid: tweetid}
@@ -19,7 +19,7 @@ if(type==="Tweet"){
       <div className="hh"><Star className="staricon" /></div>
       <div className="hih">
       <Avatar src={profilepic}/>
-      <h6 className="notification-text">{tweetdata}</h6>
+      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
       <h6 className="notification-tweet">{notificationtext}</h6>
       </div>
       </div>
@@ -27,6 +27,26 @@ if(type==="Tweet"){
 </Link>
 </div>
       );
+}
+
+else if(type==="Chat"){
+      return (
+<div className="card trendcard" >
+<Link to= '/messages'>
+<div className="card-body">
+      <div className="notification-block">
+      <div className="hh"><Star className="staricon" /></div>
+      <div className="hih">
+      <Avatar src={profilepic}/>
+      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
+      <h6 className="notification-tweet">{notificationtext}</h6>
+      </div>
+      </div>
+</div>
+</Link>
+</div>
+      );
+
 }
 
 else{
@@ -38,7 +58,7 @@ else{
       <div className="hh"><Star className="staricon" /></div>
       <div className="hih">
       <Avatar src={profilepic}/>
-      <h6 className="notification-text">{tweetdata}</h6>
+      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
       <h6 className="notification-tweet">{notificationtext}</h6>
       </div>
       </div>

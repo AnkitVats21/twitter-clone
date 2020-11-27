@@ -18,7 +18,7 @@ console.log(token)
 class MainChat extends Component {
 
   // client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+"17"+ '/' +token+'/')
-  client = new W3CWebSocket('ws://2d8a6838506e.ngrok.io/ws/chat/'+this.props.location.state.chatId+ '/' +token+'/')
+  client = new W3CWebSocket('ws://84f6e0f316f3.ngrok.io/ws/chat/'+this.props.location.state.chatId+ '/' +token+'/')
 
   state ={
       userName: '',

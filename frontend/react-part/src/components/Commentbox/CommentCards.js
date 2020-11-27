@@ -12,6 +12,7 @@ import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 import ReplyCards from './ReplyCards'
 import ServerService from '../../services/ServerService';
 import axios from 'axios';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
       class CommentCard extends Component{
         state={
@@ -26,6 +27,10 @@ import axios from 'axios';
         showreply=()=>{
         this.setState({replyshow:false})
         }
+
+        createSuccess = (info) => {
+          NotificationManager.success( info, '');
+        };
 
         handlechangeall = (event) =>{
           this.setState ( { [event.target.name] :event.target.value  } )
@@ -47,6 +52,7 @@ import axios from 'axios';
           ServerService.addreply(data)
           .then(response=>{
             console.log(response);
+            this.createSuccess("Your reply has been added")
             this.setState({redirect:'/'})
           })
          }

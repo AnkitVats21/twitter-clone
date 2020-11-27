@@ -18,6 +18,11 @@
     padding-left: 2px;
   }
 
+  .commentspinner{
+    margin-top: 30vh !important;
+    margin-bottom: 70vh !important;
+    margin-left: 5vw;
+  }
 
 .commentfield:focus{
     border: none !important;
@@ -40,4 +45,8 @@ background-color: #4563ff!important;
 border: none !important;
 outline: none !important;
 box-shadow: none !important;
+}
+
+.repbtn{
+  cursor: pointer;
 }

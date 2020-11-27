@@ -10,6 +10,18 @@
     margin-top: 0;
   }
 
+.widgetpost {
+    display: flex;
+    /* align-items: flex-start; */
+    flex-direction: column;
+    padding-bottom: 10px;
+    background-color: white;
+    border: 2px solid rgba(101, 126, 255,0.2);
+    border-radius: 20px;
+    /* margin: 20px; */
+    margin-top: 20px;
+  }
+
 .commpost {
     display: flex;
     /* align-items: flex-start; */
@@ -304,4 +316,8 @@ width: 100%;
   .userlinks:hover{
     color: black !important;
     text-decoration: none;
+  }
+
+  .pointcursor{
+    cursor: pointer;
   }

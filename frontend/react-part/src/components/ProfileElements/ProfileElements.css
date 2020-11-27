@@ -156,3 +156,9 @@ color: #657EFF !important;
   .activeoption>h5{
       color: var(--twitter-color) !important;
   }
+
+  .profilespinner{
+    margin-top: 30vh !important;
+    margin-bottom: 70vh !important;
+    margin-left: 15vw;
+  }

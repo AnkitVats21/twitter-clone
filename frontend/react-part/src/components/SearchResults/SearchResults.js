@@ -72,7 +72,7 @@ console.log(data)
 
       <div className="widget__input">
         
-        <input className="widgets__searchbar"  name="newsearch" onChange={this.handlechangeall} placeholder="Search Twitter" type="text" />
+        <input className="widgets__sbar"  name="newsearch" onChange={this.handlechangeall} placeholder="Search Twitter" type="text" />
         <SearchIcon className="widgets__searchIcon" onClick={this.handlesubmit} />
       </div>
 

@@ -4,6 +4,7 @@
     background-size: cover;
     background-image: url("../../../assets/images/Group\ 230.svg");
     background-color: #F6F8FF;
+    /* background-position: center; */
 }
 
 .rightbox{
@@ -120,3 +121,14 @@
     color: black;
     opacity: 0.5; 
   }
+
+
+  @media(max-width: 750px){
+      .leftbox{
+    display:none;
+      }
+      .rightbox{
+          width: 100%;
+      }
+  }
+

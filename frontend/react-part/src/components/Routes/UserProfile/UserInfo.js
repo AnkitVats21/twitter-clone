@@ -4,13 +4,17 @@ import Post from '../../Feed/Post'
 import ServerService from '../../../services/ServerService'
 import axios from 'axios'
 import {ReactComponent as MessageIcon} from '../../../assets/icons/envelope.svg'
+import Loader from 'react-loader-spinner'
+
 
 class UserInfo extends Component {
     state={
         userdetails:[],
         profiledet:[],
         connect:[],
-        redirect: null
+        redirect: null,
+        isloading:true,
+        isfollow:false
       }
 
       componentDidMount(){
@@ -20,13 +24,32 @@ class UserInfo extends Component {
           ServerService.otherdetails(data)
         .then(response=>{
           console.log(response.data);
-          this.setState({userdetails: response.data, profiledet: response.data.profile, connect: response.data.connections})
+          this.setState({userdetails: response.data, isfollow:response.data.following, profiledet: response.data.profile, connect: response.data.connections, isloading: false})
         })
       }
 
+      handlefollow=()=>{
+        const data = this.state.userdetails.id
+        console.log(data)
+        
+        ServerService.connect(data)
+        .then(response=>{
+          console.log(response);
+        })
+
+        console.log(this.state.follow)
+        if(this.state.isfollow){
+            this.setState({isfollow:false})
+        }
+        else{
+            this.setState({isfollow:true})
+        }
+
+    }
+
       createchat=()=>{
         const data={
-        receiver: this.state.userdetails.username
+        reciever: this.state.userdetails.username
         }
         console.log(data)
         ServerService.newchat(data)
@@ -38,9 +61,27 @@ class UserInfo extends Component {
 
       render(){
 
+        console.log(this.state.isfollow)
+
         if(this.state.redirect){
           return <Redirect to= {this.state.redirect} />
         }
+
+        if(this.state.isloading){
+          return  (
+            <>
+          <Loader
+          type="TailSpin"
+          color="#657EFF"
+          height={100}
+          width={100}
+          className="profilespinner"
+       />
+       </>
+       );
+        }
+
+        else{
 
 return(
     <>
@@ -77,7 +118,12 @@ backgroundRepeat: 'no-repeat'
 <div>
 
 <button onClick={this.createchat} className="editprofile msgbtn"><MessageIcon className="messageicon" /></button>
-<button className="editprofile"><span className="editprofiletext">Follow</span></button>
+{/*  */}
+{this.state.isfollow? <button onClick={this.handlefollow} className="editprofile"><span className="editprofiletext">Unfollow</span></button>
+:<button onClick={this.handlefollow} className="editprofile"><span className="editprofiletext">Follow</span></button>
+}
+{/* <button className="editprofile"><span className="editprofiletext">Follow</span></button> */}
+{/*  */}
 </div>
 </div>
 <p className="biotext">{this.state.profiledet.bio}
@@ -122,6 +168,7 @@ backgroundRepeat: 'no-repeat'
 </>
 );
 }
+      }
 }
 
 export default UserInfo;

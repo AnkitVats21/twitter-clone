@@ -98,6 +98,7 @@ class Login extends Component{
       if (resp.status === 200) {
         localStorage.setItem("refresh_token",resp.data.refresh)
         localStorage.setItem("access_token",resp.data.access)
+        localStorage.setItem("my_username",resp.data.username)
         this.setState({isLoading: false});
         this.setState({ redirect: "/" });
         // console.log(resp.data.refresh)

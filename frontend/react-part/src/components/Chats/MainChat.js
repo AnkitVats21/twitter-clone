@@ -11,14 +11,16 @@ const { Text } = Typography;
 const { Meta } = Card;
 
 const token=localStorage.getItem("access_token")
+const myusername=localStorage.getItem("my_username")
 console.log(token)
+console.log(myusername)
 
 
 
 class MainChat extends Component {
 
   // client = new W3CWebSocket('ws://6fc246ea7f7e.ngrok.io/ws/chat/'+"17"+ '/' +token+'/')
-  client = new W3CWebSocket('ws://84f6e0f316f3.ngrok.io/ws/chat/'+this.props.location.state.chatId+ '/' +token+'/')
+  client = new W3CWebSocket('ws://c01e4e453ada.ngrok.io/ws/chat/'+this.props.location.state.chatId+ '/' +token+'/')
 
   state ={
       userName: '',
@@ -101,7 +103,7 @@ class MainChat extends Component {
               //     description={message.msg}
               //   />
               // </Card> 
-            <p className={message.owner? classes.mymessage : classes.theirmessage}>{message.msg}</p>
+            <p className={message.user===myusername ? classes.mymessage : classes.theirmessage}>{message.msg}</p>
             )}
           </div>
           <div className={classes.pseudodiv}></div>

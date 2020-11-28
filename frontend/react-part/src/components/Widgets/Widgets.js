@@ -10,6 +10,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import WidgetPost from '../Feed/WidgetPost'
 // import CommentCard from 
 import axios from 'axios'
+import ServerService from '../../services/ServerService'
 
 class Widgets extends Component {
 
@@ -25,15 +26,7 @@ handlechangeall = (event) =>{
 
 
   componentDidMount(){
-    axios.get('http://84f6e0f316f3.ngrok.io/'+ 'api/trending/tweets/',
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-        
-    }
-      )
+    ServerService.trendingtweets()
       .then(response=>{
         console.log(response);
         this.setState({postlist: response.data})

@@ -13,6 +13,20 @@ class ProfileElements extends Component {
     postlist:[]
   }
 
+  deletepost=(index, tweetid)=>{
+    //   console.log(index)
+    // console.log(tweetid)
+    let oldItems = this.state.postlist;
+    oldItems.splice(index,1);
+    this.setState({postlist : oldItems});
+  
+    ServerService.deletepost(tweetid)
+    .then(response=>{
+      console.log(response);
+    })
+  
+  }
+
   componentDidMount(){
     ServerService.myposts()
     .then(response=>{

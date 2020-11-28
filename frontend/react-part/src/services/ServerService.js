@@ -4,7 +4,7 @@ import { trackPromise } from 'react-promise-tracker';
 
 // const BASE_URL = "http://127.0.0.1:8000/";
 
-const BASE_URL = "http://84f6e0f316f3.ngrok.io/";
+const BASE_URL = "http://c01e4e453ada.ngrok.io/";
 
 class ServerService {
 
@@ -42,6 +42,18 @@ class ServerService {
         },
         
     }
+    )
+   }
+
+   trendingtweets(){
+    return axios.get(BASE_URL + 'api/trending/tweets/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+      
+  }
     )
    }
 

@@ -49,7 +49,7 @@ class UserInfo extends Component {
 
       createchat=()=>{
         const data={
-        reciever: this.state.userdetails.username
+        receiver: this.state.userdetails.username
         }
         console.log(data)
         ServerService.newchat(data)

@@ -135,7 +135,7 @@ class FeedsView(APIView):
                             "tweet_data": serializer.data.get('text')
                         }
                         text_data = json.dumps(text_data)
-                        Notification.objects.create(user=user[0], text=text_data, category='Tweet')
+                        Notification.objects.create(user=user[0], tweet_id=tweet.id, text=text_data, category='Tweet')
 
             except:
                 pass
@@ -166,6 +166,14 @@ class TweetDelete(APIView):
 
 class LikeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, pk):
+        obj = Likes.objects.filter(tweet=pk)
+        query = []
+        for i in obj:
+            query.append(i.user)
+        serializer = FollowerSerializer(query, many=True, context={'request': self.request, 'user_id': self.request.user.id})
+        return Response(serializer.data)
+
     def post(self, request, pk):
         tweet_id= request.data.get('tweet_id')
         try:
@@ -230,7 +238,7 @@ class LikeView(APIView):
                 "notification_data": "<b>{}</b> liked your tweet".format(name),
                 "tweet_id":tweet.id,
                 "tweet_data": tweet.text,
-                "profile_pic":str(tweet_user.profile.picture)
+                "profile_pic":str(tweetUser.profile.picture)
             }
             extra_txt = json.dumps(extra_txt)
             text_data = json.dumps(text_data)
@@ -239,9 +247,12 @@ class LikeView(APIView):
 class BookmarkView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, pk):
-        queryset = Bookmark.objects.filter(user=request.user)[0].tweet.all()
-        serializer=TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
-        return Response(serializer.data)
+        try:
+            queryset = Bookmark.objects.filter(user=request.user)[0].tweet.all()
+            serializer=TweetSerializer(queryset, many=True, context={'request':request,'user': request.user.id})
+            return Response(serializer.data)
+        except:
+            return Response([])
 
     def post(self, request, pk):
         tweet_id= pk
@@ -262,7 +273,6 @@ class RetweetView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def post(self, request):
         data={}
-        print(request.data)
         for i in request.data:
             if request.data[i] != "null":
                 data[i]=request.data[i]
@@ -298,12 +308,12 @@ class CommentView(APIView):
                 data['tweet_type'] = pk
                 data['user']=request.user.id
                 tweet   = Tweet.objects.get(id=data['replying_to_tweet'])
-                data['replying_to'] = tweet.user.id
+                data['replying_to'] = [tweet.user.id]
                 if pk == 'reply':
                     try:
                         if data['replying_to_comment']:
                             tweet   = Tweet.objects.get(id=data['replying_to_comment'])
-                            data['replying_to'] = tweet.user.id
+                            data['replying_to'] = [tweet.user.id]
                     except:
                         return Response("replying_to_comment id either not given or not valid.")
                 serializer = serializers.TweetPostSerializer(data=data)
@@ -363,7 +373,7 @@ class CommentView(APIView):
                 "username": user.username,
                 "profile_pic":str(profile_pic)}
         text_data = json.dumps(text_data)
-        obj = Notification.objects.create(user=user, text=text_data, category="Tweet")
+        obj = Notification.objects.create(user=user, tweet_id=tweet_id, text=text_data, category="Tweet")
         return
         
     def patch(self, request,pk):
@@ -429,7 +439,7 @@ class TrendingView(APIView):
                     fields  = ('id','name','username','profile_pic','text','photos', 'videos','topic','timestamp',
                                 'location','liked', 'likes', 'bookmarked','TotalComments', 'retweets'))
                 return Response(serializer.data)
-            return Response({"details":"not found"})
+            return Response([])
         else:
             trending = self.get_trending()
             data=[]
@@ -437,7 +447,7 @@ class TrendingView(APIView):
             for i in trending:
                 x = {
                     "serial_no":j,
-                    "hashtag":i[0],
+                    "hashtag":i[0][1:],
                     "count":i[1]
                 }
                 j += 1
@@ -460,8 +470,12 @@ class TrendingView(APIView):
 #     filter_backends  = [filters.SearchFilter]
 #     search_fields    = ['username', 'profile__name']
 
-# class TweetListView(generics.ListAPIView):
-#     queryset         = Tweet.objects.all()
-#     serializer_class = TweetSerializer
-#     filter_backends  = [filters.SearchFilter]
-#     search_fields    = ['text']
+# class TweetLikesView(APIView):
+#     def get(self, request, pk):
+#         obj = Likes.objects.filter(tweet=pk)
+#         query = []
+#         for i in obj:
+#             query.append(obj.user)
+#         serializer = FollowerSerializer(query, many=True, context={'request': self.request, 'user_id': self.request.user.id})
+#         return Response(serializer.data)
+    

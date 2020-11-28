@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User, OTP, Connections, Notification
-from .serializers import UserSerializer, OTPSerializer,  NotificationSerializer, FollowerSerializer#ConnectionsSerializer,
+from .serializers import UserSerializer, OTPSerializer,  NotificationSerializer, FollowerSerializer, UserUpdateSerializer
 from rest_framework import viewsets, status, generics, mixins, permissions
 from random import randint
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -75,9 +75,8 @@ class CreateUserAccount(APIView):
                 # html_message = render_to_string('otp_template.html', context)
                 head         = 'OTP Verification'
                 body = ("Your One Time Password is {} for talkpiper account verification.").format(otp)
-                print(otp)
-                send_mail(head, body, 'scrummy4u@gmail.com', [user_email])
-                serializer = UserSerializer(data = req_data, context={'request': request})
+                # send_mail(head, body, 'scrummy4u@gmail.com', [user_email])
+                serializer = UserUpdateSerializer(data = req_data, context={'request': request})
                 if serializer.is_valid():
                     serializer.save()
                     return Response({'details':'otp sent successfully for email verification.'}, status = status.HTTP_201_CREATED)
@@ -168,6 +167,7 @@ class UserLoginView(TokenObtainPairView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        print(request.data)
         username = request.data.get("email")
         try:
             username = request.data['username']
@@ -179,7 +179,6 @@ class UserLoginView(TokenObtainPairView):
             pass
         else:
             user = User.objects.filter(email__iexact=username)
-            print(user)
         if user.exists():
             if user[0].active :
                 pass
@@ -192,6 +191,7 @@ class UserLoginView(TokenObtainPairView):
         user = user[0]
         if user.check_password(password):
             token = get_tokens_for_user(user)
+            token['username']=user.username
             return Response(token, status=status.HTTP_200_OK)
         return Response({"details":"wrong password"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -264,21 +264,21 @@ class FollowerView(APIView):
         except:
             return Response({"details":"please enter valid keyword either self or id of user"})
         if user=='self':
-            return Response(self.get_data(connection, request.user.id))
+            return Response(self.get_data(connection, request, request.user.id))
         else:
             user = User.objects.filter(id=int(user))
             if user.exists():
-                return Response(self.get_data(connection, user[0].id))
+                return Response(self.get_data(connection, request, user[0].id))
             else:
                 return Response({"details":"invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
         
-    def get_data(self, connection, user):
+    def get_data(self, connection, request, user):
         queryset    = Connections.objects.filter(user=user)[0]
         if connection=='follower':
             query   = queryset.follower.all()
         else:
             query   = queryset.following.all()
-        serializer  = FollowerSerializer(query, many=True, context={'request': self.request, 'user_id': self.request.user.id})
+        serializer  = FollowerSerializer(query, many=True, context={'request': request, 'user_id':user})
         return serializer.data
 
 
@@ -318,7 +318,6 @@ class ConnectionsView(APIView):
                 "notification_data":"<b>{}</b> started following you.".format(user.profile.name)
                 }
             text_data = json.dumps(text_data)
-            print(text_data)
             obj = Notification.objects.filter(user=user2).filter(text=text_data)
             if len(obj)==0:
                 Notification.objects.create(user=user2, text=text_data, category="Text")
@@ -358,8 +357,8 @@ class UserProfileView(APIView):
             return Response({"details":"please enter valid id"})
         else:
             following = False
-            connection = Connections.objects.filter(user=user[0])[0]
-            if request.user in connection.following.all():
+            connection = Connections.objects.filter(user=request.user.id)[0]
+            if user[0] in connection.following.all():
                 following = True
             else:
                 following = False

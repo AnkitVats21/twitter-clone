@@ -133,7 +133,7 @@ class Connections(models.Model):
         verbose_name = "Connection"
         verbose_name_plural = "Connections"
 
-Notification_Category=( ('Text','Text'), ('Tweet', 'Tweet'),)
+Notification_Category=( ('Text','Text'), ('Tweet', 'Tweet'),('Chat','Chat'))
 
 
 class Notification(models.Model):

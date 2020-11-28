@@ -2,6 +2,7 @@ from accounts.models import User, ChatConnection
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
+from accounts.models import Notification
 from .models import Chat, Message 
 from .views import get_last_10_messages, get_user_contact
 from asgiref.sync import async_to_sync
@@ -26,22 +27,52 @@ class ChatConsumer(WebsocketConsumer):
     def new_message(self, data):
         chat    = Chat.objects.filter(id=self.chatId)[0]
         user    = User.objects.get(id=self.user_id)
+        receiver= None
+        if chat.sender == user:
+            receiver  = chat.reciever
+        else:
+            receiver  = chat.sender
         try:
             message = data['message']
             obj     = Message.objects.create(chat=chat, content=message, sender=user)
             queryset= Message.objects.filter(id=obj.id)[0]
             serializer = MessageSerializer(queryset, context={'user_id': self.user_id})
+            self.send_notification(serializer.data['content'],receiver)
             return self.send_chat_message([serializer.data])
         except:
             self.send_message({"details":"please enter valid data."})
 
-    # commands = {
-    #     'fetch_messages': fetch_messages,
-    #     'new_message': new_message
-    # }
+    def send_notification(self,message,receiver):
+        noification = Notification.objects.filter(user=receiver.id).filter(extra_txt=self.chatId)
+        user = User.objects.get(id=self.user_id)
+        try:
+            profile_pic=user.profile.picture.url
+        except:
+            profile_pic=None
+        if not noification.exists():
+            text_data = {
+                    "notification_data":"<b>{}</b> sent you a message.".format(user.profile.name),
+                    "tweet_data": message,
+                    "username": user.username,
+                    "profile_pic":str(profile_pic)}
+            text_data = json.dumps(text_data)
+            obj = Notification.objects.create(user=receiver,extra_txt = self.chatId, text=text_data, category="Chat")
+            return
+        else:
+            text_data = {
+                    "notification_data":"<b>{}</b> sent you a message.".format(user.profile.name),
+                    "tweet_data": message,
+                    "username": user.username,
+                    "profile_pic":str(profile_pic)}
+            text_data = json.dumps(text_data)
+            obj = noification[0]
+            obj.seen = False
+            obj.text=text_data
+            obj.save()
+            return
 
     def message_to_json(self, data):
-        serial
+        # serial
         print(data)
         return 'MessageSerializer(data)'
 

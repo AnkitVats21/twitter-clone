@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@600&display=swap');
+
+.loginForm{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+}
+
+.loginHeader{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 140px; */
+  padding: 40px 0px 14px 0px;  
+}
+
+.loginHeader .header{
+  font-family: Gilroy;
+  font-weight: 600;
+  color: #657EFF;
+  font-size: 40px;
+}
+
+.loginHeader .headline{
+  font-weight: 600; 
+  font-size: 18px;
+  padding: 1rem 5rem;
+}
+
+.loginForm input{
+  height: 24px;
+}
+
+.loginForm .login-form-button{
+  width: 100%;
+  background-color: #08BD80;
+  border-radius: 8px;
+  height: 36px;
+}
+
+.loginForm .ant-form-item-explain-error{
+  font-size: 11px;
+}
+
+/* .loginForm .login-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 300px;
+  width: 42%;
+  min-width: 300px;
+} */
+
+.login-form .ant-input {
+    border: 2px solid rgba(101, 126, 255, 0.2)!important;
+    height: 2rem;
+    border-radius: 5px!important;
+    background-color: #FFFFFF;
+    width: 20rem;    
+}   
+
+.login-form .ant-input-affix-wrapper{
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+
+.login-form button{
+    color: #FFFFFF;
+    background-color: #657EFF;
+    width: 100%;
+    border-radius: 5px;
+}

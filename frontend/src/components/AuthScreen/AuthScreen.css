@@ -1,0 +1,38 @@
+.bg{
+  /* background: url('../../assets/background.png'); */
+  background: #F6F8FF;
+  display: flex;
+  flex-direction: row;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 90vh;
+}
+
+.bg .welcome-box{
+  background-image: url('../../assets/icons/logo-bg.svg');
+  background-size: cover;
+  width: 50%;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bg .welcome-box .logo{
+  margin: auto;
+}
+
+.bg .welcome-box .logo .brand-name{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg .welcome-box .logo .brand-name h1{
+  color: white;
+  font-family: 'Baloo Bhai 2', cursive;
+}

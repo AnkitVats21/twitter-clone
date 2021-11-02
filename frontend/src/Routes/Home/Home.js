@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import classes from './Home.module.css';
-// import NavigationBar from '../../Navbar/Navbar'
-import Sidebar from '../../Sidebar/Sidebar'
-import Feed from '../../Feed/Feed'
-import Widgets from '../../../components/Widgets/Widgets'
+import './Home.css';
+import NavBar from '../../components/Navbar/Navbar'
+import Feed from '../../components/Feed/Feed';
 
 
 class Home extends Component {
 
-  
-    render() {
-      return(
-      <div className={classes.flexbox}>
-        {/* <NavigationBar />      */}
-        <Sidebar propactive="home" />
-        <Feed />
-        <Widgets />
-      </div>
-      )
-    }
+
+  render() {
+    return (
+      <>
+        <NavBar className="navbar" />
+        <div className="flexbox">
+          {/* <Sidebar propactive="home" /> */}
+          {/* <Feed /> */}
+          {/* <Widgets /> */}
+        </div>
+      </>
+    )
   }
-  
-  
-  export default Home;
-  
-  
+}
+
+
+export default Home;
+

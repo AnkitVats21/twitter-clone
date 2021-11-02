@@ -1,76 +1,76 @@
 import React, { forwardRef } from "react";
-import {ReactComponent as Star} from '../../../../assets/icons/ninja.svg'
+import { ReactComponent as Star } from '../../../../assets/icons/ninja.svg'
 import { Avatar } from "@material-ui/core";
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const FollowerCards = forwardRef(
-    ({ notificationtext, profilepic, tweetdata, tweetid, type }) => {
+      ({ notificationtext, profilepic, tweetdata, tweetid, type }) => {
 
-if(type==="Tweet"){
+            if (type === "Tweet") {
 
-      return (
-<div className="card trendcard">
-<Link to= {{
-                pathname:'/comments',
-                state:{tweetid: tweetid}
-              }}>
-<div className="card-body">
-      <div className="notification-block">
-      <div className="hh"><Star className="staricon" /></div>
-      <div className="hih">
-      <Avatar src={profilepic}/>
-      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
-      <h6 className="notification-tweet">{notificationtext}</h6>
-      </div>
-      </div>
-</div>
-</Link>
-</div>
-      );
-}
+                  return (
+                        <div className="card trendcard">
+                              <Link to={{
+                                    pathname: '/comments',
+                                    state: { tweetid: tweetid }
+                              }}>
+                                    <div className="card-body">
+                                          <div className="notification-block">
+                                                <div className="hh"><Star className="staricon" /></div>
+                                                <div className="hih">
+                                                      <Avatar src={profilepic} />
+                                                      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
+                                                      <h6 className="notification-tweet">{notificationtext}</h6>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </Link>
+                        </div>
+                  );
+            }
 
-else if(type==="Chat"){
-      return (
-<div className="card trendcard" >
-<Link to= '/messages'>
-<div className="card-body">
-      <div className="notification-block">
-      <div className="hh"><Star className="staricon" /></div>
-      <div className="hih">
-      <Avatar src={profilepic}/>
-      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
-      <h6 className="notification-tweet">{notificationtext}</h6>
-      </div>
-      </div>
-</div>
-</Link>
-</div>
-      );
+            else if (type === "Chat") {
+                  return (
+                        <div className="card trendcard" >
+                              <Link to='/messages'>
+                                    <div className="card-body">
+                                          <div className="notification-block">
+                                                <div className="hh"><Star className="staricon" /></div>
+                                                <div className="hih">
+                                                      <Avatar src={profilepic} />
+                                                      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
+                                                      <h6 className="notification-tweet">{notificationtext}</h6>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </Link>
+                        </div>
+                  );
 
-}
+            }
 
-else{
-      return (
-<div className="card trendcard" >
-<Link to= '/followers'>
-<div className="card-body">
-      <div className="notification-block">
-      <div className="hh"><Star className="staricon" /></div>
-      <div className="hih">
-      <Avatar src={profilepic}/>
-      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
-      <h6 className="notification-tweet">{notificationtext}</h6>
-      </div>
-      </div>
-</div>
-</Link>
-</div>
-      );
+            else {
+                  return (
+                        <div className="card trendcard" >
+                              <Link to='/followers'>
+                                    <div className="card-body">
+                                          <div className="notification-block">
+                                                <div className="hh"><Star className="staricon" /></div>
+                                                <div className="hih">
+                                                      <Avatar src={profilepic} />
+                                                      <h6 className="notification-text" dangerouslySetInnerHTML={{ __html: tweetdata }}></h6>
+                                                      <h6 className="notification-tweet">{notificationtext}</h6>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </Link>
+                        </div>
+                  );
 
-}
+            }
 
 
-    }
-  );
-  
-  export default FollowerCards;
+      }
+);
+
+export default FollowerCards;

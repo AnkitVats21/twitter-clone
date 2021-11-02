@@ -5,11 +5,11 @@ const Protected = ({ component: Cmp, ...rest }) => (
     <Route
         {...rest}
         render={(props) =>
-            localStorage.getItem('refresh_token') ? (
+            localStorage.getItem('refreshToken') ? (
                 <Cmp {...props} />
             ) :
                 <Redirect
-                    to={{ pathname: "/log-in", state: { from: props.location } }}
+                    to={{ pathname: "/login", state: { from: props.location } }}
 
                 />
         }

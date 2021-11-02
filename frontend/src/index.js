@@ -5,29 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from "react-promise-loader";
-import { createStore, applyMiddleware} from "redux";
 import { Provider } from "react-redux";
-import rootreducer from './reducers'
-import thunk from 'redux-thunk'
+// import rootreducer from './redux/reducers'
+// import thunk from 'redux-thunk'
+import store from './redux/store';
 
-const store = createStore(rootreducer, applyMiddleware(thunk));
 
+// const LoadingIndicator = props => {
+//   const { promiseInProgress } = usePromiseTracker();
 
-const LoadingIndicator = props => {
-    const { promiseInProgress } = usePromiseTracker();
-  
-     return (
-     promiseInProgress && 
-      <h1>Hey some async call in progress ! </h1>
-    );  
-   }
+//   return (
+//     promiseInProgress &&
+//     <h1>Hey some async call in progress ! </h1>
+//   );
+// }
 
 ReactDOM.render(
   <Provider store={store}>
-     <React.StrictMode>
-    <App />
-    {/* <LoadingIndicator/> */}
-    <Loader color="#657EFF" background="rgba(255,255,255,0)" promiseTracker={usePromiseTracker} />
+    <React.StrictMode>
+      <App />
+      {/* <LoadingIndicator/> */}
+      <Loader color="#657EFF" background="rgba(255,255,255,0)" promiseTracker={usePromiseTracker} />
     </React.StrictMode></Provider>,
   document.getElementById('root')
 );

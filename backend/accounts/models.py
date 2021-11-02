@@ -1,155 +1,120 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import (
+    BaseUserManager,
+    AbstractBaseUser,
+    AbstractUser,
+    PermissionsMixin,
+)
+import uuid, os
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
-
+    def _create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError("Users must have an email address")
-
-        if not password:
-            raise ValueError("Users must have a password")
-
-        user = self.model(
-            email=self.normalize_email(email),
-        )
-
+            raise ValueError("The given email must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_staffuser(self, email, password):
-        user = self.create_user(
-            email,
-            password=password,
-        )
-        user.staff = True
-        user.save(using=self._db)
-        return user
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", False)
+        return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password):
-        user = self.create_user(
-            email,
-            password=password,
-        )
-        user.active = True
-        user.staff = True
-        user.admin = True
-        user.save(using=self._db)
-        return user
+    def create_staffuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", True)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", True)
+        return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
-    email = models.EmailField(
-        verbose_name="email address",
-        max_length=255,
-        unique=True,
-    )
-    username = models.CharField(max_length=14, unique=True)
-    active = models.BooleanField(default=False)
-    staff = models.BooleanField(default=False)
-    admin = models.BooleanField(default=False)
-    last_login = models.DateTimeField(auto_now=True)
-    date_joined = models.DateField(auto_now_add=True)
-
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True, verbose_name="email")
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
 
     objects = UserManager()
-
-    def get_full_name(self):
-        return self.email
-
-    def get_short_name(self):
-        return self.email
 
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
-
-    @property
-    def is_staff(self):
-        return self.staff
-
-    @property
-    def is_admin(self):
-        return self.admin
-
-    @property
-    def is_active(self):
-        return self.active
-
     def save(self, *args, **kwargs):
-        super(User, self).save(*args, **kwargs)
-        obj = Connections.objects.filter(user=self)
-        if len(obj) == 0:
-            Connections.objects.create(user=self)
+        super().save(*args, **kwargs)
 
 
 class UserProfile(models.Model):
+    def picture_upload(instance, filename):
+        username = instance.username
+        ext = filename.split(".")[-1]
+        filename = "%s%s.%s" % (username, uuid.uuid4(), ext)
+        return os.path.join("media/userdata/avatar", filename)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    name = models.CharField(max_length=30)
+    username = models.CharField(max_length=55)
+    name = models.CharField(max_length=55)
     dob = models.DateField(blank=True, null=True)
-    bio = models.TextField(max_length=240, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
     picture = models.ImageField(
-        upload_to="profile/", blank=True, null=True, max_length=1000
+        upload_to=picture_upload, blank=True, null=True, max_length=1000
     )
-    cover_pic = models.ImageField(
-        upload_to="profile/cover/", blank=True, null=True, max_length=2000
-    )
-    location = models.CharField(max_length=30, blank=True, null=True)
-    website = models.URLField(max_length=100, blank=True, null=True)
+    location = models.CharField(max_length=255, blank=True, null=True)
+    website = models.URLField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
-class Connections(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
-    follower = models.ManyToManyField(User, related_name="follower", blank=True)
-    following = models.ManyToManyField(User, related_name="following", blank=True)
+# class Connections(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
+#     follower = models.ManyToManyField(User, related_name="follower", blank=True)
+#     following = models.ManyToManyField(User, related_name="following", blank=True)
 
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
 
-    def username(self):
-        return self.user.username
+#     def username(self):
+#         return self.user.username
 
-    class Meta:
-        verbose_name = "Connection"
-        verbose_name_plural = "Connections"
-
-
-Notification_Category = (("Text", "Text"), ("Tweet", "Tweet"), ("Chat", "Chat"))
+#     class Meta:
+#         verbose_name = "Connection"
+#         verbose_name_plural = "Connections"
 
 
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField(max_length=500, blank=True, null=True)
-    tweet_id = models.IntegerField(blank=True, null=True)
-    extra_txt = models.TextField(blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(choices=Notification_Category, max_length=30)
-    seen = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.user.username) + " --> " + self.category
-
-    def username(self):
-        return str(self.user.username)
+# Notification_Category = (("Text", "Text"), ("Tweet", "Tweet"), ("Chat", "Chat"))
 
 
-class ChatConnection(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="status")
-    status = models.IntegerField(default=0)
-    last_seen = models.DateTimeField(auto_now=True)
+# class Notification(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     text = models.TextField(max_length=500, blank=True, null=True)
+#     tweet_id = models.IntegerField(blank=True, null=True)
+#     extra_txt = models.TextField(blank=True, null=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     category = models.CharField(choices=Notification_Category, max_length=30)
+#     seen = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return str(self.user.username) + " --> " + self.category
+
+#     def username(self):
+#         return str(self.user.username)
+
+
+# class ChatConnection(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="status")
+#     status = models.IntegerField(default=0)
+#     last_seen = models.DateTimeField(auto_now=True)

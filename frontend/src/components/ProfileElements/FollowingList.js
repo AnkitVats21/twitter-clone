@@ -1,42 +1,39 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import '../ProfileElements/ProfileElements.css'
-import { Redirect, Link } from 'react-router-dom';
-import Background from '../../assets/images/texting-1490691_1920.jpg'
 import Details from './Details'
 import FollowerCards from '../UI/Cards/FollowerCards/FollowerCards'
-import axios from 'axios'
 import ServerService from "../../services/ServerService";
 
 class FollowingList extends Component {
 
-  state={
+  state = {
     followlist: []
   }
 
-  componentDidMount(){
+  componentDidMount() {
     ServerService.following()
-    .then(response=>{
-      console.log(response.data);
-      this.setState({followlist: response.data})
-    })
+      .then(response => {
+        console.log(response.data);
+        this.setState({ followlist: response.data })
+      })
   }
 
-render(){
+  render() {
 
-  const followlist= this.state.followlist.map(postlist=>{
-    return <FollowerCards displayName={postlist.profile.name} id={postlist.profile.id} 
-    isfollow={postlist.following} username={postlist.profile.username} avatar={postlist.profile.picture}/>
+    const followlist = this.state.followlist.map(postlist => {
+      return <FollowerCards displayName={postlist.profile.name} id={postlist.profile.id}
+        isfollow={postlist.following} username={postlist.profile.username} avatar={postlist.profile.picture} />
     })
 
-  return (
-    <div className="feed">
-    <Details propactive="following"/>
+    return (
+      <div className="feed">
+        <Details propactive="following" />
 
-    <div className="feed__header">
-        <h2>Followers</h2>
-      </div>
+        <div className="feed__header">
+          <h2>Followers</h2>
+        </div>
 
-{/* <FollowerCards
+        {/* <FollowerCards
             key="hi"
             displayName="Narendra Modi"
             username="PMOIndia"
@@ -45,9 +42,9 @@ render(){
             image="https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
           /> */}
 
-    {followlist}
-    </div>
-  );
-}
+        {followlist}
+      </div>
+    );
+  }
 }
 export default FollowingList;

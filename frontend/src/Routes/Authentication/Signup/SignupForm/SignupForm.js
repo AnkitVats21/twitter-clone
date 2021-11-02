@@ -5,12 +5,15 @@ import "./SignUpForm.css";
 
 function SignupForm(props) {
 
-    const onFinish = (values) => {
-        const userData = {
-            email: values.email,
-            password: values.password
+    const submitHandler = (values) => {
+        if (values.email && values.password && values.confirm) {
+
+            const userData = {
+                email: values.email,
+                password: values.password
+            }
+            props.onFinish(userData);
         }
-        props.submitHandler(userData);
     }
 
     return (
@@ -26,8 +29,8 @@ function SignupForm(props) {
                     <Form
                         name="normal_login"
                         className="signup-form"
-                        initialValues={{ remember: true }}
-                        onFinish={onFinish}
+                        onFinish={submitHandler}
+                    // initialValues={{ remember: true }}
                     >
                         <Form.Item
                             name="email"
@@ -46,34 +49,38 @@ function SignupForm(props) {
 
                         <Form.Item
                             name="password"
+                            // label="Password"
                             rules={[
                                 {
                                     required: true,
-                                    message: "Please input your Password!"
+                                    message: 'Please input your password!',
                                 },
-                                // {
-                                //     pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                                //     message: "Minimum eight characters, at least one letter and one number required"
-                                // }
                             ]}
+                        // hasFeedback
                         >
                             <Input
                                 type="password"
                                 placeholder="Password"
+
                             />
                         </Form.Item>
 
                         <Form.Item
-                            name="password2"
+                            name="confirm"
+                            dependencies={['password']}
                             rules={[
                                 {
                                     required: true,
-                                    message: "Please confirm your Password!"
+                                    message: 'Please confirm your password!',
                                 },
-                                // {
-                                //     pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                                //     message: "Minimum eight characters, at least one letter and one number required"
-                                // }
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    },
+                                }),
                             ]}
                         >
                             <Input
@@ -83,7 +90,9 @@ function SignupForm(props) {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button>
+                            <Button
+                                htmlType="submit"
+                            >
                                 Create Account
                             </Button>
                         </Form.Item>

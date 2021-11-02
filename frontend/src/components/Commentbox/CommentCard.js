@@ -2,12 +2,6 @@ import React, { forwardRef } from "react";
 import "../Feed/Post.css";
 import { Avatar } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import { ReactComponent as ChatBubbleOutlineIcon } from "../../assets/icons/Comment.svg";
-import { ReactComponent as RepeatIcon } from "../../assets/icons/Retweet.svg";
-import { ReactComponent as FavoriteBorderIcon } from "../../assets/icons/Heart.svg";
-import LikeButton from "../UI/LikeButton/LikeButton"
-import BookmarkButton from "../UI/BookmarkButton/BookmarkButton"
-import { ReactComponent as PublishIcon } from "../../assets/icons/Bookmark.svg";
 import Highlighter from "react-highlight-words";
 
 

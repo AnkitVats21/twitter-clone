@@ -9,12 +9,14 @@ import {
 import SignupForm from "./SignupForm/SignupForm";
 import ServerService from "../../../services/ServerService";
 import AuthScreen from "../../../components/AuthScreen/AuthScreen"
+import { Redirect } from 'react-router-dom';
 
 class SignUp extends Component {
   state = {
     notificationIcon: null,
     notificationTitle: null,
     notificationContent: null,
+    redirect: null,
   };
 
   componentDidMount() {
@@ -34,51 +36,56 @@ class SignUp extends Component {
     let key = "updatable";
 
     //loading msg
-    message.loading({ content: "Action in progress...", key });
+    // message.loading({ content: "Action in progress...", key });
 
     const registerData = {
-      institutionName: userData.collegeName,
-      contactNumber: userData.phone,
       password: userData.password,
       email: userData.email,
     };
 
     console.log(registerData);
 
-    ServerService.RegisterInstitution(registerData)
+    ServerService.SignUp(registerData)
       .then((res) => {
         console.log(res);
         //to stop the loading
-        message.success({ content: "Action completed!", key, duration: 2 });
-        if (res.status === 200) {
+        localStorage.clear();
+        if (res.status != 200) {
           //if signup is successful
+          localStorage.setItem("accessToken", res.data.data.access);
+          localStorage.setItem("refreshToken", res.data.data.refresh);
+          localStorage.setItem("email", JSON.stringify(res.data.data.email));
+          localStorage.setItem("isVerified", JSON.stringify(res.data.data.is_verified));
           this.setState(
             {
               notificationIcon: <SmileOutlined style={{ color: "#108ee9" }} />,
               notificationTitle: "Signup successful!",
               notificationContent:
-                "Thanks! your account has been successfully created. Please wait for it to be verified by our Admin.",
+                "Thanks! your account has been successfully created. A confirmation link has been sent on your email.",
+              redirect: true,
             },
             () => {
-              this.openNotification(4.5);
+              this.openNotification(4);
             }
           );
+
         }
       })
       .catch((err) => {
         //to stop the loading
-        message.error({ content: "Something went wrong!", key, duration: 2 });
+        console.log(err.response.data);
+        // message.error({ content: "User with given eamil already exists.", duration: 2 });
         const error = { ...err };
         console.log(error);
 
-        if (error.response && error.response.status === 409) {
+        if (error.response && error.response.status === 400) {
           //if email id already exists in database
           this.setState(
             {
               notificationIcon: <FrownOutlined style={{ color: "red" }} />,
               notificationTitle: "User already exists!",
               notificationContent:
-                "The Email you entered is already linked to an account! Please proceed to Signin page.",
+                "The Email you entered is already linked to an account! Please proceed to Login page.",
             },
             () => {
               this.openNotification(6);
@@ -104,9 +111,12 @@ class SignUp extends Component {
   };
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/dashboard" />
+    }
     return (
       <>
-        <AuthScreen form={<SignupForm />} onFinish={this.onFinish} />
+        <AuthScreen form={<SignupForm onFinish={this.onFinish} />} />
       </>
     );
   }

@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classes from './LikeButton.module.css';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import ServerService from '../../../services/ServerService';
 import { ReactComponent as FavoriteBorderIcon } from "../../../assets/icons/Heart.svg";
 import { ReactComponent as Filledheart } from "../../../assets/icons/Filledheart.svg";
@@ -22,59 +21,59 @@ class LikeButton extends Component {
     // }
 
     addLike = () => {
- 
-        if(this.state.isclicked){
-            this.setState({likes: this.state.likes-1})
+
+        if (this.state.isclicked) {
+            this.setState({ likes: this.state.likes - 1 })
         }
-        else{
-            this.setState({likes: this.state.likes+1})
+        else {
+            this.setState({ likes: this.state.likes + 1 })
         }
 
-          this.setState({
-          isclicked: ((this.state.isclicked)?false:true)
+        this.setState({
+            isclicked: ((this.state.isclicked) ? false : true)
         });
 
         // const pk: this.state.pk;
-        const pk= this.state.pk
-        const data={
+        const pk = this.state.pk
+        const data = {
             tweetid: this.state.pk
         }
 
-        ServerService.like(pk,data)
-        .then((resp)=>{
-            console.log(resp)          
-          })
-        
+        ServerService.like(pk, data)
+            .then((resp) => {
+                console.log(resp)
+            })
+
     };
 
     render() {
 
-        if(this.state.isclicked){
+        if (this.state.isclicked) {
             return (
-            
+
                 <div onClick={this.addLike} className={classes.likebtn} >
                     {/* <i className="fa fa-heart" aria-hidden="true"></i> {this.state.likes} */}
-                    <Filledheart className={classes.icon}/> <Link to= {{
-                pathname:'/liked-by',
-                state:{postid: this.state.pk}
-              }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
+                    <Filledheart className={classes.icon} /> <Link to={{
+                        pathname: '/liked-by',
+                        state: { postid: this.state.pk }
+                    }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
                 </div>
             )
         }
 
-        else{
+        else {
             return (
-            
-                <div onClick={this.addLike} className={classes.likebtn} > 
-                {/* <i className="far fa-heart"></i> {this.state.likes} */}
-                <FavoriteBorderIcon className={classes.icon}/> <Link to= {{
-                pathname:'/liked-by',
-                state:{postid: this.state.pk}
-              }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
+
+                <div onClick={this.addLike} className={classes.likebtn} >
+                    {/* <i className="far fa-heart"></i> {this.state.likes} */}
+                    <FavoriteBorderIcon className={classes.icon} /> <Link to={{
+                        pathname: '/liked-by',
+                        state: { postid: this.state.pk }
+                    }}><span className={classes.peoplecount}>{this.state.likes}</span></Link>
                 </div>
             )
         }
-        
+
     }
 }
 

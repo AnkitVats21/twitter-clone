@@ -6,19 +6,17 @@ from .models import User
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirm password", widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('email','username')
+        fields = ("email",)
 
     def clean_email(self):
-        email   = self.cleaned_data.get('email')
-        username= self.cleaned_data.get('username')
+        email = self.cleaned_data.get("email")
         qs1 = User.objects.filter(email=email)
-        qs2 = User.objects.filter(username=username)
-        if qs1.exists() or qs2.exists():
-            raise forms.ValidationError("username or email is taken")
+        if qs1.exists():
+            raise forms.ValidationError("email is taken")
         return email
 
     def clean_password2(self):
@@ -30,12 +28,14 @@ class RegisterForm(forms.ModelForm):
 
 
 class UserAdminCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
         model = User
-        fields = ('email','username')
+        fields = ("email", "is_active", "is_verified", "is_staff", "is_superuser")
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -45,7 +45,6 @@ class UserAdminCreationForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-
         user = super(UserAdminCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
@@ -57,8 +56,15 @@ class UserAdminChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model   = User
-        fields  = ('email', 'username', 'password', 'active', 'admin')
+        model = User
+        fields = (
+            "email",
+            "password",
+            "is_active",
+            "is_staff",
+            "is_verified",
+            "is_superuser",
+        )
 
     def clean_password(self):
         return self.initial["password"]

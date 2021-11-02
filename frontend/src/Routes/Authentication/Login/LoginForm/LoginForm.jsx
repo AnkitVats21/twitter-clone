@@ -10,7 +10,7 @@ function LoginForm(props) {
             email: values.email,
             password: values.password
         }
-        props.submitHandler(userData);
+        props.submitHandeler(userData);
     }
 
     return (
@@ -64,7 +64,9 @@ function LoginForm(props) {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button>
+                            <Button
+                                htmlType="submit"
+                            >
                                 Login
                             </Button>
                         </Form.Item>

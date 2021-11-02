@@ -1,44 +1,44 @@
 
 .brand{
- font-size: 40px;
-  margin-right: 12vw;
- color: #f95700ff;
- text-decoration: none;
- font-family: 'Pacifico';
+  font-size: 40px;
+  color: white;
+  margin-left: 2rem;
+  text-decoration: none;
+  font-family: 'Pacifico';
+  justify-content: center;
+  align-items: center;
 }
 
-.sbar{
-  width: 20vw !important;
-  height: 35px !important;
+.search .ant-input {
+    border: none!important;
+    height: 34px;
+    border-radius: 3px!important;
+    width: 480px;
+    color: #A5AEB8;
+    background-color: #405368!important;; 
+}   
 
-  /* border-radius: 5px !important; */
+.search .ant-input:hover{
+    border: none!important;
+    height: 2rem;
+    border-radius: 3px!important;
+    width: 20rem;
 }
 
-
-
-.sbar:focus{
-  outline: none;
-  box-shadow:none !important;
-  border:1px solid #f95700ff !important;
+.search .ant-input-affix-wrapper{
+    padding: 0;
+    border: none!important;
+    background-color: transparent;
 }
 
-.sbtn{
-  width: 3vw;
-  /* display: flex;
-  flex-wrap: wrap; */
-  color:#f95700ff;
-  background-color: #f1f1f1;
-  border:none;
-  outline: none;
+.search .ant-input:focus, .ant-input:active, .ant-input:hover{
+  border: none!important;
+  border-radius: 3px!important;
 }
 
-.sbtn:hover{
-  width: 3vw;
-  /* display: flex;
-  flex-wrap: wrap; */
-  background-color: #f95700ff;
-  border:none;
-  outline: none;
+.search .ant-input:focus{
+  color: #001935;
+  background-color: white!important;
 }
 
 .navoption{
@@ -48,18 +48,20 @@
 }
 
 .logopt{
-  margin:0 1vw;
+  margin:0 1rem;
+  font-size: 1.5rem;
   font-family: Quicksand !important;
-  color: #495057    !important;
+  color: #A5AEB8 !important;
   font-weight: 600;
+}
+
+.logopt .nav-link{
+  padding: 0 1rem;
 }
 
 .logopt:hover{
   color: #f95700ff  !important;
 }
-
-
-
 
 /* useless prolly */
 
@@ -104,7 +106,7 @@ font-family: Lato !important;
 
 .brand:hover{
   text-decoration: none;
-  color: #343a40;
+  color: #e60e3c;
 }
 
 @media(max-width:300px){

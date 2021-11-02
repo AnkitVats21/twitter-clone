@@ -1,22 +1,12 @@
-.container{
-  display: flex;
-}
-.container .avatar{
-  width: 64px;
-  height: 64px;
-  border-radius: 5%;
-  margin-right: 20px;
-  background-color: white;
-}
 
-.container .post{
+.postcards{
   background-color: white;
   border-radius: 4px;
   margin-bottom: 20px;
   height: auto;
 }
 
-/* .container > div{
+/* > div{
   flex-direction: row;
    background-color: #f1f1f1;
   width: 100px;
@@ -26,23 +16,23 @@
   font-size: 30px;
 } */
 
-.container .post header{
+.postcards header{
   display: flex;
-  padding: 15px 20px 0;
+  /* padding: 15px 20px 0; */
   margin: 0 0 15px;
   color: #666;
   height: 2rem;
 }
 
-.container .post header .more{
+.postcards header .more{
   flex-grow: 1;
 }
 
-.container .post header .more i{
+.postcards header .more i{
   color: #000;
 }
 
-.container .post header .username{
+.postcards header .username{
   flex-grow: 11;
   display: flex;
   font: 14px "Favorit", "Helvetica Neue", Arial, sans-serif;
@@ -50,18 +40,18 @@
   color: black; 
 }
 
-.container .post header .username .name a{
+.postcards header .username .name a{
   color: black;
   
   padding-right: 5px;
   /* font-family: "Favorit", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif; */
 }
 
-.container .post header .username .follow a:hover{
+.postcards header .username .follow a:hover{
   text-decoration: underline;
 }
 
-.container .post .content{
+.postcards .content{
     box-sizing: border-box;
     color: "black";
     font-family: "Favorit", "Helvetica Neue", Arial, sans-serif;
@@ -75,7 +65,7 @@
     word-break: break-word;
 }
 
-.container .post .content .text{
+.postcards .content .text{
   padding: 0 20px;
   /* width: 100%;
   height: auto;
@@ -83,13 +73,13 @@
   margin-bottom: 15px; */
 }
 
-.container .post .content .image img{
+.postcards .content .image img{
   object-fit: contain;
   width: 100%;
   /* height: auto; */
 }
 
-.container .post footer{
+.postcards footer{
   align-items: center;
   color: rgba(var(--black),.65);
   display: flex;
@@ -103,37 +93,17 @@
   padding-bottom: 12px;
 }
 
-.container .post footer .likes{
+.postcards footer .likes{
   padding-left: 20px;
 }
 
-.container .post footer .actions{
+.postcards footer .actions{
   align-items: center;
   display: flex;
   justify-content: flex-end;
   padding-right: 20px;
 }
 
-.container .post footer .actions div{
+.postcards footer .actions div{
   padding: 0 10px;
 }
-
-
-.card .avatar img{
-  width: 50px;
-  height: 50px;
-  border-radius: 5%;
-  margin-right: 10px;
-}
-
-/* .post {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    padding-bottom: 10px;
-    background-color: #F6F8FF;
-    border: 2px solid rgba(101, 126, 255,0.2);
-    border-radius: 20px;
-    margin: 20px;
-    margin-top: 0;
-  } */

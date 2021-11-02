@@ -13,7 +13,7 @@ class Home extends Component {
         <NavBar className="navbar" />
         <div className="flexbox">
           {/* <Sidebar propactive="home" /> */}
-          {/* <Feed /> */}
+          <Feed />
           {/* <Widgets /> */}
         </div>
       </>

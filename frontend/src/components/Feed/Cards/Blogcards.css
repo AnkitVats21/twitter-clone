@@ -1,0 +1,55 @@
+.blogcards{
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.blogcards li .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.blogcards li .item .avatar{
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+}
+
+.blogcards li .item .avatar .img{
+    min-width: 37px;
+    margin-right: 11px;
+    
+}
+
+.blogcards li .item .avatar .img img{
+    width: 37px;
+    height: 37px;
+    border-radius: 2px;
+    /* object-fit: contain;
+    width: 100%; */
+}
+
+.blogcards li .item .handle{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.blogcards li .item .handle .username span{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.blogcards li .item .handle .name span{
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #8a8a8a;
+}
+
+.blogcards li .item .follow span {
+    color: rgb(0, 184, 255);
+}
+
+.blogcards li .item .follow span:hover{
+    text-decoration: underline;
+}

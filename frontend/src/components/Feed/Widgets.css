@@ -1,0 +1,28 @@
+.header{
+    margin-bottom: 38px;
+}
+
+.header h1{
+    border-bottom: 2px solid #484848;
+    line-height: 1.2;
+    padding: 0 10px 10px;
+    color: white;
+    font: 1.5rem 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom: 0;
+}
+
+.header a{
+    padding-left: 10px;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 12px;
+    text-decoration: none;
+    color: rgb(0, 184, 255);
+}
+
+.header .postcards{
+    margin: 10px;
+    padding: 0 10px;
+}
